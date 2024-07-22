@@ -1,0 +1,5 @@
+Voxels is released under an MIT License, see LICENSE for details.
+
+Copyright 2024, Joseph Heck.
+
+
