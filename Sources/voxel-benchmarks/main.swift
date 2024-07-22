@@ -1,6 +1,6 @@
 import CollectionsBenchmark
-import Voxels
 import Foundation
+import Voxels
 
 // NOTE(heckj): benchmark implementations can be a bit hard to understand from the opaque inputs and structure of the code.
 // It's worthwhile to look at existing benchmarks that Karoy created for swift-collections:
@@ -27,12 +27,12 @@ benchmark.addSimple(
     title: "GSet<String,Int> insert",
     input: [Int].self
 ) { input in
-    //var set = GSet<String, Int>(actorId: "A")
+    // var set = GSet<String, Int>(actorId: "A")
     for i in input {
-        //set.insert(i)
+        // set.insert(i)
     }
-    //precondition(set.count == input.count)
-    //blackHole(set)
+    // precondition(set.count == input.count)
+    // blackHole(set)
 }
 
 benchmark.add(
