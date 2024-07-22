@@ -3,10 +3,10 @@
 import PackageDescription
 
 var globalSwiftSettings: [PackageDescription.SwiftSetting] = [
-    .enableExperimentalFeature("StrictConcurrency")
+    .enableExperimentalFeature("StrictConcurrency"),
     // Swift 6 enablement
-    //.enableUpcomingFeature("StrictConcurrency")
-    //.swiftLanguageVersion(.v5)
+    // .enableUpcomingFeature("StrictConcurrency")
+    // .swiftLanguageVersion(.v5)
 ]
 
 let package = Package(
@@ -30,7 +30,8 @@ let package = Package(
         .target(
             name: "Voxels",
             dependencies: [],
-            swiftSettings: globalSwiftSettings),
+            swiftSettings: globalSwiftSettings
+        ),
         .testTarget(
             name: "VoxelsTests",
             dependencies: ["Voxels"]
@@ -41,5 +42,6 @@ let package = Package(
                 "Voxels",
                 .product(name: "CollectionsBenchmark", package: "swift-collections-benchmark"),
             ]
-        ),    ]
+        ),
+    ]
 )
