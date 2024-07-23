@@ -7,6 +7,9 @@ var globalSwiftSettings: [PackageDescription.SwiftSetting] = [
     // Swift 6 enablement
     // .enableUpcomingFeature("StrictConcurrency")
     // .swiftLanguageVersion(.v5)
+    .enableUpcomingFeature("ExistentialAny"),
+    .enableExperimentalFeature("AccessLevelOnImport"),
+    .enableUpcomingFeature("InternalImportsByDefault"),
 ]
 
 let package = Package(
