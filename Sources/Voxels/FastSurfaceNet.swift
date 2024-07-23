@@ -232,18 +232,6 @@ func sdf_gradient(dists: [Float32], s: SIMD3<Float>) -> SIMD3<Float> {
         + s.yzx() * s.zxy() * d11
 }
 
-extension SIMD3<Float> {
-    @inline(__always)
-    func yzx() -> Self {
-        Self(y, z, x)
-    }
-
-    @inline(__always)
-    func zxy() -> Self {
-        Self(z, x, y)
-    }
-}
-
 let CUBE_CORNERS: [SIMD3<UInt>] = [
     [0, 0, 0],
     [1, 0, 0],
@@ -427,10 +415,4 @@ func maybe_make_quad(
     }
     indices.append(contentsOf: quad)
 //    indices.extend_from_slice(&quad);
-}
-
-extension SIMD3<Float> {
-    func distance_squared(_ other: Self) -> Float {
-        (self - other).lengthSquared
-    }
 }
