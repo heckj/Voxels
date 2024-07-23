@@ -115,8 +115,8 @@ func estimate_surface(
         for y in min.y ... max.y {
             for x in min.x ... max.x {
                 let stride = shape.linearize(UInt(x), UInt(y), UInt(z))
-                let p = SIMD3<Float>(Float(x), Float(y), Float(z))
-                if estimate_surface_in_cube(sdf: sdf, shape: shape, p: p, min_corner_stride: stride, output: &output) {
+                let position = SIMD3<Float>(Float(x), Float(y), Float(z))
+                if estimate_surface_in_cube(sdf: sdf, shape: shape, position: position, min_corner_stride: stride, output: &output) {
                     output.stride_to_index[Int(stride)] = UInt32(output.positions.count) - 1
                     output.surface_points.append(SIMD3<UInt32>(x, y, z))
                     output.surface_strides.append(UInt32(stride))
@@ -136,7 +136,7 @@ func estimate_surface(
 func estimate_surface_in_cube(
     sdf: [Float],
     shape: VoxelArray<UInt32>,
-    p: SIMD3<Float>,
+    position: SIMD3<Float>,
     min_corner_stride: Int,
     output: inout SurfaceNetsBuffer
 ) -> Bool {
@@ -144,7 +144,7 @@ func estimate_surface_in_cube(
     var corner_dists: [Float] = Array(repeating: 0.0, count: 8)
     var num_negative = 0
 
-    for (i, dist) in corner_dists.enumerated() {
+    for i in 0 ... 7 {
         let corner_stride = min_corner_stride + shape.linearize(CUBE_CORNERS[i])
         let d = sdf[corner_stride]
         // let d = *unsafe { sdf.get_unchecked(corner_stride as usize) };
@@ -160,15 +160,15 @@ func estimate_surface_in_cube(
         return false
     }
 
-    let c = centroid_of_edge_intersections(dists: &corner_dists)
+    let centroid: SIMD3<Float> = centroid_of_edge_intersections(dists: corner_dists)
 
-    output.positions.append(p + c)
-    output.normals.append(sdf_gradient(dists: &corner_dists, s: c))
+    output.positions.append(position + centroid)
+    output.normals.append(sdf_gradient(dists: corner_dists, s: centroid))
 
     return true
 }
 
-func centroid_of_edge_intersections(dists: inout [Float]) -> SIMD3<Float> {
+func centroid_of_edge_intersections(dists: [Float]) -> SIMD3<Float> {
     var count = 0
     var sum = SIMD3<Float>.zero
     for corners in CUBE_EDGES {
@@ -204,7 +204,7 @@ func estimate_surface_edge_intersection(
 ///
 /// For each dimension, there are 4 cube edges along that axis. This will do bilinear interpolation between the differences
 /// along those edges based on the position of the surface (s).
-func sdf_gradient(dists: inout [Float32], s: SIMD3<Float>) -> SIMD3<Float> {
+func sdf_gradient(dists: [Float32], s: SIMD3<Float>) -> SIMD3<Float> {
     let p00 = SIMD3<Float>([dists[0b001], dists[0b010], dists[0b100]])
     let n00 = SIMD3<Float>([dists[0b000], dists[0b000], dists[0b000]])
 
@@ -310,8 +310,8 @@ func make_all_quads(
         if xyz.y != min.y, xyz.z != min.z, xyz.x != max.x - 1 {
             maybe_make_quad(
                 sdf: sdf,
-                stride_to_index: &output.stride_to_index,
-                positions: &output.positions,
+                stride_to_index: output.stride_to_index,
+                positions: output.positions,
                 p1: p_stride,
                 p2: p_stride + xyz_strides[0],
                 axis_b_stride: xyz_strides[1],
@@ -323,8 +323,8 @@ func make_all_quads(
         if xyz.x != min.x, xyz.z != min.z, xyz.y != max.y - 1 {
             maybe_make_quad(
                 sdf: sdf,
-                stride_to_index: &output.stride_to_index,
-                positions: &output.positions,
+                stride_to_index: output.stride_to_index,
+                positions: output.positions,
                 p1: p_stride,
                 p2: p_stride + xyz_strides[1],
                 axis_b_stride: xyz_strides[2],
@@ -336,8 +336,8 @@ func make_all_quads(
         if xyz.x != min.x, xyz.y != min.y, xyz.z != max.z - 1 {
             maybe_make_quad(
                 sdf: sdf,
-                stride_to_index: &output.stride_to_index,
-                positions: &output.positions,
+                stride_to_index: output.stride_to_index,
+                positions: output.positions,
                 p1: p_stride,
                 p2: p_stride + xyz_strides[2],
                 axis_b_stride: xyz_strides[0],
@@ -378,8 +378,8 @@ func make_all_quads(
 // directions; these are axis B and axis C.
 func maybe_make_quad(
     sdf: [Float],
-    stride_to_index: inout [UInt32],
-    positions: inout [SIMD3<Float>],
+    stride_to_index: [UInt32],
+    positions: [SIMD3<Float>],
     p1: Int,
     p2: Int,
     axis_b_stride: Int,
