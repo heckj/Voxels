@@ -81,7 +81,7 @@ public extension Vector {
     func lerp(_ a: Vector, _ t: Float) -> Vector {
         self + (a - self) * t
     }
-    
+
     /// The squared distance from this vector to another you provide.
     /// - Parameter other: The vector to compare
     /// - Returns: The square of the distance between the vectors
