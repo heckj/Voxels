@@ -2,25 +2,25 @@ public struct CompleteVertex: Hashable {
     var position: SIMD3<Float>
     var normal: SIMD3<Float>
     var uv: SIMD2<Float>
-    
+
     public init(position: SIMD3<Float>, normal: SIMD3<Float>? = nil, uv: SIMD2<Float>? = nil) {
         self.position = position
-        if let normal = normal {
+        if let normal {
             self.normal = normal.normalized()
         } else {
             self.normal = .zero
         }
-        if let uv = uv {
+        if let uv {
             self.uv = uv
         } else {
             self.uv = .zero
         }
     }
-    
+
     /// Creates a new vertex with normal vector you provide.
     /// - Parameter normal: The normal to apply to the vertex.
     public func withNormal(_ normal: Vector) -> CompleteVertex {
-        return CompleteVertex(position: position, normal: normal, uv: uv)
+        CompleteVertex(position: position, normal: normal, uv: uv)
     }
 
     /// Creates a new vertex with the value for the normal inverted.
@@ -40,11 +40,10 @@ public struct CompleteVertex: Hashable {
             uv: uv.lerp(other.uv, t)
         )
     }
-
 }
 
-extension SIMD2<Float> {
-    public func lerp(_ a: SIMD2<Float>, _ t: Float) -> SIMD2<Float> {
+public extension SIMD2<Float> {
+    func lerp(_ a: SIMD2<Float>, _ t: Float) -> SIMD2<Float> {
         self + (a - self) * t
     }
 }
