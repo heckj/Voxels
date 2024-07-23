@@ -1,6 +1,6 @@
-struct VoxelArray<T> {
+public struct VoxelArray<T> {
     var _contents: [T]
-    let size: Int
+    public let size: Int
 
     public init(size: UInt, value: T) {
         self.size = Int(size)
@@ -8,7 +8,17 @@ struct VoxelArray<T> {
     }
 
     @inlinable
-    func indexFrom(_ x: UInt, _ y: UInt, _ z: UInt) -> Int {
+    public func linearize(_ arr: [UInt]) -> Int {
+        linearize(arr[0], arr[1], arr[2])
+    }
+
+    @inlinable
+    public func linearize(_ arr: SIMD3<UInt>) -> Int {
+        linearize(arr.x, arr.y, arr.z)
+    }
+
+    @inlinable
+    public func linearize(_ x: UInt, _ y: UInt, _ z: UInt) -> Int {
         let index = (Int(x) * size * size) + (Int(y) * size) + Int(z)
         // Row-major address by index:
         //
@@ -28,6 +38,6 @@ struct VoxelArray<T> {
     }
 
     public func value(x: UInt, y: UInt, z: UInt) -> T {
-        _contents[indexFrom(x, y, z)]
+        _contents[linearize(x, y, z)]
     }
 }

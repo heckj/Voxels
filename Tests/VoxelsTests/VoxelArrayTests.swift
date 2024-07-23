@@ -12,13 +12,18 @@ class VoxelArrayTests: XCTestCase {
         }
 
         // indexing function
-        XCTAssertEqual(v.indexFrom(0, 0, 0), 0)
-        XCTAssertEqual(v.indexFrom(1, 1, 1), 13)
-        XCTAssertEqual(v.indexFrom(2, 2, 2), 26)
+        XCTAssertEqual(v.linearize(0, 0, 0), 0)
+        XCTAssertEqual(v.linearize(1, 1, 1), 13)
+        XCTAssertEqual(v.linearize(2, 2, 2), 26)
 
         // external access
         XCTAssertEqual(v.value(x: 0, y: 0, z: 0), 1)
         XCTAssertEqual(v.value(x: 1, y: 1, z: 1), 1)
         XCTAssertEqual(v.value(x: 2, y: 2, z: 2), 1)
+    }
+
+    func testSIMDFloatDefault() throws {
+        let x = SIMD8<Float>()
+        XCTAssertEqual(x[0], 0)
     }
 }
