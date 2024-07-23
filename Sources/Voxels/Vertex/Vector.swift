@@ -60,7 +60,7 @@ extension Vector {
         return simd.cross(self, other)
         #else
             Vector(
-                y * another.z - z * other.y,
+                y * other.z - z * other.y,
                 z * other.x - x * other.z,
                 x * other.y - y * other.x
             )
