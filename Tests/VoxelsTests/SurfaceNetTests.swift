@@ -6,7 +6,7 @@ final class SurfaceNetTests: XCTestCase {
         // Based on the example usage of the original library at https://github.com/bonsairobo/fast-surface-nets-rs/blob/main/examples-crate/render/main.rs
 
         let sphereSDF = SDF<Float>() { _, _, _ in
-            self.sphere(radius: 5.0, p: Vector(1, 1, 1))
+            self.sphere(radius: 1.0, p: Vector(0, 0, 0))
         }
 
         let buffer = sdf_to_buffer(sdf: sphereSDF)
@@ -33,6 +33,7 @@ final class SurfaceNetTests: XCTestCase {
     }
 
     func into_domain(array_dim: UInt, _ xyz: SIMD3<UInt>) -> SIMD3<Float> {
+        // samples over a quadrant - starts at -1 and goes up to (2/edgeSize * (edgeSize-1)) - 1
         (2.0 / Float(array_dim)) * SIMD3<Float>(Float(xyz.x), Float(xyz.y), Float(xyz.z)) - 1.0
     }
 
