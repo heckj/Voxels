@@ -4,8 +4,8 @@
 public struct SurfaceNetsBuffer {
     /// The triangle mesh positions.
     ///
-    /// These are in array-local coordinates, i.e. at array position `(x, y, z)`, the vertex position would be `(x, y, z) +
-    /// centroid` if the isosurface intersects that voxel.
+    /// These are in array-local coordinates. That is, at the array position `(x, y, z)`, the vertex
+    /// position would be `(x, y, z) + centroid` if the isosurface intersects that voxel.
     var positions: [SIMD3<Float>]
 
     /// The triangle mesh normals.
@@ -61,10 +61,13 @@ public let NULL_VERTEX = UInt32.max
 /// The Naive Surface Nets smooth voxel meshing algorithm.
 ///
 /// Extracts an isosurface mesh from the [signed distance field](https://en.wikipedia.org/wiki/Signed_distance_function) `sdf`.
-/// Each value in the field determines how close that point is to the isosurface. Negative values are considered "interior" of
-/// the surface volume, and positive values are considered "exterior." These lattice points will be considered corners of unit
-/// cubes. For each unit cube, at most one isosurface vertex will be estimated, as below, where `p` is a positive corner value,
-/// `n` is a negative corner value, `s` is an isosurface vertex, and `|` or `-` are mesh polygons connecting the vertices.
+/// Each value in the field determines how close that point is to the isosurface.
+/// Negative values are considered "interior" of the surface volume, and positive values are considered "exterior."
+/// These lattice points will be considered corners of unit cubes.
+/// For each unit cube, at most one isosurface vertex will be estimated.
+/// In the example below, `p` is a positive corner value,
+/// `n` is a negative corner value, `s` is an isosurface vertex,
+/// and `|` or `-` are mesh polygons connecting the vertices.
 ///
 /// ```text
 /// p   p   p   p
@@ -89,7 +92,9 @@ public func surface_nets(
     // SAFETY
     // Make sure the slice matches the shape before we start using get_unchecked.
     // assert!(shape.linearize(min) <= shape.linearize(max));
+    precondition(shape.linearize(min) <= shape.linearize(max))
     // assert!((shape.linearize(max) as usize) < sdf.len());
+    precondition(shape.linearize(max) < sdf.count)
 
     var buffer = SurfaceNetsBuffer(arraySize: UInt(sdf.count))
 
@@ -98,12 +103,8 @@ public func surface_nets(
     return buffer
 }
 
-// Based on the usage at https://github.com/bonsairobo/fast-surface-nets-rs/blob/main/examples-crate/render/main.rs
-// the sdf is an array that's the same size as internal bits of VoxelArray, and represents the SDF function sampled
-// at each of the voxel centroid positions
-
-// Find all vertex positions and normals. Also generate a map from grid position to vertex index to be used to look up vertices
-// when generating quads.
+// Find all vertex positions and normals.
+// Also generate a map from grid position to vertex index to be used to look up vertices when generating quads.
 func estimate_surface(
     sdf: [Float],
     shape: VoxelArray<UInt32>,
@@ -111,9 +112,9 @@ func estimate_surface(
     max: SIMD3<UInt32>,
     output: inout SurfaceNetsBuffer
 ) {
-    for z in min.z ... max.z {
-        for y in min.y ... max.y {
-            for x in min.x ... max.x {
+    for z in min.z ..< max.z {
+        for y in min.y ..< max.y {
+            for x in min.x ..< max.x {
                 let stride = shape.linearize(UInt(x), UInt(y), UInt(z))
                 let position = SIMD3<Float>(Float(x), Float(y), Float(z))
                 if estimate_surface_in_cube(sdf: sdf, shape: shape, position: position, min_corner_stride: stride, output: &output) {
