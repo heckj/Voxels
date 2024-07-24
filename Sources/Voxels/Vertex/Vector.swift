@@ -37,7 +37,7 @@ public extension Vector {
         #if canImport(simd)
             Swift.abs(simd.length_squared(self) - Float(1.0)) < Vector.epsilon
         #else
-            abs(dot(self) - 1) < Vector.epsilon
+            Swift.abs(dot(self) - 1) < Vector.epsilon
         #endif
     }
 
@@ -78,7 +78,7 @@ public extension Vector {
             return simd.simd_abs(self)
         #else
             Vector(
-                abs(x), abs(y), abs(z)
+                Swift.abs(x), Swift.abs(y), Swift.abs(z)
             )
         #endif
     }
