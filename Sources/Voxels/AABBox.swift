@@ -1,6 +1,8 @@
 // Derived from MIT licensced code:
 // https://github.com/kodecocodes/swift-algorithm-club/blob/master/Octree/Octree.playground/Sources/Octree.swift
 // accessed at https://github.com/kodecocodes/swift-algorithm-club/tree/master
+
+/// An Axis-aligned bounding box
 public struct AABBox {
     public var boxMin: Vector
     public var boxMax: Vector

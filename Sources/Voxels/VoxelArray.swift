@@ -1,10 +1,14 @@
 public struct VoxelArray<T> {
     var _contents: [T]
-    public let size: Int
+    public let edgeSize: Int
 
     public init(size: UInt, value: T) {
-        self.size = Int(size)
+        edgeSize = Int(size)
         _contents = Array(repeating: value, count: Int(size) * Int(size) * Int(size))
+    }
+
+    public var size: Int {
+        _contents.count
     }
 
     @inlinable
@@ -18,8 +22,13 @@ public struct VoxelArray<T> {
     }
 
     @inlinable
+    public func linearize(_ arr: SIMD3<UInt32>) -> Int {
+        linearize(UInt(arr.x), UInt(arr.y), UInt(arr.z))
+    }
+
+    @inlinable
     public func linearize(_ x: UInt, _ y: UInt, _ z: UInt) -> Int {
-        let index = (Int(x) * size * size) + (Int(y) * size) + Int(z)
+        let index = (Int(x) * edgeSize * edgeSize) + (Int(y) * edgeSize) + Int(z)
         // Row-major address by index:
         //
         //    Address of A[i][j][k] = B + W *(P* N * (i-x) + P*(j-y) + (k-z))
@@ -35,6 +44,25 @@ public struct VoxelArray<T> {
         //    y = Lower Bound of Column                                    = 0
         //    z = Lower Bound of Width                                     = 0
         return index
+    }
+
+    @inlinable
+    public func delinearize(_ arr: UInt) -> SIMD3<UInt> {
+        let majorStride = UInt(edgeSize * edgeSize)
+        let minorStride = UInt(edgeSize)
+        var x: UInt = 0
+        if arr > majorStride {
+            x = arr / majorStride
+        }
+
+        let remaining = arr - (x * majorStride)
+        var y: UInt = 0
+        if remaining > minorStride {
+            y = remaining / minorStride
+        }
+
+        let z = remaining - (y * minorStride)
+        return SIMD3<UInt>(x, y, z)
     }
 
     public func value(x: UInt, y: UInt, z: UInt) -> T {

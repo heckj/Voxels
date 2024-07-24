@@ -35,7 +35,7 @@ public extension Vector {
     /// A Boolean value indicating that the length of the vector is `1`.
     var isNormalized: Bool {
         #if canImport(simd)
-            abs(simd.length_squared(self) - Float(1.0)) < Vector.epsilon
+            Swift.abs(simd.length_squared(self) - Float(1.0)) < Vector.epsilon
         #else
             abs(dot(self) - 1) < Vector.epsilon
         #endif
@@ -71,6 +71,16 @@ public extension Vector {
     func normalized() -> Vector {
         let length = length
         return length == 0 ? .zero : self / length
+    }
+
+    func abs() -> Vector {
+        #if canImport(simd)
+            return simd.simd_abs(self)
+        #else
+            Vector(
+                abs(x), abs(y), abs(z)
+            )
+        #endif
     }
 
     /// Linearly interpolate between this vector and another you provide.
