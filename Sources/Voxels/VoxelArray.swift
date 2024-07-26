@@ -1,4 +1,4 @@
-public struct VoxelArray<T> {
+public struct VoxelArray<T>: VoxelAccess {
     var _contents: [T]
     public let edgeSize: Int
 
