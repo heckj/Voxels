@@ -1,3 +1,4 @@
+import CameraControlARView
 import RealityKit
 import SwiftUI
 
@@ -89,13 +90,29 @@ struct ContentView: View {
         return sphereEntity
     }
 
+    private func buildFloor(color: UIColor) -> ModelEntity {
+        let floorEntity = ModelEntity(
+            mesh: .generatePlane(width: 2.0, depth: 2.0),
+            materials: [SimpleMaterial(color: color, isMetallic: false)]
+        )
+        floorEntity.position = [0, -1, -2]
+        return floorEntity
+    }
+
     var body: some View {
         VStack {
-            RealityView { content in
+            RealityKitView({ content in
+                let floor = buildFloor(color: .blue)
+                content.add(floor)
                 let me = buildSphere(position: SIMD3<Float>(0, 0, -2), radius: 1.0, color: .red)
                 content.add(me)
-//                showTangentCoordinateSystems(modelEntity: me, parent: me.parent!)
-            }.border(.blue)
+            }, update: {
+                // print("update")
+            })
+            .border(.blue)
+//            RealityView { content in
+            ////                showTangentCoordinateSystems(modelEntity: me, parent: me.parent!)
+//            }
             Text("Hello, world!")
         }
         .padding()

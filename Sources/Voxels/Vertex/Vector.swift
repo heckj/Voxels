@@ -69,8 +69,12 @@ public extension Vector {
 
     /// Returns a normalized vector with a length of one.
     func normalized() -> Vector {
-        let length = length
-        return length == 0 ? .zero : self / length
+        #if canImport(simd)
+            return simd.normalize(self)
+        #else
+            let length = length
+            return length == 0 ? .zero : self / length
+        #endif
     }
 
     func abs() -> Vector {
@@ -89,7 +93,11 @@ public extension Vector {
     ///   - t: A value, typically between `0` and `1`, to indicate the position  to interpolate between the two vectors.
     /// - Returns: A vector interpolated to the position you provide.
     func lerp(_ a: Vector, _ t: Float) -> Vector {
-        self + (a - self) * t
+        #if canImport(simd)
+            return simd.mix(self, a, t: t)
+        #else
+            self + (a - self) * t
+        #endif
     }
 
     /// The squared distance from this vector to another you provide.
