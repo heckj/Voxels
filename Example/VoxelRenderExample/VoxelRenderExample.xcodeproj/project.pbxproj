@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1A51C57C2C54556B0037FEEF /* Voxels in Frameworks */ = {isa = PBXBuildFile; productRef = 1A51C57B2C54556B0037FEEF /* Voxels */; };
+		1ADA4C882C570B7800E4F844 /* CameraControlARView in Frameworks */ = {isa = PBXBuildFile; productRef = 1ADA4C872C570B7800E4F844 /* CameraControlARView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A51C57C2C54556B0037FEEF /* Voxels in Frameworks */,
+				1ADA4C882C570B7800E4F844 /* CameraControlARView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,6 +69,7 @@
 			name = VoxelRenderExample;
 			packageProductDependencies = (
 				1A51C57B2C54556B0037FEEF /* Voxels */,
+				1ADA4C872C570B7800E4F844 /* CameraControlARView */,
 			);
 			productName = VoxelRenderExample;
 			productReference = 1A51C5682C5454EA0037FEEF /* VoxelRenderExample.app */;
@@ -98,6 +101,7 @@
 			mainGroup = 1A51C55F2C5454EA0037FEEF;
 			packageReferences = (
 				1A51C57A2C54556B0037FEEF /* XCLocalSwiftPackageReference "../../../Voxels" */,
+				1ADA4C862C570B7800E4F844 /* XCRemoteSwiftPackageReference "CameraControlARView" */,
 			);
 			productRefGroup = 1A51C5692C5454EA0037FEEF /* Products */;
 			projectDirPath = "";
@@ -281,7 +285,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
@@ -293,7 +297,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 2.0;
+				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
 			name = Debug;
 		};
@@ -321,7 +325,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
@@ -333,7 +337,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 2.0;
+				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
 			name = Release;
 		};
@@ -367,10 +371,26 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		1ADA4C862C570B7800E4F844 /* XCRemoteSwiftPackageReference "CameraControlARView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/heckj/CameraControlARView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		1A51C57B2C54556B0037FEEF /* Voxels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Voxels;
+		};
+		1ADA4C872C570B7800E4F844 /* CameraControlARView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1ADA4C862C570B7800E4F844 /* XCRemoteSwiftPackageReference "CameraControlARView" */;
+			productName = CameraControlARView;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

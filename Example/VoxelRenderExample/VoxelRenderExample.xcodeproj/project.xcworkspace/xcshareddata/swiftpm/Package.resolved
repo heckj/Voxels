@@ -1,6 +1,15 @@
 {
-  "originHash" : "5d67667fa59f3fbf980d97e2cb99d52b47a8979e8b3a4c4ebe2e03fc9385ee5c",
+  "originHash" : "01c1cdd195d54499c7028c3d682075f9444301ffbc56bd7fae0899e8156ba0e3",
   "pins" : [
+    {
+      "identity" : "cameracontrolarview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/heckj/CameraControlARView",
+      "state" : {
+        "revision" : "5292d34683c431a021c096605c51566e400ac57a",
+        "version" : "0.6.1"
+      }
+    },
     {
       "identity" : "swift-argument-parser",
       "kind" : "remoteSourceControl",
