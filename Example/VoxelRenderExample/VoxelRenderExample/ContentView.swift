@@ -9,14 +9,8 @@ struct ContentView: View {
         (2.0 / Float(array_dim)) * SIMD3<Float>(Float(xyz.x), Float(xyz.y), Float(xyz.z)) - 1.0
     }
 
-    private func sphere(radius: Float, p: Vector) -> Float {
-        p.length - radius
-    }
-
     private func buildMesh() -> ModelEntity {
-        let sphereSDF = SDF<Float>() { x, y, z in
-            sphere(radius: 0.5, p: Vector(x, y, z))
-        }
+        let sphereSDF = SDF.sphere()
 
         let sampleShape = VoxelArray<UInt32>(size: 34, value: 0)
         var samples: [Float] = Array(repeating: 0.0, count: sampleShape.size)
