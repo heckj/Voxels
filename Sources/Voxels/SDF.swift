@@ -8,7 +8,7 @@ public protocol SignedDistanceField {
 public struct SDF<T: SIMDScalar> {
     public let _function: (T, T, T) -> T
 
-    init(_function: @escaping (T, T, T) -> T) {
+    public init(_function: @escaping (T, T, T) -> T) {
         self._function = _function
     }
 
