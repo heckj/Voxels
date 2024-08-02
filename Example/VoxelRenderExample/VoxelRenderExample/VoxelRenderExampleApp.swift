@@ -9,7 +9,7 @@ struct VoxelRenderExampleApp: App {
         }
     }
 
-    func sdf_to_buffer(sdf: SDF<Float>) -> SurfaceNetsBuffer {
+    func sdf_to_buffer(sdf: SDFWrapper<Float>) -> SurfaceNetsBuffer {
         let sampleShape = VoxelArray<UInt32>(size: 34, value: 0)
         var samples: [Float] = Array(repeating: 0.0, count: sampleShape.size)
 

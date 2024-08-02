@@ -32,7 +32,6 @@ final class SurfaceNetTests: XCTestCase {
     }
 
     func testSphereSDFMeasures() throws {
-        
         let sphereSDF = SDF.sphere
 
         XCTAssertEqual(sphereSDF.valueAt(x: 0, y: 0, z: 0), -0.5)

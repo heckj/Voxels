@@ -35,7 +35,7 @@ public enum SDF {
     static func _sphere(p: SIMD3<Float>, radius: Float) -> Float {
         p.length - radius
     }
-    
+
 //    static func _cube(b: Vector, p: Vector) -> Float {
 //        let q = p.abs() - b;
 //        q.max(Vec3A::ZERO).length() + q.max_element().min(0.0)
@@ -45,5 +45,4 @@ public enum SDF {
 //        let q = Vec3A::new(p.x, (p.y.abs() - le).max(0.0), p.z);
 //        Vec2::new(q.length() - r1, q.z).length() - r2
 //    }
-
 }
