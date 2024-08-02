@@ -6,18 +6,18 @@ public struct SurfaceNetsBuffer {
     ///
     /// These are in array-local coordinates. That is, at the array position `(x, y, z)`, the vertex
     /// position would be `(x, y, z) + centroid` if the isosurface intersects that voxel.
-    var positions: [SIMD3<Float>]
+    public var positions: [SIMD3<Float>]
 
     /// The triangle mesh normals.
     ///
     /// The normals are **not** normalized, since that is done most efficiently on the GPU.
-    var normals: [SIMD3<Float>]
+    public var normals: [SIMD3<Float>]
 
     /// The triangle mesh indices.
-    var indices: [UInt32]
+    public var indices: [UInt32]
 
     /// Local 3D array coordinates of every voxel that intersects the isosurface.
-    var surface_points: [SIMD3<UInt32>]
+    public var surface_points: [SIMD3<UInt32>]
 
     /// Stride of every voxel that intersects the isosurface. Can be used for efficient post-processing.
     var surface_strides: [UInt32]
