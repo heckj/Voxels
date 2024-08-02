@@ -10,7 +10,7 @@ struct ContentView: View {
     }
 
     private func buildMesh() -> ModelEntity {
-        let sphereSDF = SDF.sphere
+        let sphereSDF = SDF.sphere()
 
         let sampleShape = VoxelArray<UInt32>(size: 34, value: 0)
         var samples: [Float] = Array(repeating: 0.0, count: sampleShape.size)
