@@ -5,31 +5,43 @@ final class SurfaceNetTests: XCTestCase {
     func testExample() throws {
         // Based on the example usage of the original library at https://github.com/bonsairobo/fast-surface-nets-rs/blob/main/examples-crate/render/main.rs
 
-        let sphereSDF = SDF<Float>() { _, _, _ in
-            self.sphere(radius: 1.0, p: Vector(0, 0, 0))
+        let sphereSDF = SDF<Float>() { x, y, z in
+            self.sphere(radius: 0.5, p: Vector(x, y, z))
         }
 
-        let buffer = sdf_to_buffer(sdf: sphereSDF)
-        XCTAssertNotNil(buffer)
-    }
-
-    func sdf_to_buffer(sdf: SDF<Float>) -> SurfaceNetsBuffer {
         let sampleShape = VoxelArray<UInt32>(size: 34, value: 0)
-        // type SampleShape = ConstShape3u32<34, 34, 34>;
-
         var samples: [Float] = Array(repeating: 0.0, count: sampleShape.size)
 
         for i in 0 ..< (sampleShape.size) {
             let position: SIMD3<Float> = into_domain(array_dim: 32, sampleShape.delinearize(UInt(i)))
-            samples[i] = sdf.valueAt(position)
+            let value = sphereSDF.valueAt(position)
+            samples[i] = value
         }
 
-        return surface_nets(
+        let insides = samples.filter { val in
+            val < 0
+        }
+        XCTAssertTrue(insides.count > 1)
+
+        let buffer = surface_nets(
             sdf: samples,
             shape: sampleShape,
             min: SIMD3<UInt32>(0, 0, 0),
             max: SIMD3<UInt32>(33, 33, 33)
         )
+
+        XCTAssertTrue(buffer.positions.count > 1)
+    }
+
+    func testSphereSDFMeasures() throws {
+        let sphereSDF = SDF<Float>() { x, y, z in
+            self.sphere(radius: 0.5, p: Vector(x, y, z))
+        }
+
+        XCTAssertEqual(sphereSDF.valueAt(x: 0, y: 0, z: 0), -0.5)
+        XCTAssertEqual(sphereSDF.valueAt(x: 0.25, y: 0, z: 0), -0.25)
+        XCTAssertEqual(sphereSDF.valueAt(x: 0.5, y: 0, z: 0), 0)
+        XCTAssertEqual(sphereSDF.valueAt(x: 1, y: 0, z: 0), 0.5)
     }
 
     func into_domain(array_dim: UInt, _ xyz: SIMD3<UInt>) -> SIMD3<Float> {

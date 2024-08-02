@@ -4,25 +4,6 @@ import SwiftUI
 import Voxels
 
 struct ContentView: View {
-    private func sdf_to_buffer(sdf: SDF<Float>) -> SurfaceNetsBuffer {
-        let sampleShape = VoxelArray<UInt32>(size: 34, value: 0)
-        // type SampleShape = ConstShape3u32<34, 34, 34>;
-
-        var samples: [Float] = Array(repeating: 0.0, count: sampleShape.size)
-
-        for i in 0 ..< (sampleShape.size) {
-            let position: SIMD3<Float> = into_domain(array_dim: 32, sampleShape.delinearize(UInt(i)))
-            samples[i] = sdf.valueAt(position)
-        }
-
-        return surface_nets(
-            sdf: samples,
-            shape: sampleShape,
-            min: SIMD3<UInt32>(0, 0, 0),
-            max: SIMD3<UInt32>(33, 33, 33)
-        )
-    }
-
     private func into_domain(array_dim: UInt, _ xyz: SIMD3<UInt>) -> SIMD3<Float> {
         // samples over a quadrant - starts at -1 and goes up to (2/edgeSize * (edgeSize-1)) - 1
         (2.0 / Float(array_dim)) * SIMD3<Float>(Float(xyz.x), Float(xyz.y), Float(xyz.z)) - 1.0
@@ -33,10 +14,26 @@ struct ContentView: View {
     }
 
     private func buildMesh() -> ModelEntity {
-        let sphereSDF = SDF<Float>() { _, _, _ in
-            sphere(radius: 0.5, p: Vector(0, 0, 0))
+        let sphereSDF = SDF<Float>() { x, y, z in
+            sphere(radius: 0.5, p: Vector(x, y, z))
         }
-        let buffer = sdf_to_buffer(sdf: sphereSDF)
+
+        let sampleShape = VoxelArray<UInt32>(size: 34, value: 0)
+        var samples: [Float] = Array(repeating: 0.0, count: sampleShape.size)
+
+        for i in 0 ..< (sampleShape.size) {
+            let position: SIMD3<Float> = into_domain(array_dim: 32, sampleShape.delinearize(UInt(i)))
+            let value = sphereSDF.valueAt(position)
+            samples[i] = value
+        }
+
+        let buffer = surface_nets(
+            sdf: samples,
+            shape: sampleShape,
+            min: SIMD3<UInt32>(0, 0, 0),
+            max: SIMD3<UInt32>(33, 33, 33)
+        )
+
         let descriptor = buffer.meshDescriptor()
         let mesh = try! MeshResource.generate(from: [descriptor])
         let material = SimpleMaterial(color: .green, isMetallic: false)
