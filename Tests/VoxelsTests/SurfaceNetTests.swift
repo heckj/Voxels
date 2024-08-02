@@ -5,7 +5,7 @@ final class SurfaceNetTests: XCTestCase {
     func testExample() throws {
         // Based on the example usage of the original library at https://github.com/bonsairobo/fast-surface-nets-rs/blob/main/examples-crate/render/main.rs
 
-        let sphereSDF = SDF.sphere
+        let sphereSDF: SDFSampleable<Float> = SDF.sphere()
 
         let sampleShape = VoxelArray<UInt32>(size: 34, value: 0)
         var samples: [Float] = Array(repeating: 0.0, count: sampleShape.size)
@@ -32,7 +32,7 @@ final class SurfaceNetTests: XCTestCase {
     }
 
     func testSphereSDFMeasures() throws {
-        let sphereSDF = SDF.sphere
+        let sphereSDF = SDF.sphere()
 
         XCTAssertEqual(sphereSDF.valueAt(x: 0, y: 0, z: 0), -0.5)
         XCTAssertEqual(sphereSDF.valueAt(x: 0.25, y: 0, z: 0), -0.25)
