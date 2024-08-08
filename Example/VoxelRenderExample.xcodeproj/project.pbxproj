@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1A51C57C2C54556B0037FEEF /* Voxels in Frameworks */ = {isa = PBXBuildFile; productRef = 1A51C57B2C54556B0037FEEF /* Voxels */; };
-		1ADA4C882C570B7800E4F844 /* CameraControlARView in Frameworks */ = {isa = PBXBuildFile; productRef = 1ADA4C872C570B7800E4F844 /* CameraControlARView */; };
+		1AACD7882C655E97001C91E7 /* Voxels in Frameworks */ = {isa = PBXBuildFile; productRef = 1AACD7872C655E97001C91E7 /* Voxels */; };
+		1AACD78B2C655EA8001C91E7 /* CameraControlARView in Frameworks */ = {isa = PBXBuildFile; productRef = 1AACD78A2C655EA8001C91E7 /* CameraControlARView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,8 +25,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AACD78B2C655EA8001C91E7 /* CameraControlARView in Frameworks */,
 				1A51C57C2C54556B0037FEEF /* Voxels in Frameworks */,
-				1ADA4C882C570B7800E4F844 /* CameraControlARView in Frameworks */,
+				1AACD7882C655E97001C91E7 /* Voxels in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,7 +71,8 @@
 			name = VoxelRenderExample;
 			packageProductDependencies = (
 				1A51C57B2C54556B0037FEEF /* Voxels */,
-				1ADA4C872C570B7800E4F844 /* CameraControlARView */,
+				1AACD7872C655E97001C91E7 /* Voxels */,
+				1AACD78A2C655EA8001C91E7 /* CameraControlARView */,
 			);
 			productName = VoxelRenderExample;
 			productReference = 1A51C5682C5454EA0037FEEF /* VoxelRenderExample.app */;
@@ -100,8 +103,8 @@
 			);
 			mainGroup = 1A51C55F2C5454EA0037FEEF;
 			packageReferences = (
-				1A51C57A2C54556B0037FEEF /* XCLocalSwiftPackageReference "../../../Voxels" */,
-				1ADA4C862C570B7800E4F844 /* XCRemoteSwiftPackageReference "CameraControlARView" */,
+				1AACD7862C655E97001C91E7 /* XCLocalSwiftPackageReference "../../Voxels" */,
+				1AACD7892C655EA8001C91E7 /* XCLocalSwiftPackageReference "../../CameraControlARView" */,
 			);
 			productRefGroup = 1A51C5692C5454EA0037FEEF /* Products */;
 			projectDirPath = "";
@@ -365,31 +368,27 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		1A51C57A2C54556B0037FEEF /* XCLocalSwiftPackageReference "../../../Voxels" */ = {
+		1AACD7862C655E97001C91E7 /* XCLocalSwiftPackageReference "../../Voxels" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../Voxels;
+			relativePath = ../../Voxels;
+		};
+		1AACD7892C655EA8001C91E7 /* XCLocalSwiftPackageReference "../../CameraControlARView" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../CameraControlARView;
 		};
 /* End XCLocalSwiftPackageReference section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		1ADA4C862C570B7800E4F844 /* XCRemoteSwiftPackageReference "CameraControlARView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/heckj/CameraControlARView";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.6.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		1A51C57B2C54556B0037FEEF /* Voxels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Voxels;
 		};
-		1ADA4C872C570B7800E4F844 /* CameraControlARView */ = {
+		1AACD7872C655E97001C91E7 /* Voxels */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1ADA4C862C570B7800E4F844 /* XCRemoteSwiftPackageReference "CameraControlARView" */;
+			productName = Voxels;
+		};
+		1AACD78A2C655EA8001C91E7 /* CameraControlARView */ = {
+			isa = XCSwiftPackageProductDependency;
 			productName = CameraControlARView;
 		};
 /* End XCSwiftPackageProductDependency section */
