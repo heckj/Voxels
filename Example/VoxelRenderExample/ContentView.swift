@@ -112,7 +112,6 @@ struct ContentView: View {
                 //            RealityView { content in
                 //                showTangentCoordinateSystems(modelEntity: me, parent: me.parent!)
                 //            }
-                ArcBallStateView(state: arcballState)
             }
             Text("Hello, world!")
         }
