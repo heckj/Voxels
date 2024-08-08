@@ -5,7 +5,7 @@ import Voxels
 
 struct ContentView: View {
     @State private var arcballState: ArcBallState
-    
+
     private func into_domain(array_dim: UInt, _ xyz: SIMD3<UInt>) -> SIMD3<Float> {
         // samples over a quadrant - starts at -1 and goes up to (2/edgeSize * (edgeSize-1)) - 1
         (2.0 / Float(array_dim)) * SIMD3<Float>(Float(xyz.x), Float(xyz.y), Float(xyz.z)) - 1.0
@@ -81,6 +81,7 @@ struct ContentView: View {
     init() {
         arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0), radius: 50.0, inclinationAngle: 0.0, rotationAngle: 0.0)
     }
+
     var body: some View {
         VStack {
             HStack {
@@ -88,18 +89,18 @@ struct ContentView: View {
                     // camera is positioned (at the start) at 0,0,2, looking in -Z direction
                     // so, loosely ~2m back from 0,0,0
                     // - this is derived from radius: 2, inclination: 0, rotation: 0
-                    
+
                     // look at point
                     content.arView.arcball_state = arcballState
                     print("camera anchor position: \(content.arView.cameraAnchor.position)")
                     let floor = buildFloor(color: .blue) // width: 1, depth:1, at 0,0,0
                     content.add(floor)
-                    
+
                     // lower left
                     content.add(buildSphere(position: SIMD3<Float>(0, 0, 0), radius: 0.05, color: .red))
                     // lower right
                     content.add(buildSphere(position: SIMD3<Float>(1, 0, 0), radius: 0.05, color: .red))
-                    
+
                     // upper right
                     content.add(buildSphere(position: SIMD3<Float>(0, 1, 0), radius: 0.05, color: .red))
                     // upper left
