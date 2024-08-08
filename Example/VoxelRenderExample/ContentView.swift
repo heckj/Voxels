@@ -79,7 +79,7 @@ struct ContentView: View {
     }
 
     init() {
-        arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0), radius: 50.0, inclinationAngle: 0.0, rotationAngle: 0.0)
+        arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0), radius: 5.0, inclinationAngle: 0.0, rotationAngle: 0.0)
     }
 
     var body: some View {
