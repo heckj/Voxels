@@ -360,5 +360,4 @@ func maybe_make_quad(
         [v2, v4, v3, v2, v3, v1]
     }
     indices.append(contentsOf: quad)
-//    indices.extend_from_slice(&quad);
 }
