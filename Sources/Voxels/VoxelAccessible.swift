@@ -1,6 +1,7 @@
-public protocol VoxelAccessible {
+public protocol VoxelAccessible<Element> {
     associatedtype Element
-    func value(x: UInt, y: UInt, z: UInt) -> Element
+    func value(x: Int, y: Int, z: Int) -> Element?
+    subscript(_: SIMD3<Int>) -> Element? { get }
 }
 
 public protocol StrideIndexable {
