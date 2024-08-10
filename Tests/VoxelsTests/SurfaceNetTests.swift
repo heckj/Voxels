@@ -6,14 +6,10 @@ final class SurfaceNetTests: XCTestCase {
         // Based on the example usage of the original library at https://github.com/bonsairobo/fast-surface-nets-rs/blob/main/examples-crate/render/main.rs
 
         let sphereSDF: SDFSampleable<Float> = SDF.sphere()
-
-        let sampleShape = VoxelArray<UInt32>(edge: 34, value: 0)
-
         var samples = VoxelArray<Float>(edge: 34, value: 0.0)
-        // var samples: [Float] = Array(repeating: 0.0, count: sampleShape.size)
 
-        for i in 0 ..< (sampleShape.size) {
-            let position: SIMD3<Float> = into_domain(array_dim: 32, sampleShape.delinearize(i))
+        for i in 0 ..< (samples.size) {
+            let position: SIMD3<Float> = into_domain(array_dim: 32, samples.delinearize(i))
             let value = sphereSDF.valueAt(position)
             samples[i] = value
         }
@@ -25,7 +21,6 @@ final class SurfaceNetTests: XCTestCase {
 
         let buffer = surface_nets(
             sdf: samples,
-            shape: sampleShape,
             min: SIMD3<UInt32>(0, 0, 0),
             max: SIMD3<UInt32>(33, 33, 33)
         )
