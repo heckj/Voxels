@@ -1,16 +1,16 @@
-//https://github.com/bonsairobo/block-mesh-rs/blob/main/src/greedy.rs
-//mod merge_strategy;
+// https://github.com/bonsairobo/block-mesh-rs/blob/main/src/greedy.rs
+// mod merge_strategy;
 //
-//pub use merge_strategy::*;
+// pub use merge_strategy::*;
 //
-//use crate::{bounds::assert_in_bounds, OrientedBlockFace, QuadBuffer, UnorientedQuad, Voxel, VoxelVisibility};
+// use crate::{bounds::assert_in_bounds, OrientedBlockFace, QuadBuffer, UnorientedQuad, Voxel, VoxelVisibility};
 //
-//use ilattice::glam::UVec3;
-//use ilattice::prelude::Extent;
-//use ndcopy::fill3;
-//use ndshape::Shape;
+// use ilattice::glam::UVec3;
+// use ilattice::prelude::Extent;
+// use ndcopy::fill3;
+// use ndshape::Shape;
 //
-//pub trait MergeVoxel: Voxel {
+// pub trait MergeVoxel: Voxel {
 //    type MergeValue: Eq;
 //    type MergeValueFacingNeighbour: Eq;
 //
@@ -19,21 +19,21 @@
 //    fn merge_value(&self) -> Self::MergeValue;
 //
 //    fn merge_value_facing_neighbour(&self) -> Self::MergeValueFacingNeighbour;
-//}
+// }
 //
 ///// Contains the output from the [`greedy_quads`] algorithm. The quads can be used to generate a mesh. See the methods on
 ///// [`OrientedBlockFace`] and [`UnorientedQuad`] for details.
 /////
 ///// This buffer can be reused between multiple calls of [`greedy_quads`] in order to avoid reallocations.
-//pub struct GreedyQuadsBuffer {
+// pub struct GreedyQuadsBuffer {
 //    pub quads: QuadBuffer,
 //
 //    // A single array is used for the visited mask because it allows us to index by the same strides as the voxels array. It
 //    // also only requires a single allocation.
 //    visited: Vec<bool>,
-//}
+// }
 //
-//impl GreedyQuadsBuffer {
+// impl GreedyQuadsBuffer {
 //    pub fn new(size: usize) -> Self {
 //        Self {
 //            quads: QuadBuffer::new(),
@@ -48,7 +48,7 @@
 //            self.visited = vec![false; size];
 //        }
 //    }
-//}
+// }
 //
 ///// The "Greedy Meshing" algorithm described by Mikola Lysenko in the [0fps
 ///// article](https://0fps.net/2012/06/30/meshing-in-a-minecraft-game/).
@@ -59,17 +59,17 @@
 /////
 ///// All quads created will have the same "merge value" as defined by the [`MergeVoxel`] trait. The quads can be post-processed
 ///// into meshes as the user sees fit.
-//pub fn greedy_quads<T, S>(
+// pub fn greedy_quads<T, S>(
 //    voxels: &[T],
 //    voxels_shape: &S,
 //    min: [u32; 3],
 //    max: [u32; 3],
 //    faces: &[OrientedBlockFace; 6],
 //    output: &mut GreedyQuadsBuffer,
-//) where
+// ) where
 //    T: MergeVoxel,
 //    S: Shape<3, Coord = u32>,
-//{
+// {
 //    greedy_quads_with_merge_strategy::<_, _, VoxelMerger<T>>(
 //        voxels,
 //        voxels_shape,
@@ -78,21 +78,21 @@
 //        faces,
 //        output,
 //    )
-//}
+// }
 //
 ///// Run the greedy meshing algorithm with a custom quad merging strategy using the [`MergeStrategy`] trait.
-//pub fn greedy_quads_with_merge_strategy<T, S, Merger>(
+// pub fn greedy_quads_with_merge_strategy<T, S, Merger>(
 //    voxels: &[T],
 //    voxels_shape: &S,
 //    min: [u32; 3],
 //    max: [u32; 3],
 //    faces: &[OrientedBlockFace; 6],
 //    output: &mut GreedyQuadsBuffer,
-//) where
+// ) where
 //    T: Voxel,
 //    S: Shape<3, Coord = u32>,
 //    Merger: MergeStrategy<Voxel = T>,
-//{
+// {
 //    assert_in_bounds(voxels, voxels_shape, min, max);
 //
 //    let min = UVec3::from(min).as_ivec3();
@@ -112,20 +112,20 @@
 //    for (group, face) in groups.iter_mut().zip(faces.iter()) {
 //        greedy_quads_for_face::<_, _, Merger>(voxels, voxels_shape, interior, face, visited, group);
 //    }
-//}
+// }
 //
-//fn greedy_quads_for_face<T, S, Merger>(
+// fn greedy_quads_for_face<T, S, Merger>(
 //    voxels: &[T],
 //    voxels_shape: &S,
 //    interior: Extent<UVec3>,
 //    face: &OrientedBlockFace,
 //    visited: &mut [bool],
 //    quads: &mut Vec<UnorientedQuad>,
-//) where
+// ) where
 //    T: Voxel,
 //    S: Shape<3, Coord = u32>,
 //    Merger: MergeStrategy<Voxel = T>,
-//{
+// {
 //    visited.fill(false);
 //
 //    let OrientedBlockFace {
@@ -223,20 +223,20 @@
 //        // Move to the next slice.
 //        slice_extent = slice_extent + *n;
 //    }
-//}
+// }
 //
 ///// Returns true iff the given `voxel` face needs to be meshed. This means that we haven't already meshed it, it is non-empty,
 ///// and it's visible (not completely occluded by an adjacent voxel).
-//pub(crate) unsafe fn face_needs_mesh<T>(
+// pub(crate) unsafe fn face_needs_mesh<T>(
 //    voxel: &T,
 //    voxel_stride: u32,
 //    visibility_offset: u32,
 //    voxels: &[T],
 //    visited: &[bool],
-//) -> bool
-//where
+// ) -> bool
+// where
 //    T: Voxel,
-//{
+// {
 //    if voxel.get_visibility() == VoxelVisibility::Empty || visited[voxel_stride as usize] {
 //        return false;
 //    }
@@ -251,10 +251,10 @@
 //        VoxelVisibility::Translucent => voxel.get_visibility() == VoxelVisibility::Opaque,
 //        VoxelVisibility::Opaque => false,
 //    }
-//}
+// }
 //
-//#[cfg(test)]
-//mod tests {
+// #[cfg(test)]
+// mod tests {
 //    use super::*;
 //    use crate::RIGHT_HANDED_Y_UP_CONFIG;
 //    use ndshape::{ConstShape, ConstShape3u32};
@@ -319,18 +319,93 @@
 //            true
 //        }
 //    }
-//}
+// }
 
-//https://github.com/bonsairobo/block-mesh-rs/blob/main/src/greedy/merge_strategy.rs
-//use crate::greedy::face_needs_mesh;
-//use crate::Voxel;
+// JavaScript greedyMesh algorithm
+// https://github.com/mikolalysenko/mikolalysenko.github.com/blob/gh-pages/MinecraftMeshes/js/greedy.js
 //
-//use super::MergeVoxel;
+// function GreedyMesh(volume, dims) {
+//  function f(i,j,k) {
+//    return volume[i + dims[0] * (j + dims[1] * k)];
+//  }
+//  //Sweep over 3-axes
+//  var quads = [];
+//  for(var d=0; d<3; ++d) {
+//    var i, j, k, l, w, h
+//      , u = (d+1)%3
+//      , v = (d+2)%3
+//      , x = [0,0,0]
+//      , q = [0,0,0]
+//      , mask = new Int32Array(dims[u] * dims[v]);
+//    q[d] = 1;
+//    for(x[d]=-1; x[d]<dims[d]; ) {
+//      //Compute mask
+//      var n = 0;
+//      for(x[v]=0; x[v]<dims[v]; ++x[v])
+//      for(x[u]=0; x[u]<dims[u]; ++x[u]) {
+//        mask[n++] =
+//          (0    <= x[d]      ? f(x[0],      x[1],      x[2])      : false) !=
+//          (x[d] <  dims[d]-1 ? f(x[0]+q[0], x[1]+q[1], x[2]+q[2]) : false);
+//      }
+//      //Increment x[d]
+//      ++x[d];
+//      //Generate mesh for mask using lexicographic ordering
+//      n = 0;
+//      for(j=0; j<dims[v]; ++j)
+//      for(i=0; i<dims[u]; ) {
+//        if(mask[n]) {
+//          //Compute width
+//          for(w=1; mask[n+w] && i+w<dims[u]; ++w) {
+//          }
+//          //Compute height (this is slightly awkward
+//          var done = false;
+//          for(h=1; j+h<dims[v]; ++h) {
+//            for(k=0; k<w; ++k) {
+//              if(!mask[n+k+h*dims[u]]) {
+//                done = true;
+//                break;
+//              }
+//            }
+//            if(done) {
+//              break;
+//            }
+//          }
+//          //Add quad
+//          x[u] = i;  x[v] = j;
+//          var du = [0,0,0]; du[u] = w;
+//          var dv = [0,0,0]; dv[v] = h;
+//          quads.push([
+//              [x[0],             x[1],             x[2]            ]
+//            , [x[0]+du[0],       x[1]+du[1],       x[2]+du[2]      ]
+//            , [x[0]+du[0]+dv[0], x[1]+du[1]+dv[1], x[2]+du[2]+dv[2]]
+//            , [x[0]      +dv[0], x[1]      +dv[1], x[2]      +dv[2]]
+//          ]);
+//          //Zero-out mask
+//          for(l=0; l<h; ++l)
+//          for(k=0; k<w; ++k) {
+//            mask[n+k+l*dims[u]] = false;
+//          }
+//          //Increment counters and continue
+//          i += w; n += w;
+//        } else {
+//          ++i;    ++n;
+//        }
+//      }
+//    }
+//  }
+//  return quads;
+// }
+
+// https://github.com/bonsairobo/block-mesh-rs/blob/main/src/greedy/merge_strategy.rs
+// use crate::greedy::face_needs_mesh;
+// use crate::Voxel;
+//
+// use super::MergeVoxel;
 //
 //// TODO: implement a MergeStrategy for voxels with an ambient occlusion value at each vertex
 //
 ///// A strategy for merging cube faces into quads.
-//pub trait MergeStrategy {
+// pub trait MergeStrategy {
 //    type Voxel;
 //
 //    /// Return the width and height of the quad that should be constructed.
@@ -362,23 +437,23 @@
 //    ) -> (u32, u32)
 //    where
 //        Self::Voxel: Voxel;
-//}
+// }
 //
-//pub struct FaceStrides {
+// pub struct FaceStrides {
 //    pub n_stride: u32,
 //    pub u_stride: u32,
 //    pub v_stride: u32,
 //    pub visibility_offset: u32,
-//}
+// }
 //
-//pub struct VoxelMerger<T> {
+// pub struct VoxelMerger<T> {
 //    marker: std::marker::PhantomData<T>,
-//}
+// }
 //
-//impl<T> MergeStrategy for VoxelMerger<T>
-//where
+// impl<T> MergeStrategy for VoxelMerger<T>
+// where
 //    T: MergeVoxel,
-//{
+// {
 //    type Voxel = T;
 //
 //    unsafe fn find_quad(
@@ -431,9 +506,9 @@
 //
 //        (quad_width, quad_height)
 //    }
-//}
+// }
 //
-//impl<T> VoxelMerger<T> {
+// impl<T> VoxelMerger<T> {
 //    unsafe fn get_row_width(
 //        voxels: &[T],
 //        visited: &[bool],
@@ -473,4 +548,4 @@
 //
 //        quad_width
 //    }
-//}
+// }
