@@ -69,8 +69,20 @@ public struct VoxelArray<T>: VoxelAccessible, StrideIndexable {
         return SIMD3<UInt>(x, y, z)
     }
 
-    public func value(x: UInt, y: UInt, z: UInt) -> T {
-        _contents[linearize(x, y, z)]
+    public func value(x: Int, y: Int, z: Int) -> T? {
+        _contents[linearize(UInt(x), UInt(y), UInt(z))]
+    }
+
+    public subscript(position: SIMD3<Int>) -> T? {
+        get {
+            _contents[linearize(UInt(position.x), UInt(position.y), UInt(position.z))]
+        }
+        set(newValue) {
+            let pos = linearize(UInt(position.x), UInt(position.y), UInt(position.z))
+            if let newValue {
+                _contents[pos] = newValue
+            }
+        }
     }
 
     subscript(index: Int) -> T {
