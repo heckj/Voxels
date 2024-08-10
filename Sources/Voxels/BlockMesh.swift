@@ -1,28 +1,28 @@
 // https://github.com/bonsairobo/block-mesh-rs/blob/main/src/simple.rs
 //
-//use crate::{
+// use crate::{
 //    bounds::assert_in_bounds, IdentityVoxel, OrientedBlockFace, UnitQuadBuffer, UnorientedUnitQuad, Voxel, VoxelVisibility,
-//};
+// };
 //
-//use ilattice::glam::UVec3;
-//use ilattice::prelude::Extent;
-//use ndshape::Shape;
+// use ilattice::glam::UVec3;
+// use ilattice::prelude::Extent;
+// use ndshape::Shape;
 //
 //
 ///// A fast and simple meshing algorithm that produces a single quad for every visible face of a block.
 /////
 ///// This is faster than [`greedy_quads`](crate::greedy_quads) but it produces many more quads.
-//pub fn visible_block_faces<T, S>(
+// pub fn visible_block_faces<T, S>(
 //    voxels: &[T],
 //    voxels_shape: &S,
 //    min: [u32; 3],
 //    max: [u32; 3],
 //    faces: &[OrientedBlockFace; 6],
 //    output: &mut UnitQuadBuffer,
-//) where
+// ) where
 //    T: Voxel,
 //    S: Shape<3, Coord = u32>,
-//{
+// {
 //    visible_block_faces_with_voxel_view::<_, IdentityVoxel<T>, _>(
 //        voxels,
 //        voxels_shape,
@@ -31,23 +31,23 @@
 //        faces,
 //        output,
 //    )
-//}
+// }
 //
 ///// Same as [`visible_block_faces`](visible_block_faces),
 ///// with the additional ability to interpret the array as some other type.
 ///// Use this if you want to mesh the same array multiple times
 ///// with different sets of voxels being visible.
-//pub fn visible_block_faces_with_voxel_view<'a, T, V, S>(
+// pub fn visible_block_faces_with_voxel_view<'a, T, V, S>(
 //    voxels: &'a [T],
 //    voxels_shape: &S,
 //    min: [u32; 3],
 //    max: [u32; 3],
 //    faces: &[OrientedBlockFace; 6],
 //    output: &mut UnitQuadBuffer,
-//) where
+// ) where
 //    V: Voxel + From<&'a T>,
 //    S: Shape<3, Coord = u32>,
-//{
+// {
 //    assert_in_bounds(voxels, voxels_shape, min, max);
 //
 //    let min = UVec3::from(min).as_ivec3();
@@ -86,10 +86,10 @@
 //            }
 //        }
 //    }
-//}
+// }
 //
-//#[cfg(test)]
-//mod tests {
+// #[cfg(test)]
+// mod tests {
 //    use super::*;
 //    use crate::RIGHT_HANDED_Y_UP_CONFIG;
 //    use ndshape::{ConstShape, ConstShape3u32};
@@ -142,8 +142,7 @@
 //        }
 //    }
 //
-//}
-
+// }
 
 //  https://github.com/bonsairobo/block-mesh-rs/blob/main/src/lib.rs
 //
@@ -226,51 +225,52 @@
 //! assert!(buffer.quads.num_quads() > 0);
 //! ```
 
-mod bounds;
-mod buffer;
-pub mod geometry;
-mod greedy;
-mod simple;
-
-pub use buffer::*;
-#[doc(inline)]
-pub use geometry::*;
-pub use greedy::*;
-pub use simple::*;
-
-pub use ilattice;
-pub use ndshape;
-
-/// Describes how this voxel influences mesh generation.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum VoxelVisibility {
-    /// This voxel should not produce any geometry.
-    Empty,
-    /// Should produce geometry, and also light can pass through.
-    Translucent,
-    /// Light cannot pass through this voxel.
-    Opaque,
-}
-
-/// Implement on your voxel types to inform the library
-/// how to generate geometry for this voxel.
-pub trait Voxel {
-    fn get_visibility(&self) -> VoxelVisibility;
-}
-
-/// Used as a dummy for functions that must wrap a voxel
-/// but don't want to change the original's properties.
-struct IdentityVoxel<'a, T: Voxel>(&'a T);
-
-impl<'a, T: Voxel> Voxel for IdentityVoxel<'a, T> {
-    #[inline]
-    fn get_visibility(&self) -> VoxelVisibility {
-        self.0.get_visibility()
-    }
-}
-
-impl<'a, T: Voxel> From<&'a T> for IdentityVoxel<'a, T> {
-    fn from(voxel: &'a T) -> Self {
-        Self(voxel)
-    }
-}
+// lib.rs
+// mod bounds;
+// mod buffer;
+// pub mod geometry;
+// mod greedy;
+// mod simple;
+//
+// pub use buffer::*;
+// #[doc(inline)]
+// pub use geometry::*;
+// pub use greedy::*;
+// pub use simple::*;
+//
+// pub use ilattice;
+// pub use ndshape;
+//
+///// Describes how this voxel influences mesh generation.
+// #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+// pub enum VoxelVisibility {
+//    /// This voxel should not produce any geometry.
+//    Empty,
+//    /// Should produce geometry, and also light can pass through.
+//    Translucent,
+//    /// Light cannot pass through this voxel.
+//    Opaque,
+// }
+//
+///// Implement on your voxel types to inform the library
+///// how to generate geometry for this voxel.
+// pub trait Voxel {
+//    fn get_visibility(&self) -> VoxelVisibility;
+// }
+//
+///// Used as a dummy for functions that must wrap a voxel
+///// but don't want to change the original's properties.
+// struct IdentityVoxel<'a, T: Voxel>(&'a T);
+//
+// impl<'a, T: Voxel> Voxel for IdentityVoxel<'a, T> {
+//    #[inline]
+//    fn get_visibility(&self) -> VoxelVisibility {
+//        self.0.get_visibility()
+//    }
+// }
+//
+// impl<'a, T: Voxel> From<&'a T> for IdentityVoxel<'a, T> {
+//    fn from(voxel: &'a T) -> Self {
+//        Self(voxel)
+//    }
+// }
