@@ -3,7 +3,7 @@ import XCTest
 
 class VoxelArrayTests: XCTestCase {
     func testVoxelArrayInitializer() throws {
-        let v = VoxelArray(size: 3, value: 1)
+        let v = VoxelArray(edge: 3, value: 1)
 
         // internal access
         XCTAssertEqual(v._contents.count, 27)
@@ -20,7 +20,7 @@ class VoxelArrayTests: XCTestCase {
     }
 
     func testLinearize() throws {
-        let v = VoxelArray(size: 3, value: 1)
+        let v = VoxelArray(edge: 3, value: 1)
 
         // indexing function
         XCTAssertEqual(v.linearize(0, 0, 0), 0)
@@ -29,7 +29,7 @@ class VoxelArrayTests: XCTestCase {
     }
 
     func testDelinearize() throws {
-        let v = VoxelArray(size: 3, value: 1)
+        let v = VoxelArray(edge: 3, value: 1)
 
         // reversing the indexing function
         XCTAssertEqual(v.delinearize(0), SIMD3<UInt>(0, 0, 0))

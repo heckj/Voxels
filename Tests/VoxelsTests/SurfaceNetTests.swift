@@ -7,16 +7,18 @@ final class SurfaceNetTests: XCTestCase {
 
         let sphereSDF: SDFSampleable<Float> = SDF.sphere()
 
-        let sampleShape = VoxelArray<UInt32>(size: 34, value: 0)
-        var samples: [Float] = Array(repeating: 0.0, count: sampleShape.size)
+        let sampleShape = VoxelArray<UInt32>(edge: 34, value: 0)
+
+        var samples = VoxelArray<Float>(edge: 34, value: 0.0)
+        // var samples: [Float] = Array(repeating: 0.0, count: sampleShape.size)
 
         for i in 0 ..< (sampleShape.size) {
-            let position: SIMD3<Float> = into_domain(array_dim: 32, sampleShape.delinearize(UInt(i)))
+            let position: SIMD3<Float> = into_domain(array_dim: 32, sampleShape.delinearize(i))
             let value = sphereSDF.valueAt(position)
             samples[i] = value
         }
 
-        let insides = samples.filter { val in
+        let insides = samples._contents.filter { val in
             val < 0
         }
         XCTAssertTrue(insides.count > 1)

@@ -29,7 +29,7 @@ public let NULL_VERTEX = UInt32.max
 /// Note that the scheme illustrated above implies that chunks must be padded with a 1-voxel border copied from neighboring
 /// voxels in order to connect seamlessly.
 public func surface_nets(
-    sdf: [Float],
+    sdf: VoxelArray<Float>,
     shape: VoxelArray<UInt32>,
     min: SIMD3<UInt32>,
     max: SIMD3<UInt32>
@@ -39,9 +39,9 @@ public func surface_nets(
     // assert!(shape.linearize(min) <= shape.linearize(max));
     precondition(shape.linearize(min) <= shape.linearize(max))
     // assert!((shape.linearize(max) as usize) < sdf.len());
-    precondition(shape.linearize(max) < sdf.count)
+    precondition(shape.linearize(max) < sdf.size)
 
-    var buffer = SurfaceNetsBuffer(arraySize: UInt(sdf.count))
+    var buffer = SurfaceNetsBuffer(arraySize: UInt(sdf.size))
 
     estimate_surface(sdf: sdf, shape: shape, min: min, max: max, output: &buffer)
     make_all_quads(sdf: sdf, shape: shape, min: min, max: max, output: &buffer)
@@ -51,7 +51,7 @@ public func surface_nets(
 // Find all vertex positions and normals.
 // Also generate a map from grid position to vertex index to be used to look up vertices when generating quads.
 func estimate_surface(
-    sdf: [Float],
+    sdf: VoxelArray<Float>,
     shape: VoxelArray<UInt32>,
     min: SIMD3<UInt32>,
     max: SIMD3<UInt32>,
@@ -80,7 +80,7 @@ func estimate_surface(
 // This is done by estimating, for each cube edge, where the isosurface crosses the edge (if it does at all). Then the estimated
 // surface point is the average of these edge crossings.
 func estimate_surface_in_cube(
-    sdf: [Float],
+    sdf: VoxelArray<Float>,
     shape: VoxelArray<UInt32>,
     position: SIMD3<Float>,
     min_corner_stride: Int,
@@ -221,7 +221,7 @@ let CUBE_EDGES: [SIMD2<UInt32>] = [
 // "centers" are actually the vertex positions found earlier. Also make sure the triangles are facing the right way. See the
 // comments on `maybe_make_quad` to help with understanding the indexing.
 func make_all_quads(
-    sdf: [Float],
+    sdf: VoxelArray<Float>,
     shape: VoxelArray<UInt32>,
     min: SIMD3<UInt32>,
     max: SIMD3<UInt32>,
@@ -311,7 +311,7 @@ func make_all_quads(
 // then we must find the other 3 quad corners by moving along the other two axes (those orthogonal to A) in the negative
 // directions; these are axis B and axis C.
 func maybe_make_quad(
-    sdf: [Float],
+    sdf: VoxelArray<Float>,
     stride_to_index: [UInt32],
     positions: [SIMD3<Float>],
     p1: Int,

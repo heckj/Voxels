@@ -1,10 +1,11 @@
-public struct VoxelArray<T>: VoxelAccess {
+public struct VoxelArray<T>: VoxelAccessible, StrideIndexable {
     var _contents: [T]
     public let edgeSize: Int
 
-    public init(size: UInt, value: T) {
-        edgeSize = Int(size)
-        _contents = Array(repeating: value, count: Int(size) * Int(size) * Int(size))
+    public init(edge: Int, value: T) {
+        precondition(edge >= 0)
+        edgeSize = edge
+        _contents = Array(repeating: value, count: edge * edge * edge)
     }
 
     public var size: Int {
@@ -18,17 +19,7 @@ public struct VoxelArray<T>: VoxelAccess {
 
     @inlinable
     public func linearize(_ arr: SIMD3<UInt>) -> Int {
-        linearize(arr.x, arr.y, arr.z)
-    }
-
-    @inlinable
-    public func linearize(_ arr: SIMD3<UInt32>) -> Int {
-        linearize(UInt(arr.x), UInt(arr.y), UInt(arr.z))
-    }
-
-    @inlinable
-    public func linearize(_ x: UInt, _ y: UInt, _ z: UInt) -> Int {
-        let index = (Int(x) * edgeSize * edgeSize) + (Int(y) * edgeSize) + Int(z)
+        let index = (Int(arr.x) * edgeSize * edgeSize) + (Int(arr.y) * edgeSize) + Int(arr.z)
         // Row-major address by index:
         //
         //    Address of A[i][j][k] = B + W *(P* N * (i-x) + P*(j-y) + (k-z))
@@ -47,15 +38,28 @@ public struct VoxelArray<T>: VoxelAccess {
     }
 
     @inlinable
-    public func delinearize(_ arr: UInt) -> SIMD3<UInt> {
+    public func linearize(_ arr: SIMD3<UInt32>) -> Int {
+        let convertedSIMD = SIMD3<UInt>(UInt(arr.x), UInt(arr.y), UInt(arr.z))
+        return linearize(convertedSIMD)
+    }
+
+    @inlinable
+    public func linearize(_ x: UInt, _ y: UInt, _ z: UInt) -> Int {
+        linearize(SIMD3<UInt>(x, y, z))
+    }
+
+    @inlinable
+    public func delinearize(_ arr: Int) -> SIMD3<UInt> {
+        precondition(arr >= 0)
+        let strideIndex = UInt(arr)
         let majorStride = UInt(edgeSize * edgeSize)
         let minorStride = UInt(edgeSize)
         var x: UInt = 0
         if arr > majorStride {
-            x = arr / majorStride
+            x = strideIndex / majorStride
         }
 
-        let remaining = arr - (x * majorStride)
+        let remaining = strideIndex - (x * majorStride)
         var y: UInt = 0
         if remaining > minorStride {
             y = remaining / minorStride
@@ -67,5 +71,16 @@ public struct VoxelArray<T>: VoxelAccess {
 
     public func value(x: UInt, y: UInt, z: UInt) -> T {
         _contents[linearize(x, y, z)]
+    }
+
+    subscript(index: Int) -> T {
+        get {
+            precondition(index >= 0 && index < _contents.count)
+            return _contents[index]
+        }
+        set(newValue) {
+            precondition(index >= 0 && index < _contents.count)
+            _contents[index] = newValue
+        }
     }
 }
