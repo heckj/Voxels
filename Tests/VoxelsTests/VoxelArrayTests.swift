@@ -37,8 +37,14 @@ class VoxelArrayTests: XCTestCase {
         XCTAssertEqual(v.delinearize(26), SIMD3<UInt>(2, 2, 2))
     }
 
-    func testSIMDFloatDefault() throws {
-        let x = SIMD8<Float>()
-        XCTAssertEqual(x[0], 0)
+    func testVoxelArraySequence() throws {
+        var voxels = VoxelArray(edge: 3, value: 1)
+        voxels[SIMD3<Int>(1, 1, 1)] = 2
+
+        let ones = voxels.filter { $0 == 1 }
+        XCTAssertEqual(ones.count, 26)
+
+        let twos = voxels.filter { $0 == 2 }
+        XCTAssertEqual(twos.count, 1)
     }
 }
