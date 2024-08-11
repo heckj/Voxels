@@ -9,6 +9,7 @@ public struct VoxelHash<T>: VoxelAccessible {
         _contents.count
     }
 
+    // TODO: move this to VoxelAccessible... or a broader voxel collection thing...
     public var bounds: (min: SIMD3<Int>, max: SIMD3<Int>)? {
         if _contents.isEmpty {
             return nil
