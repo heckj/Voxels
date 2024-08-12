@@ -32,9 +32,9 @@ class VoxelArrayTests: XCTestCase {
         let v = VoxelArray(edge: 3, value: 1)
 
         // reversing the indexing function
-        XCTAssertEqual(v.delinearize(0), SIMD3<UInt>(0, 0, 0))
-        XCTAssertEqual(v.delinearize(13), SIMD3<UInt>(1, 1, 1))
-        XCTAssertEqual(v.delinearize(26), SIMD3<UInt>(2, 2, 2))
+        XCTAssertEqual(v.delinearize(0), SIMD3<Int>(0, 0, 0))
+        XCTAssertEqual(v.delinearize(13), SIMD3<Int>(1, 1, 1))
+        XCTAssertEqual(v.delinearize(26), SIMD3<Int>(2, 2, 2))
     }
 
     func testVoxelArraySequence() throws {

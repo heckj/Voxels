@@ -6,5 +6,5 @@ public protocol VoxelAccessible<Element> {
 
 public protocol StrideIndexable {
     func linearize(_ arr: SIMD3<UInt>) -> Int
-    func delinearize(_ arr: Int) -> SIMD3<UInt>
+    func delinearize(_ arr: Int) -> SIMD3<Int>
 }
