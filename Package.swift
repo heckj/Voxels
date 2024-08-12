@@ -1,4 +1,5 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 5.9
+// Swift 5.9 to support Xcode 15.2 on GitHub Actions
 
 import PackageDescription
 
