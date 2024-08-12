@@ -49,24 +49,23 @@ public struct VoxelArray<T>: VoxelAccessible, StrideIndexable {
     }
 
     @inlinable
-    public func delinearize(_ arr: Int) -> SIMD3<UInt> {
-        precondition(arr >= 0)
-        let strideIndex = UInt(arr)
-        let majorStride = UInt(edgeSize * edgeSize)
-        let minorStride = UInt(edgeSize)
-        var x: UInt = 0
-        if arr > majorStride {
+    public func delinearize(_ strideIndex: Int) -> SIMD3<Int> {
+        precondition(strideIndex >= 0)
+        let majorStride = edgeSize * edgeSize
+        let minorStride = edgeSize
+        var x = 0
+        if strideIndex > majorStride {
             x = strideIndex / majorStride
         }
 
         let remaining = strideIndex - (x * majorStride)
-        var y: UInt = 0
+        var y = 0
         if remaining > minorStride {
             y = remaining / minorStride
         }
 
         let z = remaining - (y * minorStride)
-        return SIMD3<UInt>(x, y, z)
+        return SIMD3<Int>(x, y, z)
     }
 
     public func value(x: Int, y: Int, z: Int) -> T? {
