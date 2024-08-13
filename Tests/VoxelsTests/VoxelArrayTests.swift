@@ -12,9 +12,9 @@ class VoxelArrayTests: XCTestCase {
         }
 
         // external access
-        XCTAssertEqual(v.value(x: 0, y: 0, z: 0), 1)
-        XCTAssertEqual(v.value(x: 1, y: 1, z: 1), 1)
-        XCTAssertEqual(v.value(x: 2, y: 2, z: 2), 1)
+        XCTAssertEqual(try v.value(x: 0, y: 0, z: 0), 1)
+        XCTAssertEqual(try v.value(x: 1, y: 1, z: 1), 1)
+        XCTAssertEqual(try v.value(x: 2, y: 2, z: 2), 1)
 
         XCTAssertEqual(v.size, 27)
     }
@@ -46,5 +46,12 @@ class VoxelArrayTests: XCTestCase {
 
         let twos = voxels.filter { $0 == 2 }
         XCTAssertEqual(twos.count, 1)
+    }
+
+    func testVoxelOutOfBoundsAccess() throws {
+        let voxels = VoxelArray(edge: 3, value: 1)
+        XCTAssertThrowsError(try voxels.value(x: -1, y: 0, z: 0))
+
+        XCTAssertThrowsError(try voxels.value(x: 2, y: 2, z: 3))
     }
 }
