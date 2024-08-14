@@ -1,11 +1,13 @@
 public struct VoxelArray<T: VoxelRenderable>: VoxelAccessible, StrideIndexable {
     var _contents: [T]
     public let edgeSize: Int
+    public var bounds: VoxelBounds
 
     public init(edge: Int, value: T) {
-        precondition(edge >= 0)
+        precondition(edge > 0)
         edgeSize = edge
         _contents = Array(repeating: value, count: edge * edge * edge)
+        bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(edge - 1, edge - 1, edge - 1))
     }
 
     public var size: Int {
@@ -13,13 +15,11 @@ public struct VoxelArray<T: VoxelRenderable>: VoxelAccessible, StrideIndexable {
     }
 
     @inlinable
-    public func linearize(_ arr: [UInt]) -> Int {
-        linearize(arr[0], arr[1], arr[2])
-    }
-
-    @inlinable
-    public func linearize(_ arr: SIMD3<UInt>) -> Int {
-        let index = (Int(arr.x) * edgeSize * edgeSize) + (Int(arr.y) * edgeSize) + Int(arr.z)
+    public func linearize(_ vi: VoxelIndex) throws -> Int {
+        if !bounds.contains(vi) {
+            throw VoxelAccessError.outOfBounds("Index out of bounds: \(vi)")
+        }
+        let index = (Int(vi.x) * edgeSize * edgeSize) + (Int(vi.y) * edgeSize) + Int(vi.z)
         // Row-major address by index:
         //
         //    Address of A[i][j][k] = B + W *(P* N * (i-x) + P*(j-y) + (k-z))
@@ -38,19 +38,11 @@ public struct VoxelArray<T: VoxelRenderable>: VoxelAccessible, StrideIndexable {
     }
 
     @inlinable
-    public func linearize(_ arr: SIMD3<UInt32>) -> Int {
-        let convertedSIMD = SIMD3<UInt>(UInt(arr.x), UInt(arr.y), UInt(arr.z))
-        return linearize(convertedSIMD)
-    }
+    public func delinearize(_ strideIndex: Int) throws -> VoxelIndex {
+        if strideIndex < 0 || strideIndex >= edgeSize * edgeSize * edgeSize {
+            throw VoxelAccessError.outOfBounds("Index out of bounds: \(strideIndex)")
+        }
 
-    @inlinable
-    public func linearize(_ x: UInt, _ y: UInt, _ z: UInt) -> Int {
-        linearize(SIMD3<UInt>(x, y, z))
-    }
-
-    @inlinable
-    public func delinearize(_ strideIndex: Int) -> SIMD3<Int> {
-        precondition(strideIndex >= 0)
         let majorStride = edgeSize * edgeSize
         let minorStride = edgeSize
         var x = 0
@@ -65,30 +57,17 @@ public struct VoxelArray<T: VoxelRenderable>: VoxelAccessible, StrideIndexable {
         }
 
         let z = remaining - (y * minorStride)
-        return SIMD3<Int>(x, y, z)
+        return VoxelIndex(x, y, z)
     }
 
-    public func value(x: Int, y: Int, z: Int) throws -> T? {
-        if x < 0 || y < 0 || z < 0 {
-            throw VoxelAccessError.outOfBounds("Out of Bounds [\(x), \(y), \(z)]")
-        }
-        let stride = linearize(UInt(x), UInt(y), UInt(z))
-        if stride >= _contents.count {
-            throw VoxelAccessError.outOfBounds("Out of Bounds [\(x), \(y), \(z)] -> stride of \(stride) vs size of \(_contents.count)")
-        }
+    public func value(_ vi: VoxelIndex) throws -> T? {
+        let stride = try linearize(vi)
         return _contents[stride]
     }
 
-    public subscript(position: SIMD3<Int>) -> T? {
-        get {
-            _contents[linearize(UInt(position.x), UInt(position.y), UInt(position.z))]
-        }
-        set(newValue) {
-            let pos = linearize(UInt(position.x), UInt(position.y), UInt(position.z))
-            if let newValue {
-                _contents[pos] = newValue
-            }
-        }
+    public mutating func set(_ vi: VoxelIndex, newValue: T) throws {
+        let stride = try linearize(vi)
+        _contents[stride] = newValue
     }
 
     subscript(index: Int) -> T {

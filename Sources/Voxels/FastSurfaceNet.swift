@@ -30,20 +30,13 @@ public let NULL_VERTEX = UInt32.max
 /// voxels in order to connect seamlessly.
 public func surface_nets(
     sdf: VoxelArray<Float>,
-    min: SIMD3<UInt32>,
-    max: SIMD3<UInt32>
-) -> SurfaceNetsBuffer {
-    // SAFETY
-    // Make sure the slice matches the shape before we start using get_unchecked.
-    // assert!(shape.linearize(min) <= shape.linearize(max));
-    precondition(sdf.linearize(min) <= sdf.linearize(max))
-    // assert!((shape.linearize(max) as usize) < sdf.len());
-    precondition(sdf.linearize(max) < sdf.size)
-
+    min: VoxelIndex,
+    max: VoxelIndex
+) throws -> SurfaceNetsBuffer {
     var buffer = SurfaceNetsBuffer(arraySize: UInt(sdf.size))
 
-    estimate_surface(sdf: sdf, min: min, max: max, output: &buffer)
-    make_all_quads(sdf: sdf, min: min, max: max, output: &buffer)
+    try estimate_surface(sdf: sdf, min: min, max: max, output: &buffer)
+    try make_all_quads(sdf: sdf, min: min, max: max, output: &buffer)
     return buffer
 }
 
@@ -51,18 +44,20 @@ public func surface_nets(
 // Also generate a map from grid position to vertex index to be used to look up vertices when generating quads.
 func estimate_surface(
     sdf: VoxelArray<Float>,
-    min: SIMD3<UInt32>,
-    max: SIMD3<UInt32>,
+    min: VoxelIndex,
+    max: VoxelIndex,
     output: inout SurfaceNetsBuffer
-) {
+) throws {
     for z in min.z ..< max.z {
         for y in min.y ..< max.y {
             for x in min.x ..< max.x {
-                let stride = sdf.linearize(UInt(x), UInt(y), UInt(z))
+                let stride = try sdf.linearize(VoxelIndex(x, y, z))
                 let position = SIMD3<Float>(Float(x), Float(y), Float(z))
-                if estimate_surface_in_cube(sdf: sdf, position: position, min_corner_stride: stride, output: &output) {
+                if try estimate_surface_in_cube(sdf: sdf, position: position, min_corner_stride: stride, output: &output) {
                     output.stride_to_index[Int(stride)] = UInt32(output.positions.count) - 1
-                    output.surface_points.append(SIMD3<UInt32>(x, y, z))
+                    output.surface_points.append(
+                        SIMD3<UInt32>(x: UInt32(x), y: UInt32(y), z: UInt32(z))
+                    )
                     output.surface_strides.append(UInt32(stride))
                 } else {
                     output.stride_to_index[stride] = NULL_VERTEX
@@ -82,13 +77,14 @@ func estimate_surface_in_cube(
     position: SIMD3<Float>,
     min_corner_stride: Int,
     output: inout SurfaceNetsBuffer
-) -> Bool {
+) throws -> Bool {
     // Get the signed distance values at each corner of this cube.
     var corner_dists: [Float] = Array(repeating: 0.0, count: 8)
     var num_negative = 0
 
     for i in 0 ... 7 {
-        let corner_stride = min_corner_stride + sdf.linearize(CUBE_CORNERS[i])
+        let additional_stride = try sdf.linearize(CUBE_CORNERS[i])
+        let corner_stride = min_corner_stride + additional_stride
         let d = sdf[corner_stride]
         // let d = *unsafe { sdf.get_unchecked(corner_stride as usize) };
         // *dist = d.into();
@@ -175,7 +171,7 @@ func sdf_gradient(dists: [Float32], s: SIMD3<Float>) -> SIMD3<Float> {
         + s.yzx() * s.zxy() * d11
 }
 
-let CUBE_CORNERS: [SIMD3<UInt>] = [
+let CUBE_CORNERS: [VoxelIndex] = [
     [0, 0, 0],
     [1, 0, 0],
     [0, 1, 0],
@@ -219,11 +215,11 @@ let CUBE_EDGES: [SIMD2<UInt32>] = [
 // comments on `maybe_make_quad` to help with understanding the indexing.
 func make_all_quads(
     sdf: VoxelArray<Float>,
-    min: SIMD3<UInt32>,
-    max: SIMD3<UInt32>,
+    min: VoxelIndex,
+    max: VoxelIndex,
     output: inout SurfaceNetsBuffer
-) {
-    let xyz_strides: [Int] = [
+) throws {
+    let xyz_strides: [Int] = try [
         sdf.linearize([1, 0, 0]),
         sdf.linearize([0, 1, 0]),
         sdf.linearize([0, 0, 1]),

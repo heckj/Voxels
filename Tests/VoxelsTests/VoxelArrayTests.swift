@@ -12,9 +12,9 @@ class VoxelArrayTests: XCTestCase {
         }
 
         // external access
-        XCTAssertEqual(try v.value(x: 0, y: 0, z: 0), 1)
-        XCTAssertEqual(try v.value(x: 1, y: 1, z: 1), 1)
-        XCTAssertEqual(try v.value(x: 2, y: 2, z: 2), 1)
+        XCTAssertEqual(try v.value(VoxelIndex(x: 0, y: 0, z: 0)), 1)
+        XCTAssertEqual(try v.value(VoxelIndex(x: 1, y: 1, z: 1)), 1)
+        XCTAssertEqual(try v.value(VoxelIndex(x: 2, y: 2, z: 2)), 1)
 
         XCTAssertEqual(v.size, 27)
     }
@@ -23,23 +23,23 @@ class VoxelArrayTests: XCTestCase {
         let v = VoxelArray(edge: 3, value: 1)
 
         // indexing function
-        XCTAssertEqual(v.linearize(0, 0, 0), 0)
-        XCTAssertEqual(v.linearize(1, 1, 1), 13)
-        XCTAssertEqual(v.linearize(2, 2, 2), 26)
+        XCTAssertEqual(try v.linearize(VoxelIndex(0, 0, 0)), 0)
+        XCTAssertEqual(try v.linearize(VoxelIndex(1, 1, 1)), 13)
+        XCTAssertEqual(try v.linearize(VoxelIndex(2, 2, 2)), 26)
     }
 
     func testDelinearize() throws {
         let v = VoxelArray(edge: 3, value: 1)
 
         // reversing the indexing function
-        XCTAssertEqual(v.delinearize(0), SIMD3<Int>(0, 0, 0))
-        XCTAssertEqual(v.delinearize(13), SIMD3<Int>(1, 1, 1))
-        XCTAssertEqual(v.delinearize(26), SIMD3<Int>(2, 2, 2))
+        XCTAssertEqual(try v.delinearize(0), VoxelIndex(0, 0, 0))
+        XCTAssertEqual(try v.delinearize(13), VoxelIndex(1, 1, 1))
+        XCTAssertEqual(try v.delinearize(26), VoxelIndex(2, 2, 2))
     }
 
     func testVoxelArraySequence() throws {
         var voxels = VoxelArray(edge: 3, value: 1)
-        voxels[SIMD3<Int>(1, 1, 1)] = 2
+        try voxels.set(VoxelIndex(1, 1, 1), newValue: 2)
 
         let ones = voxels.filter { $0 == 1 }
         XCTAssertEqual(ones.count, 26)
@@ -50,8 +50,8 @@ class VoxelArrayTests: XCTestCase {
 
     func testVoxelOutOfBoundsAccess() throws {
         let voxels = VoxelArray(edge: 3, value: 1)
-        XCTAssertThrowsError(try voxels.value(x: -1, y: 0, z: 0))
+        XCTAssertThrowsError(try voxels.value(VoxelIndex(x: -1, y: 0, z: 0)))
 
-        XCTAssertThrowsError(try voxels.value(x: 2, y: 2, z: 3))
+        XCTAssertThrowsError(try voxels.value(VoxelIndex(x: 2, y: 2, z: 3)))
     }
 }

@@ -9,7 +9,7 @@ final class SurfaceNetTests: XCTestCase {
         var samples = VoxelArray<Float>(edge: 34, value: 0.0)
 
         for i in 0 ..< (samples.size) {
-            let position: SIMD3<Float> = into_domain(array_dim: 32, samples.delinearize(i))
+            let position: SIMD3<Float> = try into_domain(array_dim: 32, samples.delinearize(i))
             let value = sphereSDF.valueAt(position)
             samples[i] = value
         }
@@ -19,10 +19,10 @@ final class SurfaceNetTests: XCTestCase {
         }
         XCTAssertTrue(insides.count > 1)
 
-        let buffer = surface_nets(
+        let buffer = try surface_nets(
             sdf: samples,
-            min: SIMD3<UInt32>(0, 0, 0),
-            max: SIMD3<UInt32>(33, 33, 33)
+            min: VoxelIndex(0, 0, 0),
+            max: VoxelIndex(33, 33, 33)
         )
 
         XCTAssertTrue(buffer.positions.count > 1)

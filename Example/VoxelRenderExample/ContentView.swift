@@ -11,22 +11,22 @@ struct ContentView: View {
         (2.0 / Float(array_dim)) * SIMD3<Float>(Float(xyz.x), Float(xyz.y), Float(xyz.z)) - 1.0
     }
 
-    private func buildMesh() -> ModelEntity {
+    private func buildMesh() throws -> ModelEntity {
         let sphereSDF = SDF.sphere()
 
         var samples = VoxelArray<Float>(edge: 34, value: 0.0)
 
         for i in 0 ..< (samples.size) {
-            let voxelIndex = samples.delinearize(i)
+            let voxelIndex = try samples.delinearize(i)
             let position: SIMD3<Float> = into_domain(array_dim: 32, voxelIndex)
             let valueAtPosition = sphereSDF.valueAt(position)
-            samples[voxelIndex] = valueAtPosition
+            try samples.set(VoxelIndex((Int(position.x), Int(position.y), Int(position.z))), newValue: valueAtPosition)
         }
 
-        let buffer = surface_nets(
+        let buffer = try surface_nets(
             sdf: samples,
-            min: SIMD3<UInt32>(0, 0, 0),
-            max: SIMD3<UInt32>(33, 33, 33)
+            min: VoxelIndex(0, 0, 0),
+            max: VoxelIndex(33, 33, 33)
         )
 
         let descriptor = buffer.meshDescriptor()
@@ -114,7 +114,9 @@ struct ContentView: View {
                     content.add(buildSphere(position: SIMD3<Float>(0, 1, 0), radius: 0.05, color: .red))
                     // upper left
                     content.add(buildSphere(position: SIMD3<Float>(1, 1, 0), radius: 0.05, color: .red))
-                    content.add(buildMesh())
+                    do {
+                        try content.add(buildMesh())
+                    } catch {}
                 }, update: {
                     // print("update")
                 })
