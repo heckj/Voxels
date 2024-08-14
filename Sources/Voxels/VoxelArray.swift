@@ -1,4 +1,4 @@
-public struct VoxelArray<T>: VoxelAccessible, StrideIndexable {
+public struct VoxelArray<T: VoxelRenderable>: VoxelAccessible, StrideIndexable {
     var _contents: [T]
     public let edgeSize: Int
 

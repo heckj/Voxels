@@ -1,4 +1,4 @@
-struct Neighbors<T>: VoxelAccessible {
+struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
     // https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
     let distance: Int
     var _storage: VoxelHash<T>
@@ -7,7 +7,13 @@ struct Neighbors<T>: VoxelAccessible {
         abs(from.x - to.x) + abs(from.y - to.y) + abs(from.z - to.z)
     }
 
-    init(distance: Int, origin: SIMD3<Int>, voxels: some VoxelAccessible<T>) {
+    public enum NeighborStrategy {
+        case raw
+        case opaque
+        case surface
+    }
+
+    init(distance: Int, origin: SIMD3<Int>, voxels: some VoxelAccessible<T>, strategy: NeighborStrategy = .raw) {
         precondition(distance >= 0)
         self.distance = distance
         var initStorage = VoxelHash<T>()
@@ -16,8 +22,22 @@ struct Neighbors<T>: VoxelAccessible {
                 for k in origin.z - distance ... origin.z + distance {
                     let relativeLocation = SIMD3<Int>(i, j, k)
                     if Neighbors.manhattan_distance(from: origin, to: relativeLocation) <= distance {
-                        if let voxelData = voxels[origin &+ relativeLocation] {
-                            initStorage[relativeLocation] = voxelData
+                        let simdIndex = origin &+ relativeLocation
+                        if let voxelData = voxels[simdIndex] {
+                            switch strategy {
+                            case .raw:
+                                initStorage[simdIndex] = voxelData
+                            case .opaque:
+                                if voxelData.isOpaque() {
+                                    initStorage[simdIndex] = voxelData
+                                }
+                            case .surface:
+                                do {
+                                    if try voxels.isSurface(x: simdIndex.x, y: simdIndex.y, z: simdIndex.z) {
+                                        initStorage[simdIndex] = voxelData
+                                    }
+                                } catch {}
+                            }
                         }
                     }
                 }
