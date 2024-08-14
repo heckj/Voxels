@@ -1,4 +1,3 @@
-
 /// The output buffers used by [`surface_nets`]. These buffers can be reused to avoid reallocating memory.
 public struct SurfaceNetsBuffer {
     /// The triangle mesh positions.

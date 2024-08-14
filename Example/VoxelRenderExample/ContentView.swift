@@ -68,6 +68,15 @@ struct ContentView: View {
         return sphereEntity
     }
 
+    private func buildBareQuad(color: NSColor) -> ModelEntity {
+        var buffer = MeshBuffer()
+        buffer.addQuad(p1: SIMD3<Float>(0, 1, 0), p2: SIMD3<Float>(0, 0, 0), p3: SIMD3<Float>(1, 1, 0), p4: SIMD3<Float>(1, 0, 0))
+        let descriptor = buffer.meshDescriptor()
+        let mesh = try! MeshResource.generate(from: [descriptor])
+        let material = SimpleMaterial(color: color, isMetallic: false)
+        return ModelEntity(mesh: mesh, materials: [material])
+    }
+
     private func buildFloor(color: NSColor) -> ModelEntity {
         let floorEntity = ModelEntity(
             mesh: .generatePlane(width: 1.0, depth: 1.0),
@@ -95,6 +104,7 @@ struct ContentView: View {
                     let floor = buildFloor(color: .blue) // width: 1, depth:1, at 0,0,0
                     content.add(floor)
 
+                    content.add(buildBareQuad(color: .brown))
                     // lower left
                     content.add(buildSphere(position: SIMD3<Float>(0, 0, 0), radius: 0.05, color: .red))
                     // lower right
