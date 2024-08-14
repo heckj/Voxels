@@ -1,57 +1,46 @@
 public struct VoxelHash<T: VoxelRenderable>: VoxelAccessible {
-    var _contents: [SIMD3<Int>: T]
+    var _contents: [VoxelIndex: T]
+    public var bounds: VoxelBounds?
 
     public init() {
         _contents = [:]
+        bounds = nil
     }
 
     public var count: Int {
         _contents.count
     }
 
-    // TODO: move this to VoxelAccessible... or a broader voxel collection thing...
-    public var bounds: (min: SIMD3<Int>, max: SIMD3<Int>)? {
-        if _contents.isEmpty {
-            return nil
+    public func value(_ vi: VoxelIndex) -> T? {
+        _contents[vi]
+    }
+
+    public mutating func set(_ vi: VoxelIndex, newValue: T) throws {
+        _contents[vi] = newValue
+        updateBoundsAdding(vi)
+    }
+
+    private mutating func updateBoundsAdding(_ vi: VoxelIndex) {
+        if let bounds {
+            self.bounds = bounds.adding(vi)
         } else {
-            let keys = Array(_contents.keys)
-            if keys.count == 1, let onlyKey = keys.first {
-                return (min: onlyKey, max: onlyKey)
-            } else {
-                let firstKey = keys[0]
-                var minX = firstKey.x
-                var maxX = firstKey.x
-                var minY = firstKey.y
-                var maxY = firstKey.y
-                var minZ = firstKey.z
-                var maxZ = firstKey.z
-                for thisKey in keys[1...] {
-                    minX = Swift.min(minX, thisKey.x)
-                    maxX = Swift.max(maxX, thisKey.x)
-                    minY = Swift.min(minY, thisKey.y)
-                    maxY = Swift.max(maxY, thisKey.y)
-                    minZ = Swift.min(minZ, thisKey.z)
-                    maxZ = Swift.max(maxZ, thisKey.z)
-                }
-                return (min: SIMD3<Int>(minX, minY, minZ), max: SIMD3<Int>(maxX, maxY, maxZ))
-            }
+            bounds = VoxelBounds(vi)
         }
     }
 
-    public func value(x: Int, y: Int, z: Int) -> T? {
-        _contents[SIMD3<Int>(x, y, z)]
+    public mutating func set(_ vi: VoxelIndex, newValue: T?) throws {
+        if let aValue = newValue {
+            _contents[vi] = aValue
+            updateBoundsAdding(vi)
+        } else {
+            _contents.removeValue(forKey: vi)
+            updateBoundsRemoving(vi)
+        }
     }
 
-    public subscript(position: SIMD3<Int>) -> T? {
-        get {
-            _contents[position]
-        }
-        set(newValue) {
-            if let newValue {
-                _contents[position] = newValue
-            } else {
-                _contents.removeValue(forKey: position)
-            }
+    private mutating func updateBoundsRemoving(_ vi: VoxelIndex) {
+        if let bounds, vi == bounds.min || vi == bounds.max {
+            self.bounds = VoxelBounds(Array(_contents.keys))
         }
     }
 }
@@ -62,7 +51,7 @@ extension VoxelHash: Sequence {
     }
 
     public struct VoxelHashIterator: IteratorProtocol {
-        var keys: [SIMD3<Int>]
+        var keys: [VoxelIndex]
         let originalVoxelHash: VoxelHash<T>
 
         init(_ originalVoxelHash: VoxelHash<T>) {
@@ -74,7 +63,7 @@ extension VoxelHash: Sequence {
             guard let key = keys.popLast() else {
                 return nil
             }
-            return originalVoxelHash[key]
+            return originalVoxelHash.value(key)
         }
     }
 }

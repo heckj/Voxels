@@ -3,7 +3,7 @@ struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
     let distance: Int
     var _storage: VoxelHash<T>
 
-    static func manhattan_distance(from: SIMD3<Int>, to: SIMD3<Int>) -> Int {
+    static func manhattan_distance(from: VoxelIndex, to: VoxelIndex) -> Int {
         abs(from.x - to.x) + abs(from.y - to.y) + abs(from.z - to.z)
     }
 
@@ -13,28 +13,27 @@ struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
         case surface
     }
 
-    init(distance: Int, origin: SIMD3<Int>, voxels: some VoxelAccessible<T>, strategy: NeighborStrategy = .raw) {
+    init(distance: Int, origin: VoxelIndex, voxels: some VoxelAccessible<T>, strategy: NeighborStrategy = .raw) throws {
         precondition(distance >= 0)
         self.distance = distance
         var initStorage = VoxelHash<T>()
         for i in origin.x - distance ... origin.x + distance {
             for j in origin.y - distance ... origin.y + distance {
                 for k in origin.z - distance ... origin.z + distance {
-                    let relativeLocation = SIMD3<Int>(i, j, k)
-                    if Neighbors.manhattan_distance(from: origin, to: relativeLocation) <= distance {
-                        let simdIndex = origin &+ relativeLocation
-                        if let voxelData = voxels[simdIndex] {
+                    let computedIndex = VoxelIndex(i, j, k)
+                    if Neighbors.manhattan_distance(from: origin, to: computedIndex) <= distance {
+                        if let voxelData = try voxels.value(computedIndex) {
                             switch strategy {
                             case .raw:
-                                initStorage[simdIndex] = voxelData
+                                try initStorage.set(computedIndex, newValue: voxelData)
                             case .opaque:
                                 if voxelData.isOpaque() {
-                                    initStorage[simdIndex] = voxelData
+                                    try initStorage.set(computedIndex, newValue: voxelData)
                                 }
                             case .surface:
                                 do {
-                                    if try voxels.isSurface(x: simdIndex.x, y: simdIndex.y, z: simdIndex.z) {
-                                        initStorage[simdIndex] = voxelData
+                                    if try voxels.isSurface(computedIndex) {
+                                        try initStorage.set(computedIndex, newValue: voxelData)
                                     }
                                 } catch {}
                             }
@@ -48,11 +47,11 @@ struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
 
     // VoxelAccessible
 
-    func value(x: Int, y: Int, z: Int) -> T? {
-        _storage[SIMD3<Int>(x, y, z)]
+    func value(_ index: VoxelIndex) -> T? {
+        _storage.value(index)
     }
 
-    subscript(position: SIMD3<Int>) -> T? {
-        _storage[position]
+    mutating func set(_ index: VoxelIndex, newValue: T) throws {
+        try _storage.set(index, newValue: newValue)
     }
 }
