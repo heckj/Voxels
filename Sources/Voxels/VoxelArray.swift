@@ -68,8 +68,15 @@ public struct VoxelArray<T>: VoxelAccessible, StrideIndexable {
         return SIMD3<Int>(x, y, z)
     }
 
-    public func value(x: Int, y: Int, z: Int) -> T? {
-        _contents[linearize(UInt(x), UInt(y), UInt(z))]
+    public func value(x: Int, y: Int, z: Int) throws -> T? {
+        if x < 0 || y < 0 || z < 0 {
+            throw VoxelAccessError.outOfBounds("Out of Bounds [\(x), \(y), \(z)]")
+        }
+        let stride = linearize(UInt(x), UInt(y), UInt(z))
+        if stride >= _contents.count {
+            throw VoxelAccessError.outOfBounds("Out of Bounds [\(x), \(y), \(z)] -> stride of \(stride) vs size of \(_contents.count)")
+        }
+        return _contents[stride]
     }
 
     public subscript(position: SIMD3<Int>) -> T? {

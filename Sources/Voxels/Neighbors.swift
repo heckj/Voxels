@@ -8,7 +8,7 @@ struct Neighbors<T>: VoxelAccessible {
     }
 
     init(distance: Int, origin: SIMD3<Int>, voxels: some VoxelAccessible<T>) {
-        precondition(distance > 0)
+        precondition(distance >= 0)
         self.distance = distance
         var initStorage = VoxelHash<T>()
         for i in origin.x - distance ... origin.x + distance {

@@ -1,6 +1,6 @@
 public protocol VoxelAccessible<Element> {
     associatedtype Element
-    func value(x: Int, y: Int, z: Int) -> Element?
+    func value(x: Int, y: Int, z: Int) throws -> Element?
     subscript(_: SIMD3<Int>) -> Element? { get }
 }
 
