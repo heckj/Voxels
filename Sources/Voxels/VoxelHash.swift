@@ -1,4 +1,4 @@
-public struct VoxelHash<T>: VoxelAccessible {
+public struct VoxelHash<T: VoxelRenderable>: VoxelAccessible {
     var _contents: [SIMD3<Int>: T]
 
     public init() {
