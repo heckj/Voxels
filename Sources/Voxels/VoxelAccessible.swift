@@ -41,6 +41,26 @@ public extension VoxelAccessible {
         }
         return sumOpaqueNeighbors != 6
     }
+
+    func isSurfaceFace(_ vindex: VoxelIndex, direction: CubeFace) throws -> Bool {
+        let secondIndex = vindex.adding(direction.voxelIndexOffset)
+        if let firstVoxel = try value(vindex) {
+            // first voxel returned a value
+            if let secondVoxel = try value(secondIndex) {
+                return firstVoxel.isOpaque() != secondVoxel.isOpaque()
+            } else {
+                // second voxel didn't return a value, treat as though its not opaque
+                return firstVoxel.isOpaque()
+            }
+        } else {
+            // first voxel didn't return a value
+            if let secondVoxel = try value(secondIndex), secondVoxel.isOpaque() {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
 }
 
 public protocol VoxelRenderable {
