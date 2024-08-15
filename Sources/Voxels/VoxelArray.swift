@@ -1,7 +1,7 @@
-public struct VoxelArray<T: VoxelRenderable>: VoxelAccessible, StrideIndexable {
+public struct VoxelArray<T: VoxelRenderable>: VoxelWritable, StrideIndexable {
     var _contents: [T]
     public let edgeSize: Int
-    public var bounds: VoxelBounds
+    public var bounds: VoxelBounds?
 
     public init(edge: Int, value: T) {
         precondition(edge > 0)
@@ -16,6 +16,7 @@ public struct VoxelArray<T: VoxelRenderable>: VoxelAccessible, StrideIndexable {
 
     @inlinable
     public func linearize(_ vi: VoxelIndex) throws -> Int {
+        guard let bounds else { fatalError("bounds unset on VoxelArray") }
         if !bounds.contains(vi) {
             throw VoxelAccessError.outOfBounds("Index out of bounds: \(vi)")
         }

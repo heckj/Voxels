@@ -2,6 +2,9 @@ struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
     // https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
     let distance: Int
     var _storage: VoxelHash<T>
+    public var bounds: VoxelBounds? {
+        _storage.bounds
+    }
 
     static func manhattan_distance(from: VoxelIndex, to: VoxelIndex) -> Int {
         abs(from.x - to.x) + abs(from.y - to.y) + abs(from.z - to.z)
