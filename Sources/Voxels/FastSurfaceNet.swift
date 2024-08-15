@@ -171,17 +171,6 @@ func sdf_gradient(dists: [Float32], s: SIMD3<Float>) -> SIMD3<Float> {
         + s.yzx() * s.zxy() * d11
 }
 
-let CUBE_CORNERS: [VoxelIndex] = [
-    [0, 0, 0],
-    [1, 0, 0],
-    [0, 1, 0],
-    [1, 1, 0],
-    [0, 0, 1],
-    [1, 0, 1],
-    [0, 1, 1],
-    [1, 1, 1],
-]
-
 let CUBE_CORNER_VECTORS: [SIMD3<Float>] = [
     [0.0, 0.0, 0.0],
     [1.0, 0.0, 0.0],
