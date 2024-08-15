@@ -2,9 +2,13 @@
 public protocol VoxelAccessible<Element> {
     associatedtype Element: VoxelRenderable
     func value(_: VoxelIndex) throws -> Element?
-    mutating func set(_: VoxelIndex, newValue: Element) throws -> Void
+    var bounds: VoxelBounds? { get }
 
     func isSurface(_: VoxelIndex) throws -> Bool
+}
+
+public protocol VoxelWritable<Element>: VoxelAccessible {
+    mutating func set(_: VoxelIndex, newValue: Element) throws -> Void
 }
 
 public extension VoxelAccessible {

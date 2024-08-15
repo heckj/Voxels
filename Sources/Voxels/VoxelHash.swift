@@ -1,4 +1,4 @@
-public struct VoxelHash<T: VoxelRenderable>: VoxelAccessible {
+public struct VoxelHash<T: VoxelRenderable>: VoxelWritable {
     var _contents: [VoxelIndex: T]
     public var bounds: VoxelBounds?
 
