@@ -87,36 +87,48 @@ struct ContentView: View {
     }
 
     init() {
-        arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0), radius: 5.0, inclinationAngle: 0.0, rotationAngle: 0.0)
+        arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0),
+                                    radius: 5.0,
+                                    inclinationAngle: -Float.pi / 6.0, // around X, slightly "up"
+                                    rotationAngle: 0.0) // around Y
     }
+
+    // Common/conventional 3D axis colors
+    // RED: x
+    // GREEN: y
+    // BLUE: z
 
     var body: some View {
         VStack {
             HStack {
                 RealityKitView({ content in
-                    // camera is positioned (at the start) at 0,0,2, looking in -Z direction
-                    // so, loosely ~2m back from 0,0,0
-                    // - this is derived from radius: 2, inclination: 0, rotation: 0
-
-                    // look at point
+                    // set the motion controls to use scrolling gestures, and allow keyboard support
+                    content.arView.motionMode = .arcball(keys: true)
+                    // camera is positioned (at the start) at 0,0,5, looking in -Z direction
+                    // and rotates around 0,0,0 with a radius of 5
                     content.arView.arcball_state = arcballState
+
                     print("camera anchor position: \(content.arView.cameraAnchor.position)")
                     let floor = buildFloor(color: .blue) // width: 1, depth:1, at 0,0,0
                     content.add(floor)
+                    content.add(buildSphere(position: SIMD3<Float>(0, 0, 0), radius: 1.0, color: .black))
+                    content.add(buildSphere(position: SIMD3<Float>(1, 0, 0), radius: 1.0, color: .red))
+                    content.add(buildSphere(position: SIMD3<Float>(0, 1, 0), radius: 1.0, color: .green))
+                    content.add(buildSphere(position: SIMD3<Float>(0, 0, 1), radius: 1.0, color: .blue))
 
-                    content.add(buildBareQuad(color: .brown))
+//                    content.add(buildBareQuad(color: .brown))
                     // lower left
-                    content.add(buildSphere(position: SIMD3<Float>(0, 0, 0), radius: 0.05, color: .red))
+//                    content.add(buildSphere(position: SIMD3<Float>(0, 0, 0), radius: 0.05, color: .red))
                     // lower right
-                    content.add(buildSphere(position: SIMD3<Float>(1, 0, 0), radius: 0.05, color: .red))
+//                    content.add(buildSphere(position: SIMD3<Float>(1, 0, 0), radius: 0.05, color: .red))
 
                     // upper right
-                    content.add(buildSphere(position: SIMD3<Float>(0, 1, 0), radius: 0.05, color: .red))
+//                    content.add(buildSphere(position: SIMD3<Float>(0, 1, 0), radius: 0.05, color: .red))
                     // upper left
-                    content.add(buildSphere(position: SIMD3<Float>(1, 1, 0), radius: 0.05, color: .red))
-                    do {
-                        try content.add(buildMesh())
-                    } catch {}
+//                    content.add(buildSphere(position: SIMD3<Float>(1, 1, 0), radius: 0.05, color: .red))
+//                    do {
+//                        try content.add(buildMesh())
+//                    } catch {}
                 }, update: {
                     // print("update")
                 })
