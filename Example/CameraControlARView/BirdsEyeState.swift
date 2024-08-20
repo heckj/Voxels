@@ -117,3 +117,9 @@ public struct BirdsEyeState {
         return Transform(scale: .one, rotation: simd_quatf(lookRotation), translation: position)
     }
 }
+
+extension BirdsEyeState: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        "radius: \(radius), rotation: \(rotation) ([\(xAxis), \(zAxis)]) to target \(lensFocalPoint)"
+    }
+}
