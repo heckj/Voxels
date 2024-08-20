@@ -95,13 +95,10 @@ struct ContentView: View {
         arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0),
                                     radius: 5.0,
                                     inclinationAngle: -Float.pi / 6.0, // around X, slightly "up"
-                                    rotationAngle: 0.0) // around Y
+                                    rotationAngle: 0.0, // around Y
+                                    inclinationConstraint: -Float.pi / 2 ... 0, // 0 ... 45° 'up'
+                                    radiusConstraint: 0.1 ... 20.0)
     }
-
-    // Common/conventional 3D axis colors
-    // RED: x
-    // GREEN: y
-    // BLUE: z
 
     var body: some View {
         VStack {
@@ -109,31 +106,46 @@ struct ContentView: View {
                 RealityKitView({ content in
                     // set the motion controls to use scrolling gestures, and allow keyboard support
                     content.arView.motionMode = .arcball(keys: true)
-                    // camera is positioned (at the start) at 0,0,5, looking in -Z direction
-                    // and rotates around 0,0,0 with a radius of 5
                     content.arView.arcball_state = arcballState
 
-                    print("camera anchor position: \(content.arView.cameraAnchor.position)")
-                    let floor = buildFloor(color: .blue) // width: 1, depth:1, at 0,0,0
+//                    // reflective sphere with default lighting
+                    var sphereMaterial = SimpleMaterial()
+                    sphereMaterial.roughness = .float(0.0)
+                    sphereMaterial.metallic = .float(0.3)
+
+                    let sphereEntity = ModelEntity(mesh: .generateSphere(radius: 0.5),
+                                                   materials: [sphereMaterial])
+
+                    let sphereAnchor = AnchorEntity(world: .zero)
+                    sphereAnchor.addChild(sphereEntity)
+                    content.arView.scene.anchors.append(sphereAnchor)
+
+                    let pointLight = PointLight()
+                    pointLight.light.intensity = 50000
+                    pointLight.light.color = .red
+                    pointLight.position.z = 2.0
+                    sphereAnchor.addChild(pointLight)
+
+                    // print("camera anchor position: \(content.arView.cameraAnchor.position)")
+                    let floor = buildFloor(color: .gray) // width: 1, depth:1, at 0,0,0
                     content.add(floor)
-                    content.add(buildSphere(position: SIMD3<Float>(0, 0, 0), radius: 1.0, color: .black))
-                    content.add(buildSphere(position: SIMD3<Float>(1, 0, 0), radius: 1.0, color: .red))
-                    content.add(buildSphere(position: SIMD3<Float>(0, 1, 0), radius: 1.0, color: .green))
-                    content.add(buildSphere(position: SIMD3<Float>(0, 0, 1), radius: 1.0, color: .blue))
 
-//                    content.add(buildBareQuad(color: .brown))
-                    // lower left
-//                    content.add(buildSphere(position: SIMD3<Float>(0, 0, 0), radius: 0.05, color: .red))
-                    // lower right
-//                    content.add(buildSphere(position: SIMD3<Float>(1, 0, 0), radius: 0.05, color: .red))
+                    // Common/conventional 3D axis colors
+                    content.add(buildSphere(position: SIMD3<Float>(0, 0, 0), radius: 0.1, color: .black))
+                    // RED: x
+                    content.add(buildSphere(position: SIMD3<Float>(1, 0, 0), radius: 0.1, color: .red))
+                    // GREEN: y
+                    content.add(buildSphere(position: SIMD3<Float>(0, 1, 0), radius: 0.1, color: .green))
+                    // BLUE: z
+                    content.add(buildSphere(position: SIMD3<Float>(0, 0, 1), radius: 0.1, color: .blue))
 
-                    // upper right
-//                    content.add(buildSphere(position: SIMD3<Float>(0, 1, 0), radius: 0.05, color: .red))
-                    // upper left
-//                    content.add(buildSphere(position: SIMD3<Float>(1, 1, 0), radius: 0.05, color: .red))
+                    content.add(buildBareQuad(color: .brown))
+
 //                    do {
 //                        try content.add(buildMesh())
-//                    } catch {}
+//                    } catch {
+//                        print("Failed to add voxel mesh: \(error)")
+//                    }
                 }, update: {
                     // print("update")
                 })
@@ -146,7 +158,12 @@ struct ContentView: View {
         }
         .padding()
         .onAppear {
-//            Global.arContainer.cameraARView.environment.lighting.resource = try! EnvironmentResource.load(named: "whitedome")
+            do {
+                let loadedLightResource = try EnvironmentResource.load(named: "whitedome")
+                Global.arContainer.cameraARView.environment.lighting.resource = loadedLightResource
+            } catch {
+                print("Unable to load whitedome lighting, using default: \(error)")
+            }
         }
     }
 }
