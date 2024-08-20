@@ -1,6 +1,7 @@
 import RealityKit
 import SwiftUI
 import Voxels
+
 #if os(iOS)
     typealias PlatformColor = UIColor
 #elseif os(macOS)

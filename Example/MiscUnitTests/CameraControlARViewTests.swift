@@ -1,6 +1,6 @@
-@testable import VoxelRenderExample
 import RealityKit
 import Spatial
+@testable import VoxelRenderExample
 import XCTest
 
 final class CameraControlARViewTests: XCTestCase {
@@ -43,7 +43,7 @@ final class CameraControlARViewTests: XCTestCase {
 
         let expectedHeading = Vector3D(x: 0, y: 0, z: 0) - Vector3D(result.translation)
         let normalized = expectedHeading.normalized
-         print("normalized vector aiming at target: \(normalized)")
+        print("normalized vector aiming at target: \(normalized)")
 
         // default rotation
         // print("empty/default rotation \(Rotation3D().eulerAngles(order: __SPEulerAngleOrder.pitchYawRoll))")
