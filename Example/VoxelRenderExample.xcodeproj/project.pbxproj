@@ -9,15 +9,34 @@
 /* Begin PBXBuildFile section */
 		1A51C57C2C54556B0037FEEF /* Voxels in Frameworks */ = {isa = PBXBuildFile; productRef = 1A51C57B2C54556B0037FEEF /* Voxels */; };
 		1AACD7882C655E97001C91E7 /* Voxels in Frameworks */ = {isa = PBXBuildFile; productRef = 1AACD7872C655E97001C91E7 /* Voxels */; };
-		1AACD78B2C655EA8001C91E7 /* CameraControlARView in Frameworks */ = {isa = PBXBuildFile; productRef = 1AACD78A2C655EA8001C91E7 /* CameraControlARView */; };
+		1AE5C7022C754CEB00236DA9 /* RealityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AE5C7012C754CEB00236DA9 /* RealityKit.framework */; };
+		1AE5C70D2C754D8700236DA9 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AE5C70C2C754D8700236DA9 /* SwiftUI.framework */; };
+		1AE5C70F2C754DBD00236DA9 /* Voxels in Frameworks */ = {isa = PBXBuildFile; productRef = 1AE5C70E2C754DBD00236DA9 /* Voxels */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1AE5C6F62C75496300236DA9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A51C5602C5454EA0037FEEF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1A51C5672C5454EA0037FEEF;
+			remoteInfo = VoxelRenderExample;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1A51C5682C5454EA0037FEEF /* VoxelRenderExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoxelRenderExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AE5C6F22C75496300236DA9 /* MiscUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MiscUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AE5C6FE2C754BE400236DA9 /* VoxelRenderExample.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = VoxelRenderExample.xctestplan; sourceTree = "<group>"; };
+		1AE5C7002C754CD400236DA9 /* libswiftsimd.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftsimd.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/usr/lib/swift/libswiftsimd.tbd; sourceTree = DEVELOPER_DIR; };
+		1AE5C7012C754CEB00236DA9 /* RealityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealityKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/RealityKit.framework; sourceTree = DEVELOPER_DIR; };
+		1AE5C70C2C754D8700236DA9 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/SwiftUI.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		1A51C56A2C5454EA0037FEEF /* VoxelRenderExample */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = VoxelRenderExample; sourceTree = "<group>"; };
+		1AE5C6D92C7548E300236DA9 /* CameraControlARView */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CameraControlARView; sourceTree = "<group>"; };
+		1AE5C6F32C75496300236DA9 /* MiscUnitTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = MiscUnitTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -25,9 +44,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1AACD78B2C655EA8001C91E7 /* CameraControlARView in Frameworks */,
 				1A51C57C2C54556B0037FEEF /* Voxels in Frameworks */,
 				1AACD7882C655E97001C91E7 /* Voxels in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1AE5C6EF2C75496300236DA9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1AE5C70D2C754D8700236DA9 /* SwiftUI.framework in Frameworks */,
+				1AE5C7022C754CEB00236DA9 /* RealityKit.framework in Frameworks */,
+				1AE5C70F2C754DBD00236DA9 /* Voxels in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -37,7 +65,11 @@
 		1A51C55F2C5454EA0037FEEF = {
 			isa = PBXGroup;
 			children = (
+				1AE5C6D92C7548E300236DA9 /* CameraControlARView */,
 				1A51C56A2C5454EA0037FEEF /* VoxelRenderExample */,
+				1AE5C6FE2C754BE400236DA9 /* VoxelRenderExample.xctestplan */,
+				1AE5C6F32C75496300236DA9 /* MiscUnitTests */,
+				1AE5C6FF2C754CD400236DA9 /* Frameworks */,
 				1A51C5692C5454EA0037FEEF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -46,8 +78,19 @@
 			isa = PBXGroup;
 			children = (
 				1A51C5682C5454EA0037FEEF /* VoxelRenderExample.app */,
+				1AE5C6F22C75496300236DA9 /* MiscUnitTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		1AE5C6FF2C754CD400236DA9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1AE5C70C2C754D8700236DA9 /* SwiftUI.framework */,
+				1AE5C7012C754CEB00236DA9 /* RealityKit.framework */,
+				1AE5C7002C754CD400236DA9 /* libswiftsimd.tbd */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -67,16 +110,41 @@
 			);
 			fileSystemSynchronizedGroups = (
 				1A51C56A2C5454EA0037FEEF /* VoxelRenderExample */,
+				1AE5C6D92C7548E300236DA9 /* CameraControlARView */,
 			);
 			name = VoxelRenderExample;
 			packageProductDependencies = (
 				1A51C57B2C54556B0037FEEF /* Voxels */,
 				1AACD7872C655E97001C91E7 /* Voxels */,
-				1AACD78A2C655EA8001C91E7 /* CameraControlARView */,
 			);
 			productName = VoxelRenderExample;
 			productReference = 1A51C5682C5454EA0037FEEF /* VoxelRenderExample.app */;
 			productType = "com.apple.product-type.application";
+		};
+		1AE5C6F12C75496300236DA9 /* MiscUnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1AE5C6F82C75496300236DA9 /* Build configuration list for PBXNativeTarget "MiscUnitTests" */;
+			buildPhases = (
+				1AE5C6EE2C75496300236DA9 /* Sources */,
+				1AE5C6EF2C75496300236DA9 /* Frameworks */,
+				1AE5C6F02C75496300236DA9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1AE5C6F72C75496300236DA9 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				1AE5C6D92C7548E300236DA9 /* CameraControlARView */,
+				1AE5C6F32C75496300236DA9 /* MiscUnitTests */,
+			);
+			name = MiscUnitTests;
+			packageProductDependencies = (
+				1AE5C70E2C754DBD00236DA9 /* Voxels */,
+			);
+			productName = MiscUnitTests;
+			productReference = 1AE5C6F22C75496300236DA9 /* MiscUnitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -89,6 +157,9 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					1A51C5672C5454EA0037FEEF = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					1AE5C6F12C75496300236DA9 = {
 						CreatedOnToolsVersion = 16.0;
 					};
 				};
@@ -104,19 +175,26 @@
 			mainGroup = 1A51C55F2C5454EA0037FEEF;
 			packageReferences = (
 				1AACD7862C655E97001C91E7 /* XCLocalSwiftPackageReference "../../Voxels" */,
-				1AACD7892C655EA8001C91E7 /* XCLocalSwiftPackageReference "../../CameraControlARView" */,
 			);
 			productRefGroup = 1A51C5692C5454EA0037FEEF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				1A51C5672C5454EA0037FEEF /* VoxelRenderExample */,
+				1AE5C6F12C75496300236DA9 /* MiscUnitTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1A51C5662C5454EA0037FEEF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1AE5C6F02C75496300236DA9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -133,7 +211,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1AE5C6EE2C75496300236DA9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1AE5C6F72C75496300236DA9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1A51C5672C5454EA0037FEEF /* VoxelRenderExample */;
+			targetProxy = 1AE5C6F62C75496300236DA9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1A51C5752C5454EB0037FEEF /* Debug */ = {
@@ -344,6 +437,48 @@
 			};
 			name = Release;
 		};
+		1AE5C6F92C75496300236DA9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BDV4VC27D3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rhonabwy.MiscUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		1AE5C6FA2C75496300236DA9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BDV4VC27D3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rhonabwy.MiscUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -365,16 +500,21 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		1AE5C6F82C75496300236DA9 /* Build configuration list for PBXNativeTarget "MiscUnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1AE5C6F92C75496300236DA9 /* Debug */,
+				1AE5C6FA2C75496300236DA9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
 		1AACD7862C655E97001C91E7 /* XCLocalSwiftPackageReference "../../Voxels" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../Voxels;
-		};
-		1AACD7892C655EA8001C91E7 /* XCLocalSwiftPackageReference "../../CameraControlARView" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../CameraControlARView;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -387,9 +527,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Voxels;
 		};
-		1AACD78A2C655EA8001C91E7 /* CameraControlARView */ = {
+		1AE5C70E2C754DBD00236DA9 /* Voxels */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = CameraControlARView;
+			package = 1AACD7862C655E97001C91E7 /* XCLocalSwiftPackageReference "../../Voxels" */;
+			productName = Voxels;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
