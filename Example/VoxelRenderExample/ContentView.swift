@@ -1,7 +1,11 @@
-import CameraControlARView
 import RealityKit
 import SwiftUI
 import Voxels
+#if os(iOS)
+    typealias PlatformColor = UIColor
+#elseif os(macOS)
+    typealias PlatformColor = NSColor
+#endif
 
 struct ContentView: View {
     @State private var arcballState: ArcBallState
@@ -62,13 +66,13 @@ struct ContentView: View {
         }
     }
 
-    private func buildSphere(position: simd_float3, radius: Float, color: NSColor) -> ModelEntity {
+    private func buildSphere(position: simd_float3, radius: Float, color: PlatformColor) -> ModelEntity {
         let sphereEntity = ModelEntity(mesh: .generateSphere(radius: radius), materials: [SimpleMaterial(color: color, isMetallic: false)])
         sphereEntity.position = position
         return sphereEntity
     }
 
-    private func buildBareQuad(color: NSColor) -> ModelEntity {
+    private func buildBareQuad(color: PlatformColor) -> ModelEntity {
         var buffer = MeshBuffer()
         buffer.addQuad(p1: SIMD3<Float>(0, 1, 0), p2: SIMD3<Float>(0, 0, 0), p3: SIMD3<Float>(1, 1, 0), p4: SIMD3<Float>(1, 0, 0))
         let descriptor = buffer.meshDescriptor()
@@ -77,7 +81,7 @@ struct ContentView: View {
         return ModelEntity(mesh: mesh, materials: [material])
     }
 
-    private func buildFloor(color: NSColor) -> ModelEntity {
+    private func buildFloor(color: PlatformColor) -> ModelEntity {
         let floorEntity = ModelEntity(
             mesh: .generatePlane(width: 1.0, depth: 1.0),
             materials: [SimpleMaterial(color: color, isMetallic: false)]
@@ -140,6 +144,9 @@ struct ContentView: View {
             Text("Hello, world!")
         }
         .padding()
+        .onAppear {
+//            Global.arContainer.cameraARView.environment.lighting.resource = try! EnvironmentResource.load(named: "whitedome")
+        }
     }
 }
 
