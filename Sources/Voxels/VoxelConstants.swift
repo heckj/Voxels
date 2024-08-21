@@ -1,4 +1,4 @@
-let CUBE_CORNERS: [VoxelIndex] = [
+public let CUBE_CORNERS: [VoxelIndex] = [
     [0, 0, 0],
     [1, 0, 0],
     [0, 1, 0],
