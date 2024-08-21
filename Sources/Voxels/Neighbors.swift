@@ -1,9 +1,13 @@
-struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
+struct Neighbors<T: VoxelRenderable, R: SIMDScalar>: VoxelAccessible {
     // https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
     let distance: Int
-    var _storage: VoxelHash<T>
+    var _storage: VoxelHash<T, R>
     public var bounds: VoxelBounds? {
         _storage.bounds
+    }
+
+    public var scale: VoxelScale<R> {
+        _storage.scale
     }
 
     static func manhattan_distance(from: VoxelIndex, to: VoxelIndex) -> Int {
@@ -16,10 +20,10 @@ struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
         case surface
     }
 
-    init(distance: Int, origin: VoxelIndex, voxels: some VoxelAccessible<T>, strategy: NeighborStrategy = .raw) throws {
+    init(distance: Int, origin: VoxelIndex, voxels: any VoxelAccessible<T, R>, strategy: NeighborStrategy = .raw) throws {
         precondition(distance >= 0)
         self.distance = distance
-        var initStorage = VoxelHash<T>()
+        var initStorage = VoxelHash<T, R>(origin: voxels.scale.origin, edgeLength: voxels.scale.cubeSize)
         for i in origin.x - distance ... origin.x + distance {
             for j in origin.y - distance ... origin.y + distance {
                 for k in origin.z - distance ... origin.z + distance {
