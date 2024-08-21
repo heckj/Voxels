@@ -3,16 +3,16 @@ public struct VoxelHash<T: VoxelRenderable, R: SIMDScalar>: VoxelWritable {
     public var bounds: VoxelBounds?
     public let scale: VoxelScale<R>
 
-    public init() where R: FixedWidthInteger {
+    public init() where R == Int {
         _contents = [:]
         bounds = nil
-        scale = VoxelScale<R>(origin: SIMD3<R>(x: 0, y: 0, z: 0), cubeSize: R(1))
+        scale = VoxelScale<R>()
     }
 
-    public init() where R: BinaryFloatingPoint {
+    public init() where R == Float {
         _contents = [:]
         bounds = nil
-        scale = VoxelScale<R>(origin: SIMD3<R>(x: 0, y: 0, z: 0), cubeSize: R(1.0))
+        scale = VoxelScale<R>()
     }
 
     public init(origin: SIMD3<R>, edgeLength: R) {

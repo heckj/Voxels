@@ -3,7 +3,7 @@ import XCTest
 
 class VoxelSurfaceTests: XCTestCase {
     func testOpaqueSurface() throws {
-        var fiveByFive = VoxelHash<Int>()
+        var fiveByFive = VoxelHash<Int, Float>()
 
         // create cube in the middle
         for i in 1 ... 3 {
@@ -23,19 +23,19 @@ class VoxelSurfaceTests: XCTestCase {
     }
 
     func testOpaqueSurfaceHashOutOfBounds() throws {
-        let fiveByFive = VoxelHash<Int>()
+        let fiveByFive = VoxelHash<Int, Float>()
         XCTAssertThrowsError(try fiveByFive.isSurface((0, 0, 0)))
         XCTAssertFalse(try fiveByFive.isSurface((9, 9, 9)))
     }
 
     func testOpaqueSurfaceArrayOutOfBounds() throws {
-        let fiveByFive = VoxelArray(edge: 5, value: 0)
+        let fiveByFive = VoxelArray(edge: 5, value: 0, origin: SIMD3<Float>(0, 0, 0), edgeLength: 1.0)
         XCTAssertThrowsError(try fiveByFive.isSurface((0, 0, 0)))
         XCTAssertThrowsError(try fiveByFive.isSurface((9, 9, 9)))
     }
 
     func testSurfaceFaces() throws {
-        var fiveByFive = VoxelHash<Int>()
+        var fiveByFive = VoxelHash<Int, Float>()
 
         // create cube in the middle
         for i in 1 ... 3 {
