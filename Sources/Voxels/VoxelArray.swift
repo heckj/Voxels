@@ -41,19 +41,19 @@ public struct VoxelArray<T: VoxelRenderable>: VoxelWritable, StrideIndexable {
     @inlinable
     public func delinearize(_ strideIndex: Int) throws -> VoxelIndex {
         if strideIndex < 0 || strideIndex >= edgeSize * edgeSize * edgeSize {
-            throw VoxelAccessError.outOfBounds("Index out of bounds: \(strideIndex)")
+            throw VoxelAccessError.outOfBounds("stride index out of bounds: \(strideIndex)")
         }
 
         let majorStride = edgeSize * edgeSize
         let minorStride = edgeSize
         var x = 0
-        if strideIndex > majorStride {
+        if strideIndex >= majorStride {
             x = strideIndex / majorStride
         }
 
         let remaining = strideIndex - (x * majorStride)
         var y = 0
-        if remaining > minorStride {
+        if remaining >= minorStride {
             y = remaining / minorStride
         }
 

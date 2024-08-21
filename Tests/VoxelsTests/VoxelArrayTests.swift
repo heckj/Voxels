@@ -31,6 +31,17 @@ class VoxelArrayTests: XCTestCase {
     func testDelinearize() throws {
         let v = VoxelArray(edge: 3, value: 1)
 
+        guard let boundsCheck = v.bounds else {
+            XCTFail("VoxelArray should never have null bounds")
+            return
+        }
+
+        for linearIndex in 0 ..< v.size {
+            let voxelIndex = try v.delinearize(linearIndex)
+            // print("stride \(linearIndex) -> \(voxelIndex)")
+            XCTAssertTrue(boundsCheck.contains(voxelIndex), "stride \(linearIndex) results in out of bounds index: \(voxelIndex)")
+        }
+
         // reversing the indexing function
         XCTAssertEqual(try v.delinearize(0), VoxelIndex(0, 0, 0))
         XCTAssertEqual(try v.delinearize(13), VoxelIndex(1, 1, 1))
