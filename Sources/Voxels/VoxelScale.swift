@@ -49,3 +49,17 @@ public struct VoxelScale<T: SIMDScalar> {
                           z: Int(z.rounded(.towardZero)))
     }
 }
+
+public extension VoxelScale where T == Float {
+    init() {
+        origin = SIMD3<Float>(0, 0, 0)
+        cubeSize = 1.0
+    }
+}
+
+public extension VoxelScale where T == Int {
+    init() {
+        origin = SIMD3<Int>(0, 0, 0)
+        cubeSize = 1
+    }
+}

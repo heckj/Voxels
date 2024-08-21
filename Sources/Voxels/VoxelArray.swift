@@ -4,6 +4,30 @@ public struct VoxelArray<T: VoxelRenderable, R: SIMDScalar>: VoxelWritable, Stri
     public let scale: VoxelScale<R>
     public var bounds: VoxelBounds?
 
+    public init(edge: Int, value: T, scale: VoxelScale<R>) {
+        precondition(edge > 0)
+        edgeSize = edge
+        self.scale = scale
+        _contents = Array(repeating: value, count: edge * edge * edge)
+        bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(edge - 1, edge - 1, edge - 1))
+    }
+
+    public init(edge: Int, value: T) where R == Int {
+        precondition(edge > 0)
+        edgeSize = edge
+        scale = VoxelScale<R>()
+        _contents = Array(repeating: value, count: edge * edge * edge)
+        bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(edge - 1, edge - 1, edge - 1))
+    }
+
+    public init(edge: Int, value: T) where R == Float {
+        precondition(edge > 0)
+        edgeSize = edge
+        scale = VoxelScale<R>()
+        _contents = Array(repeating: value, count: edge * edge * edge)
+        bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(edge - 1, edge - 1, edge - 1))
+    }
+
     public init(edge: Int, value: T, origin: SIMD3<R>, edgeLength: R) {
         precondition(edge > 0)
         edgeSize = edge

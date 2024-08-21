@@ -3,7 +3,7 @@ import XCTest
 
 class VoxelArrayTests: XCTestCase {
     func testVoxelArrayInitializer() throws {
-        let v = VoxelArray(edge: 3, value: 1)
+        let v = VoxelArray<Int, Float>(edge: 3, value: 1)
 
         // internal access
         XCTAssertEqual(v._contents.count, 27)
@@ -20,7 +20,7 @@ class VoxelArrayTests: XCTestCase {
     }
 
     func testLinearize() throws {
-        let v = VoxelArray(edge: 3, value: 1)
+        let v = VoxelArray<Int, Float>(edge: 3, value: 1)
 
         // indexing function
         XCTAssertEqual(try v.linearize(VoxelIndex(0, 0, 0)), 0)
@@ -29,7 +29,7 @@ class VoxelArrayTests: XCTestCase {
     }
 
     func testDelinearize() throws {
-        let v = VoxelArray(edge: 3, value: 1)
+        let v = VoxelArray<Int, Float>(edge: 3, value: 1)
 
         guard let boundsCheck = v.bounds else {
             XCTFail("VoxelArray should never have null bounds")
@@ -49,7 +49,7 @@ class VoxelArrayTests: XCTestCase {
     }
 
     func testVoxelArraySequence() throws {
-        var voxels = VoxelArray(edge: 3, value: 1)
+        var voxels = VoxelArray<Int, Float>(edge: 3, value: 1)
         try voxels.set(VoxelIndex(1, 1, 1), newValue: 2)
 
         let ones = voxels.filter { $0 == 1 }
@@ -60,7 +60,7 @@ class VoxelArrayTests: XCTestCase {
     }
 
     func testVoxelOutOfBoundsAccess() throws {
-        let voxels = VoxelArray(edge: 3, value: 1)
+        let voxels = VoxelArray<Int, Float>(edge: 3, value: 1)
         XCTAssertThrowsError(try voxels.value(VoxelIndex(x: -1, y: 0, z: 0)))
 
         XCTAssertThrowsError(try voxels.value(VoxelIndex(x: 2, y: 2, z: 3)))
