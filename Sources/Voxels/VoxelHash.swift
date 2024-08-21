@@ -1,10 +1,24 @@
-public struct VoxelHash<T: VoxelRenderable>: VoxelWritable {
+public struct VoxelHash<T: VoxelRenderable, R: SIMDScalar>: VoxelWritable {
     var _contents: [VoxelIndex: T]
     public var bounds: VoxelBounds?
+    public let scale: VoxelScale<R>
 
-    public init() {
+    public init() where R: FixedWidthInteger {
         _contents = [:]
         bounds = nil
+        scale = VoxelScale<R>(origin: SIMD3<R>(x: 0, y: 0, z: 0), cubeSize: R(1))
+    }
+
+    public init() where R: BinaryFloatingPoint {
+        _contents = [:]
+        bounds = nil
+        scale = VoxelScale<R>(origin: SIMD3<R>(x: 0, y: 0, z: 0), cubeSize: R(1.0))
+    }
+
+    public init(origin: SIMD3<R>, edgeLength: R) {
+        _contents = [:]
+        bounds = nil
+        scale = VoxelScale<R>(origin: origin, cubeSize: edgeLength)
     }
 
     public var count: Int {
@@ -52,9 +66,9 @@ extension VoxelHash: Sequence {
 
     public struct VoxelHashIterator: IteratorProtocol {
         var keys: [VoxelIndex]
-        let originalVoxelHash: VoxelHash<T>
+        let originalVoxelHash: VoxelHash<T, R>
 
-        init(_ originalVoxelHash: VoxelHash<T>) {
+        init(_ originalVoxelHash: VoxelHash<T, R>) {
             keys = Array(originalVoxelHash._contents.keys)
             self.originalVoxelHash = originalVoxelHash
         }

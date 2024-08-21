@@ -1,11 +1,13 @@
-public struct VoxelArray<T: VoxelRenderable>: VoxelWritable, StrideIndexable {
+public struct VoxelArray<T: VoxelRenderable, R: SIMDScalar>: VoxelWritable, StrideIndexable {
     var _contents: [T]
     public let edgeSize: Int
+    public let scale: VoxelScale<R>
     public var bounds: VoxelBounds?
 
-    public init(edge: Int, value: T) {
+    public init(edge: Int, value: T, origin: SIMD3<R>, edgeLength: R) {
         precondition(edge > 0)
         edgeSize = edge
+        scale = VoxelScale<R>(origin: origin, cubeSize: edgeLength)
         _contents = Array(repeating: value, count: edge * edge * edge)
         bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(edge - 1, edge - 1, edge - 1))
     }
@@ -90,9 +92,9 @@ extension VoxelArray: Sequence {
 
     public struct VoxelArrayIterator: IteratorProtocol {
         var position: Int
-        let originalVoxelArray: VoxelArray<T>
+        let originalVoxelArray: VoxelArray<T, R>
 
-        init(_ originalVoxelArray: VoxelArray<T>) {
+        init(_ originalVoxelArray: VoxelArray<T, R>) {
             position = -1
             self.originalVoxelArray = originalVoxelArray
         }

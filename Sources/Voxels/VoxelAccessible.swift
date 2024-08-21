@@ -1,8 +1,10 @@
 
-public protocol VoxelAccessible<Element> {
+public protocol VoxelAccessible<Element, Range> {
     associatedtype Element: VoxelRenderable
+    associatedtype Range: Decodable & Encodable & Hashable & SIMDScalar
     func value(_: VoxelIndex) throws -> Element?
-    var bounds: VoxelBounds? { get }
+    var bounds: VoxelBounds? { get } // only reason this is optional is to allow an empty voxel hash
+    var scale: VoxelScale<Range> { get }
 
     func isSurface(_: VoxelIndex) throws -> Bool
 }
