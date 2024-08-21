@@ -14,6 +14,8 @@ public struct SurfaceNetsBuffer {
     /// The triangle mesh indices.
     public var indices: [UInt32]
 
+    // MARK: the buffers below are for computing the surface nets
+
     /// Local 3D array coordinates of every voxel that intersects the isosurface.
     public var surface_points: [SIMD3<UInt32>]
 
