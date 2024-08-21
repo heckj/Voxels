@@ -17,15 +17,14 @@ struct ContentView: View {
     }
 
     private func buildMesh() throws -> ModelEntity {
-        let sphereSDF = SDF.sphere()
-
+        let sphereSDF: SDFSampleable<Float> = SDF.sphere()
         var samples = VoxelArray<Float>(edge: 34, value: 0.0)
 
-        for i in 0 ..< (samples.size) {
+        for i in 0 ..< samples.size {
             let voxelIndex = try samples.delinearize(i)
             let position: SIMD3<Float> = into_domain(array_dim: 32, voxelIndex)
             let valueAtPosition = sphereSDF.valueAt(position)
-            try samples.set(VoxelIndex((Int(position.x), Int(position.y), Int(position.z))), newValue: valueAtPosition)
+            try samples.set(voxelIndex, newValue: valueAtPosition)
         }
 
         let buffer = try surface_nets(
@@ -96,8 +95,8 @@ struct ContentView: View {
                                     radius: 5.0,
                                     inclinationAngle: -Float.pi / 6.0, // around X, slightly "up"
                                     rotationAngle: 0.0, // around Y
-                                    inclinationConstraint: -Float.pi / 2 ... 0, // 0 ... 45° 'up'
-                                    radiusConstraint: 0.1 ... 20.0)
+                                    inclinationConstraint: -Float.pi / 2 ... 0, // 0 ... 90° 'up'
+                                    radiusConstraint: 0.1 ... 50.0)
     }
 
     var body: some View {
@@ -109,22 +108,22 @@ struct ContentView: View {
                     content.arView.arcball_state = arcballState
 
 //                    // reflective sphere with default lighting
-                    var sphereMaterial = SimpleMaterial()
-                    sphereMaterial.roughness = .float(0.0)
-                    sphereMaterial.metallic = .float(0.3)
-
-                    let sphereEntity = ModelEntity(mesh: .generateSphere(radius: 0.5),
-                                                   materials: [sphereMaterial])
-
-                    let sphereAnchor = AnchorEntity(world: .zero)
-                    sphereAnchor.addChild(sphereEntity)
-                    content.arView.scene.anchors.append(sphereAnchor)
-
-                    let pointLight = PointLight()
-                    pointLight.light.intensity = 50000
-                    pointLight.light.color = .red
-                    pointLight.position.z = 2.0
-                    sphereAnchor.addChild(pointLight)
+//                    var sphereMaterial = SimpleMaterial()
+//                    sphereMaterial.roughness = .float(0.0)
+//                    sphereMaterial.metallic = .float(0.3)
+//
+//                    let sphereEntity = ModelEntity(mesh: .generateSphere(radius: 0.5),
+//                                                   materials: [sphereMaterial])
+//
+//                    let sphereAnchor = AnchorEntity(world: .zero)
+//                    sphereAnchor.addChild(sphereEntity)
+//                    content.arView.scene.anchors.append(sphereAnchor)
+//
+//                    let pointLight = PointLight()
+//                    pointLight.light.intensity = 50000
+//                    pointLight.light.color = .red
+//                    pointLight.position.z = 2.0
+//                    sphereAnchor.addChild(pointLight)
 
                     // print("camera anchor position: \(content.arView.cameraAnchor.position)")
                     let floor = buildFloor(color: .gray) // width: 1, depth:1, at 0,0,0
@@ -141,11 +140,11 @@ struct ContentView: View {
 
                     content.add(buildBareQuad(color: .brown))
 
-//                    do {
-//                        try content.add(buildMesh())
-//                    } catch {
-//                        print("Failed to add voxel mesh: \(error)")
-//                    }
+                    do {
+                        try content.add(buildMesh())
+                    } catch {
+                        print("Failed to add voxel mesh: \(error)")
+                    }
                 }, update: {
                     // print("update")
                 })
