@@ -1,4 +1,4 @@
-public struct VoxelScale<T: SIMDScalar> {
+public struct VoxelScale<T: SIMDScalar & Sendable> {
     public let origin: SIMD3<T>
     public let cubeSize: T
 

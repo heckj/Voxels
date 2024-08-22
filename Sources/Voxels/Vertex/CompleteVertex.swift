@@ -1,4 +1,4 @@
-public struct CompleteVertex: Hashable {
+public struct CompleteVertex: Hashable, Sendable {
     var position: SIMD3<Float>
     var normal: SIMD3<Float>
     var uv: SIMD2<Float>

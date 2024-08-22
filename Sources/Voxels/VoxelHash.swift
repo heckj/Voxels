@@ -1,23 +1,23 @@
-public struct VoxelHash<T: VoxelRenderable, R: SIMDScalar>: VoxelWritable {
+public struct VoxelHash<T: VoxelRenderable, R: SIMDScalar & Sendable>: VoxelWritable {
     var _contents: [VoxelIndex: T]
-    public var bounds: VoxelBounds?
+    public var bounds: VoxelBounds
     public let scale: VoxelScale<R>
 
     public init() where R == Int {
         _contents = [:]
-        bounds = nil
+        bounds = .empty
         scale = VoxelScale<R>()
     }
 
     public init() where R == Float {
         _contents = [:]
-        bounds = nil
+        bounds = .empty
         scale = VoxelScale<R>()
     }
 
     public init(origin: SIMD3<R>, edgeLength: R) {
         _contents = [:]
-        bounds = nil
+        bounds = .empty
         scale = VoxelScale<R>(origin: origin, cubeSize: edgeLength)
     }
 
@@ -35,11 +35,7 @@ public struct VoxelHash<T: VoxelRenderable, R: SIMDScalar>: VoxelWritable {
     }
 
     private mutating func updateBoundsAdding(_ vi: VoxelIndex) {
-        if let bounds {
-            self.bounds = bounds.adding(vi)
-        } else {
-            bounds = VoxelBounds(vi)
-        }
+        bounds = bounds.adding(vi)
     }
 
     public mutating func set(_ vi: VoxelIndex, newValue: T?) throws {
@@ -53,8 +49,8 @@ public struct VoxelHash<T: VoxelRenderable, R: SIMDScalar>: VoxelWritable {
     }
 
     private mutating func updateBoundsRemoving(_ vi: VoxelIndex) {
-        if let bounds, vi == bounds.min || vi == bounds.max {
-            self.bounds = VoxelBounds(Array(_contents.keys))
+        if vi == bounds.min || vi == bounds.max {
+            bounds = VoxelBounds(Array(_contents.keys))
         }
     }
 }

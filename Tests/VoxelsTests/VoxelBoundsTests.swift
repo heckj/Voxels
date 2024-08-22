@@ -15,7 +15,7 @@ class VoxelBoundsTests: XCTestCase {
         XCTAssertEqual(newBounds, bounds)
     }
 
-    func testVoxelBoundsFailedIniti() throws {
-        XCTAssertNil(VoxelBounds([]))
+    func testVoxelBoundsEmptySequence() throws {
+        XCTAssertEqual(VoxelBounds([]), .empty)
     }
 }

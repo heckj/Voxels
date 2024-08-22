@@ -1,5 +1,5 @@
 /// The raw data collection that supports generating a MeshDescriptor
-public struct MeshBuffer {
+public struct MeshBuffer: Sendable {
     /// The triangle mesh positions.
     public var positions: [SIMD3<Float>]
 

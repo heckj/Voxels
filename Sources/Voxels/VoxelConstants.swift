@@ -9,7 +9,7 @@ public let CUBE_CORNERS: [VoxelIndex] = [
     [1, 1, 1],
 ]
 
-public enum CubeFace: UInt8, CaseIterable {
+public enum CubeFace: UInt8, CaseIterable, Sendable {
     case y = 0 // up/top
     case yneg = 1 // down/below
     case x = 2 // right

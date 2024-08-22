@@ -1,8 +1,8 @@
-struct Neighbors<T: VoxelRenderable, R: SIMDScalar>: VoxelAccessible {
+struct Neighbors<T: VoxelRenderable, R: SIMDScalar & Sendable>: VoxelAccessible {
     // https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
     let distance: Int
     var _storage: VoxelHash<T, R>
-    public var bounds: VoxelBounds? {
+    public var bounds: VoxelBounds {
         _storage.bounds
     }
 
