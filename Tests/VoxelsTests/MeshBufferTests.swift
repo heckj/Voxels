@@ -11,7 +11,7 @@ class MeshBufferTests: XCTestCase {
 
     func testMeshBufferAddQuad() throws {
         var buffer = MeshBuffer()
-        buffer.addQuad(p1: SIMD3<Float>(0, 1, 0), p2: SIMD3<Float>(0, 0, 0), p3: SIMD3<Float>(1, 1, 0), p4: SIMD3<Float>(1, 0, 0))
+        buffer.addQuadPoints(p1: SIMD3<Float>(0, 1, 0), p2: SIMD3<Float>(0, 0, 0), p3: SIMD3<Float>(1, 1, 0), p4: SIMD3<Float>(1, 0, 0))
         XCTAssertEqual(buffer.indices.count, 6)
         XCTAssertEqual(buffer.positions.count, 4)
         XCTAssertEqual(buffer.normals.count, 4)
@@ -24,7 +24,7 @@ class MeshBufferTests: XCTestCase {
 
     func testMeshBufferClear() throws {
         var buffer = MeshBuffer()
-        buffer.addQuad(p1: SIMD3<Float>(0, 1, 0), p2: SIMD3<Float>(0, 0, 0), p3: SIMD3<Float>(1, 1, 0), p4: SIMD3<Float>(1, 0, 0))
+        buffer.addQuadPoints(p1: SIMD3<Float>(0, 1, 0), p2: SIMD3<Float>(0, 0, 0), p3: SIMD3<Float>(1, 1, 0), p4: SIMD3<Float>(1, 0, 0))
         buffer.reset()
 
         XCTAssertTrue(buffer.indices.isEmpty)
