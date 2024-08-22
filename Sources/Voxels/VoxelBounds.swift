@@ -1,6 +1,8 @@
-public struct VoxelBounds {
+public struct VoxelBounds: Sendable {
     public let min: VoxelIndex
     public let max: VoxelIndex
+
+    public static let empty: VoxelBounds = .init(VoxelIndex())
 
     public init(_ only: VoxelIndex) {
         self.min = only
@@ -12,11 +14,10 @@ public struct VoxelBounds {
         self.max = max
     }
 
-    public init?(_ seqOfIndex: [VoxelIndex]) {
+    public init(_ seqOfIndex: [VoxelIndex]) {
         if seqOfIndex.isEmpty {
-            return nil
-        }
-        if seqOfIndex.count == 1 {
+            self.init(VoxelIndex())
+        } else if seqOfIndex.count == 1 {
             self.init(seqOfIndex[0])
         } else {
             let firstKey = seqOfIndex[0]

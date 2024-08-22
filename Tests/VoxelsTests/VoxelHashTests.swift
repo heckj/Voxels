@@ -35,13 +35,13 @@ class VoxelHashTests: XCTestCase {
         try voxels.set(VoxelIndex(1, 1, 1), newValue: 1)
 
         let bounds = voxels.bounds
-        XCTAssertEqual(bounds?.min, VoxelIndex(0, 0, 0))
-        XCTAssertEqual(bounds?.max, VoxelIndex(1, 1, 1))
+        XCTAssertEqual(bounds.min, VoxelIndex(0, 0, 0))
+        XCTAssertEqual(bounds.max, VoxelIndex(1, 1, 1))
     }
 
-    func testNilVoxelBounds() throws {
+    func testEmptyVoxelBounds() throws {
         let voxels = VoxelHash<Int, Float>()
-        XCTAssertNil(voxels.bounds)
+        XCTAssertEqual(voxels.bounds, .empty)
     }
 
     func testSingularVoxelBounds() throws {
@@ -49,8 +49,8 @@ class VoxelHashTests: XCTestCase {
         try voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
 
         let bounds = voxels.bounds
-        XCTAssertEqual(bounds?.min, VoxelIndex(0, 0, 0))
-        XCTAssertEqual(bounds?.max, VoxelIndex(0, 0, 0))
+        XCTAssertEqual(bounds.min, VoxelIndex(0, 0, 0))
+        XCTAssertEqual(bounds.max, VoxelIndex(0, 0, 0))
     }
 
     func testVoxelSequence() throws {
