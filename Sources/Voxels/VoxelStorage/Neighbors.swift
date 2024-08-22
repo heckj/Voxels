@@ -1,13 +1,13 @@
-struct Neighbors<T: VoxelRenderable, R: SIMDScalar & Sendable>: VoxelAccessible {
+struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
     // https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
     let distance: Int
-    var _storage: VoxelHash<T, R>
+    var _storage: VoxelHash<T>
     public var bounds: VoxelBounds {
         _storage.bounds
     }
 
-    public var scale: VoxelScale<R> {
-        _storage.scale
+    public var indices: any Sequence<VoxelIndex> {
+        _storage.indices
     }
 
     static func manhattan_distance(from: VoxelIndex, to: VoxelIndex) -> Int {
@@ -20,10 +20,10 @@ struct Neighbors<T: VoxelRenderable, R: SIMDScalar & Sendable>: VoxelAccessible 
         case surface
     }
 
-    init(distance: Int, origin: VoxelIndex, voxels: any VoxelAccessible<T, R>, strategy: NeighborStrategy = .raw) throws {
+    init(distance: Int, origin: VoxelIndex, voxels: any VoxelAccessible<T>, strategy: NeighborStrategy = .raw) throws {
         precondition(distance >= 0)
         self.distance = distance
-        var initStorage = VoxelHash<T, R>(origin: voxels.scale.origin, edgeLength: voxels.scale.cubeSize)
+        var initStorage = VoxelHash<T>()
         for i in origin.x - distance ... origin.x + distance {
             for j in origin.y - distance ... origin.y + distance {
                 for k in origin.z - distance ... origin.z + distance {
@@ -60,5 +60,11 @@ struct Neighbors<T: VoxelRenderable, R: SIMDScalar & Sendable>: VoxelAccessible 
 
     mutating func set(_ index: VoxelIndex, newValue: T) throws {
         try _storage.set(index, newValue: newValue)
+    }
+}
+
+extension Neighbors: Sequence {
+    public func makeIterator() -> VoxelHash<T>.VoxelHashIterator {
+        _storage.makeIterator()
     }
 }

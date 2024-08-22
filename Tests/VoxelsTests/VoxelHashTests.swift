@@ -3,14 +3,14 @@ import XCTest
 
 class VoxelHashTests: XCTestCase {
     func testVoxelHashInitializer() throws {
-        let voxels = VoxelHash<Int, Float>()
+        let voxels = VoxelHash<Int>()
 
         XCTAssertEqual(voxels.count, 0)
         XCTAssertNil(voxels.value(VoxelIndex(0, 0, 0)))
     }
 
     func testVoxelAccess() throws {
-        var voxels = VoxelHash<Int, Float>()
+        var voxels = VoxelHash<Int>()
         try voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
         try voxels.set(VoxelIndex(1, 1, 1), newValue: 1)
 
@@ -20,7 +20,7 @@ class VoxelHashTests: XCTestCase {
     }
 
     func testVoxelRemoval() throws {
-        var voxels = VoxelHash<Int, Float>()
+        var voxels = VoxelHash<Int>()
         try voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
         try voxels.set(VoxelIndex(1, 1, 1), newValue: 1)
 
@@ -30,7 +30,7 @@ class VoxelHashTests: XCTestCase {
     }
 
     func testVoxelBounds() throws {
-        var voxels = VoxelHash<Int, Float>()
+        var voxels = VoxelHash<Int>()
         try voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
         try voxels.set(VoxelIndex(1, 1, 1), newValue: 1)
 
@@ -40,12 +40,12 @@ class VoxelHashTests: XCTestCase {
     }
 
     func testEmptyVoxelBounds() throws {
-        let voxels = VoxelHash<Int, Float>()
+        let voxels = VoxelHash<Int>()
         XCTAssertEqual(voxels.bounds, .empty)
     }
 
     func testSingularVoxelBounds() throws {
-        var voxels = VoxelHash<Int, Float>()
+        var voxels = VoxelHash<Int>()
         try voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
 
         let bounds = voxels.bounds
@@ -54,7 +54,7 @@ class VoxelHashTests: XCTestCase {
     }
 
     func testVoxelSequence() throws {
-        var voxels = VoxelHash<Int, Float>()
+        var voxels = VoxelHash<Int>()
         try voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
         try voxels.set(VoxelIndex(1, 1, 1), newValue: 2)
 

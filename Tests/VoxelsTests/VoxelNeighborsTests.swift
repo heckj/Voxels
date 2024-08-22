@@ -3,15 +3,15 @@ import XCTest
 
 class VoxelNeighborsTests: XCTestCase {
     func testDistance() throws {
-        XCTAssertEqual(Neighbors<Int, Float>.manhattan_distance(from: SIMD3<Int>(0, 0, 0), to: SIMD3<Int>(0, 0, 1)), 1)
+        XCTAssertEqual(Neighbors<Int>.manhattan_distance(from: SIMD3<Int>(0, 0, 0), to: SIMD3<Int>(0, 0, 1)), 1)
 
-        XCTAssertEqual(Neighbors<Int, Float>.manhattan_distance(from: SIMD3<Int>(0, 0, 0), to: SIMD3<Int>(0, 1, 1)), 2)
+        XCTAssertEqual(Neighbors<Int>.manhattan_distance(from: SIMD3<Int>(0, 0, 0), to: SIMD3<Int>(0, 1, 1)), 2)
 
-        XCTAssertEqual(Neighbors<Int, Float>.manhattan_distance(from: SIMD3<Int>(0, 0, 0), to: SIMD3<Int>(1, 1, 1)), 3)
+        XCTAssertEqual(Neighbors<Int>.manhattan_distance(from: SIMD3<Int>(0, 0, 0), to: SIMD3<Int>(1, 1, 1)), 3)
     }
 
     func testRetrieveNeighbors() throws {
-        let fiveByFive = VoxelArray<Int, Float>(edge: 7, value: 1, origin: SIMD3<Float>(0, 0, 0), edgeLength: 1.0)
+        let fiveByFive = VoxelArray<Int>(edge: 7, value: 1)
 
         let distanceZeroNeighbors = try Neighbors(distance: 0, origin: SIMD3<Int>(3, 2, 1), voxels: fiveByFive)
         XCTAssertEqual(distanceZeroNeighbors._storage.count, 1)
@@ -27,7 +27,7 @@ class VoxelNeighborsTests: XCTestCase {
     }
 
     func testHashNeighbors() throws {
-        var fiveByFive = VoxelHash<Int, Float>()
+        var fiveByFive = VoxelHash<Int>()
 
         // create cube in the middle
         for i in 1 ... 3 {

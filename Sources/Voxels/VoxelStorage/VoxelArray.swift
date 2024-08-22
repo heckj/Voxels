@@ -1,37 +1,15 @@
-public struct VoxelArray<T: VoxelRenderable, R: SIMDScalar & Sendable>: VoxelWritable, StrideIndexable {
+public struct VoxelArray<T: VoxelRenderable>: VoxelWritable, StrideIndexable {
     var _contents: [T]
     public let edgeSize: Int
-    public let scale: VoxelScale<R>
     public var bounds: VoxelBounds
 
-    public init(edge: Int, value: T, scale: VoxelScale<R>) {
-        precondition(edge > 0)
-        edgeSize = edge
-        self.scale = scale
-        _contents = Array(repeating: value, count: edge * edge * edge)
-        bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(edge - 1, edge - 1, edge - 1))
+    public var indices: any Sequence<VoxelIndex> {
+        (0 ..< size).map { _unchecked_delinearize($0) }
     }
 
-    public init(edge: Int, value: T) where R == Int {
+    public init(edge: Int, value: T) {
         precondition(edge > 0)
         edgeSize = edge
-        scale = VoxelScale<R>()
-        _contents = Array(repeating: value, count: edge * edge * edge)
-        bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(edge - 1, edge - 1, edge - 1))
-    }
-
-    public init(edge: Int, value: T) where R == Float {
-        precondition(edge > 0)
-        edgeSize = edge
-        scale = VoxelScale<R>()
-        _contents = Array(repeating: value, count: edge * edge * edge)
-        bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(edge - 1, edge - 1, edge - 1))
-    }
-
-    public init(edge: Int, value: T, origin: SIMD3<R>, edgeLength: R) {
-        precondition(edge > 0)
-        edgeSize = edge
-        scale = VoxelScale<R>(origin: origin, cubeSize: edgeLength)
         _contents = Array(repeating: value, count: edge * edge * edge)
         bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(edge - 1, edge - 1, edge - 1))
     }
@@ -63,12 +41,16 @@ public struct VoxelArray<T: VoxelRenderable, R: SIMDScalar & Sendable>: VoxelWri
         return index
     }
 
-    @inlinable
+    @inline(__always)
     public func delinearize(_ strideIndex: Int) throws -> VoxelIndex {
         if strideIndex < 0 || strideIndex >= edgeSize * edgeSize * edgeSize {
             throw VoxelAccessError.outOfBounds("stride index out of bounds: \(strideIndex)")
         }
+        return _unchecked_delinearize(strideIndex)
+    }
 
+    @inline(__always)
+    private func _unchecked_delinearize(_ strideIndex: Int) -> VoxelIndex {
         let majorStride = edgeSize * edgeSize
         let minorStride = edgeSize
         var x = 0
@@ -115,9 +97,9 @@ extension VoxelArray: Sequence {
 
     public struct VoxelArrayIterator: IteratorProtocol {
         var position: Int
-        let originalVoxelArray: VoxelArray<T, R>
+        let originalVoxelArray: VoxelArray<T>
 
-        init(_ originalVoxelArray: VoxelArray<T, R>) {
+        init(_ originalVoxelArray: VoxelArray<T>) {
             position = -1
             self.originalVoxelArray = originalVoxelArray
         }

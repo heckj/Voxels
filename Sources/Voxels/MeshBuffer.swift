@@ -16,6 +16,19 @@ public struct MeshBuffer: Sendable {
         indices = []
     }
 
+    /// Adds a quad, scaled for the exterior view of the face of the voxel you provide.
+    /// - Parameters:
+    ///   - index: The index of the voxel.
+    ///   - scale: The scale to determine the distance and offsets for the corners.
+    ///   - face: The face of the voxel.
+    public mutating func addQuad(index: VoxelIndex, scale: VoxelScale<Float>, face: CubeFace) {
+        let corners = face.corners(exterior: true)
+        let scaledCorners = corners.map { relativeIndex in
+            scale.cornerPosition(index.adding(relativeIndex))
+        }
+        addQuadPoints(p1: scaledCorners[0], p2: scaledCorners[1], p3: scaledCorners[2], p4: scaledCorners[3])
+    }
+
     /// Adds a quad, split along the shorter axis, into the mesh buffer.
     /// - Parameters:
     ///   - p1: A 3D point that represents the top-left corner of the quad.
@@ -23,12 +36,14 @@ public struct MeshBuffer: Sendable {
     ///   - p3: A 3D point that represents the upper-right corner of the quad.
     ///   - p4: A 3D point that represents the lower-right corner of the quad.
     ///
-    /// The points of the Quad, viewed face-front, are ordered like this:
+    /// The points of the Quad, viewed face-front, are 'wound' in the following order:
     ///  ```
     ///  v1  v3
+    ///   | /|
+    ///   |/ |
     ///  v2  v4
     /// ```
-    public mutating func addQuad(p1: SIMD3<Float>, p2: SIMD3<Float>, p3: SIMD3<Float>, p4: SIMD3<Float>) {
+    public mutating func addQuadPoints(p1: SIMD3<Float>, p2: SIMD3<Float>, p3: SIMD3<Float>, p4: SIMD3<Float>) {
         // The triangle points, viewed face-front, look like this:
         // v1 v3
         // v2 v4

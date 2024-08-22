@@ -4,7 +4,7 @@ import XCTest
 class VoxelScaleTests: XCTestCase {
     func testVoxelScaleFloat() throws {
         let scale = VoxelScale(origin: SIMD3<Float>(0, 0, 0), cubeSize: 1.0)
-        let v = VoxelArray(edge: 3, value: 1, origin: SIMD3<Float>(0, 0, 0), edgeLength: 1.0)
+        let v = VoxelArray(edge: 3, value: 1)
         let bounds = try XCTUnwrap(v.bounds)
 
         // inner corner of initial voxel
@@ -18,7 +18,7 @@ class VoxelScaleTests: XCTestCase {
 
     func testVoxelScaleCentroid() throws {
         let scale = VoxelScale(origin: SIMD3<Float>(0, 0, 0), cubeSize: 1.0)
-        let v = VoxelArray(edge: 3, value: 1, origin: SIMD3<Float>(0, 0, 0), edgeLength: 1.0)
+        let v = VoxelArray(edge: 3, value: 1)
         let bounds = try XCTUnwrap(v.bounds)
 
         // centroid position of initial voxel
@@ -27,7 +27,7 @@ class VoxelScaleTests: XCTestCase {
 
     func testVoxelScaleInteger() throws {
         let scale = VoxelScale(origin: SIMD3<Int>(0, 0, 0), cubeSize: 1)
-        let v = VoxelArray(edge: 3, value: 1, origin: SIMD3<Int>(0, 0, 0), edgeLength: 0)
+        let v = VoxelArray(edge: 3, value: 1)
         let bounds = try XCTUnwrap(v.bounds)
 
         // inner corner of initial voxel

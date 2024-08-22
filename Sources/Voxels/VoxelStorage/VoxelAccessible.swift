@@ -1,10 +1,8 @@
 
-public protocol VoxelAccessible<Element, Range> where Range: Sendable {
-    associatedtype Element: VoxelRenderable
-    associatedtype Range: Decodable & Encodable & Hashable & SIMDScalar
+public protocol VoxelAccessible<Element>: Sequence where Element: VoxelRenderable {
     func value(_: VoxelIndex) throws -> Element?
     var bounds: VoxelBounds { get }
-    var scale: VoxelScale<Range> { get }
+    var indices: any Sequence<VoxelIndex> { get }
 
     func isSurface(_: VoxelIndex) throws -> Bool
 }
