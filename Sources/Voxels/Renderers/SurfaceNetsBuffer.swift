@@ -1,4 +1,4 @@
-/// The output buffers used by [`surface_nets`]. These buffers can be reused to avoid reallocating memory.
+/// The output buffers used by [`surfaceNetMesh`]. These buffers can be reused to avoid reallocating memory.
 public struct SurfaceNetsBuffer {
     public var meshbuffer: MeshBuffer
 
@@ -19,7 +19,7 @@ public struct SurfaceNetsBuffer {
         surface_points = []
         surface_strides = []
         // Just make sure this buffer is big enough, whether or not we've used it before.
-        stride_to_index = Array(repeating: NULL_VERTEX, count: Int(arraySize))
+        stride_to_index = Array(repeating: VoxelMeshRenderer.NULL_VERTEX, count: Int(arraySize))
     }
 
     init(positions: [SIMD3<Float>], normals: [SIMD3<Float>], indices: [UInt32], surface_points: [SIMD3<UInt32>], surface_strides: [UInt32], stride_to_index: [UInt32]) {
@@ -33,6 +33,6 @@ public struct SurfaceNetsBuffer {
         meshbuffer = MeshBuffer()
         surface_points = []
         surface_strides = []
-        stride_to_index = Array(repeating: NULL_VERTEX, count: Int(arraySize))
+        stride_to_index = Array(repeating: VoxelMeshRenderer.NULL_VERTEX, count: Int(arraySize))
     }
 }

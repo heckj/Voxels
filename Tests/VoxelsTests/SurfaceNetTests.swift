@@ -1,4 +1,4 @@
-@testable import Voxels
+import Voxels
 import XCTest
 
 final class SurfaceNetTests: XCTestCase {
@@ -9,17 +9,18 @@ final class SurfaceNetTests: XCTestCase {
         var samples = VoxelArray<Float>(edge: 34, value: 0.0)
 
         for i in 0 ..< (samples.size) {
-            let position: SIMD3<Float> = try into_domain(array_dim: 32, samples.delinearize(i))
+            let voxelIndex = try samples.delinearize(i)
+            let position: SIMD3<Float> = into_domain(array_dim: 32, voxelIndex)
             let value = sphereSDF.valueAt(position)
-            samples[i] = value
+            try samples.set(voxelIndex, newValue: value)
         }
 
-        let insides = samples._contents.filter { val in
+        let insides = samples.filter { val in
             val < 0
         }
         XCTAssertTrue(insides.count > 1)
 
-        let buffer = try surface_nets(
+        let buffer = try VoxelMeshRenderer.surfaceNetMesh(
             sdf: samples,
             min: VoxelIndex(0, 0, 0),
             max: VoxelIndex(33, 33, 33)
