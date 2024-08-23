@@ -28,13 +28,12 @@ extension VoxelMeshRenderer {
     /// voxels in order to connect seamlessly.
     public static func surfaceNetMesh(
         sdf: VoxelArray<Float>,
-        min: VoxelIndex,
-        max: VoxelIndex
+        within bounds: VoxelBounds
     ) throws -> MeshBuffer {
         var buffer = SurfaceNetsBuffer(arraySize: UInt(sdf.size))
 
-        try estimate_surface(sdf: sdf, min: min, max: max, output: &buffer)
-        try make_all_quads(sdf: sdf, min: min, max: max, output: &buffer)
+        try estimate_surface(sdf: sdf, bounds: bounds, output: &buffer)
+        try make_all_quads(sdf: sdf, bounds: bounds, output: &buffer)
         return buffer.meshbuffer
     }
 
@@ -42,13 +41,12 @@ extension VoxelMeshRenderer {
     // Also generate a map from grid position to vertex index to be used to look up vertices when generating quads.
     static func estimate_surface(
         sdf: VoxelArray<Float>,
-        min: VoxelIndex,
-        max: VoxelIndex,
+        bounds: VoxelBounds,
         output: inout SurfaceNetsBuffer
     ) throws {
-        for z in min.z ..< max.z {
-            for y in min.y ..< max.y {
-                for x in min.x ..< max.x {
+        for z in bounds.min.z ..< bounds.max.z {
+            for y in bounds.min.y ..< bounds.max.y {
+                for x in bounds.min.x ..< bounds.max.x {
                     let stride = try sdf.linearize(VoxelIndex(x, y, z))
                     let position = SIMD3<Float>(Float(x), Float(y), Float(z))
                     if try estimate_surface_in_cube(sdf: sdf, position: position, min_corner_stride: stride, output: &output) {
@@ -176,8 +174,7 @@ extension VoxelMeshRenderer {
     // comments on `maybe_make_quad` to help with understanding the indexing.
     static func make_all_quads(
         sdf: VoxelArray<Float>,
-        min: VoxelIndex,
-        max: VoxelIndex,
+        bounds: VoxelBounds,
         output: inout SurfaceNetsBuffer
     ) throws {
         let xyz_strides: [Int] = try [
@@ -194,7 +191,7 @@ extension VoxelMeshRenderer {
             let p_stride = Int(p_stride)
 
             // Do edges parallel with the X axis
-            if xyz.y != min.y, xyz.z != min.z, xyz.x != max.x - 1 {
+            if xyz.y != bounds.min.y, xyz.z != bounds.min.z, xyz.x != bounds.max.x - 1 {
                 maybe_make_quad(
                     sdf: sdf,
                     stride_to_index: output.stride_to_index,
@@ -207,7 +204,7 @@ extension VoxelMeshRenderer {
                 )
             }
             // Do edges parallel with the Y axis
-            if xyz.x != min.x, xyz.z != min.z, xyz.y != max.y - 1 {
+            if xyz.x != bounds.min.x, xyz.z != bounds.min.z, xyz.y != bounds.max.y - 1 {
                 maybe_make_quad(
                     sdf: sdf,
                     stride_to_index: output.stride_to_index,
@@ -220,7 +217,7 @@ extension VoxelMeshRenderer {
                 )
             }
             // Do edges parallel with the Z axis
-            if xyz.x != min.x, xyz.y != min.y, xyz.z != max.z - 1 {
+            if xyz.x != bounds.min.x, xyz.y != bounds.min.y, xyz.z != bounds.max.z - 1 {
                 maybe_make_quad(
                     sdf: sdf,
                     stride_to_index: output.stride_to_index,
