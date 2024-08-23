@@ -113,7 +113,7 @@ extension VoxelBounds: StrideIndexable {
     }
 
     @inline(__always)
-    private func _unchecked_delinearize(_ strideIndex: Int) -> VoxelIndex {
+    func _unchecked_delinearize(_ strideIndex: Int) -> VoxelIndex {
         let xDistance = self.max.x - self.min.x // 2
         let yDistance = self.max.y - self.min.y // 2
         let zDistance = self.max.z - self.min.z // 0
@@ -185,7 +185,7 @@ extension VoxelBounds: StrideIndexable {
     }
 
     @inline(__always)
-    private func _unchecked_linearize(_ vi: VoxelIndex) -> Int {
+    func _unchecked_linearize(_ vi: VoxelIndex) -> Int {
         let xDistance = self.max.x - self.min.x
         let yDistance = self.max.y - self.min.y
         let zDistance = self.max.z - self.min.z
