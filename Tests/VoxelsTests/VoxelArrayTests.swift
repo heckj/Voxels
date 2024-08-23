@@ -16,31 +16,7 @@ class VoxelArrayTests: XCTestCase {
         XCTAssertEqual(try v.value(VoxelIndex(x: 1, y: 1, z: 1)), 1)
         XCTAssertEqual(try v.value(VoxelIndex(x: 2, y: 2, z: 2)), 1)
 
-        XCTAssertEqual(v.size, 27)
-    }
-
-    func testLinearize() throws {
-        let v = VoxelArray<Int>(edge: 3, value: 1)
-
-        // indexing function
-        XCTAssertEqual(try v.linearize(VoxelIndex(0, 0, 0)), 0)
-        XCTAssertEqual(try v.linearize(VoxelIndex(1, 1, 1)), 13)
-        XCTAssertEqual(try v.linearize(VoxelIndex(2, 2, 2)), 26)
-    }
-
-    func testDelinearize() throws {
-        let v = VoxelArray<Int>(edge: 3, value: 1)
-
-        for linearIndex in 0 ..< v.size {
-            let voxelIndex = try v.delinearize(linearIndex)
-            // print("stride \(linearIndex) -> \(voxelIndex)")
-            XCTAssertTrue(v.bounds.contains(voxelIndex), "stride \(linearIndex) results in out of bounds index: \(voxelIndex)")
-        }
-
-        // reversing the indexing function
-        XCTAssertEqual(try v.delinearize(0), VoxelIndex(0, 0, 0))
-        XCTAssertEqual(try v.delinearize(13), VoxelIndex(1, 1, 1))
-        XCTAssertEqual(try v.delinearize(26), VoxelIndex(2, 2, 2))
+        XCTAssertEqual(v.bounds.size, 27)
     }
 
     func testVoxelArraySequence() throws {

@@ -1,10 +1,10 @@
-public struct VoxelArray<T: VoxelRenderable>: VoxelWritable, StrideIndexable {
+public struct VoxelArray<T: VoxelRenderable>: VoxelWritable {
     var _contents: [T]
     public let edgeSize: Int
     public var bounds: VoxelBounds
 
     public var indices: any Sequence<VoxelIndex> {
-        (0 ..< size).map { _unchecked_delinearize($0) }
+        (0 ..< bounds.size).map { bounds._unchecked_delinearize($0) }
     }
 
     public init(edge: Int, value: T) {
@@ -14,67 +14,13 @@ public struct VoxelArray<T: VoxelRenderable>: VoxelWritable, StrideIndexable {
         bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(edge - 1, edge - 1, edge - 1))
     }
 
-    public var size: Int {
-        _contents.count
-    }
-
-    @inlinable
-    public func linearize(_ vi: VoxelIndex) throws -> Int {
-        if !bounds.contains(vi) {
-            throw VoxelAccessError.outOfBounds("Index out of bounds: \(vi)")
-        }
-        let index = (Int(vi.x) * edgeSize * edgeSize) + (Int(vi.y) * edgeSize) + Int(vi.z)
-        // Row-major address by index:
-        //
-        //    Address of A[i][j][k] = B + W *(P* N * (i-x) + P*(j-y) + (k-z))
-        //
-        //    Here:
-        //
-        //    B = Base Address (start address)                             = 0
-        //    W = Weight (storage size of one element stored in the array) = 1
-        //    M = Row (total number of rows)                               = size
-        //    N = Column (total number of columns)                         = size
-        //    P = Width (total number of cells depth-wise)                 = size
-        //    x = Lower Bound of Row                                       = 0
-        //    y = Lower Bound of Column                                    = 0
-        //    z = Lower Bound of Width                                     = 0
-        return index
-    }
-
-    @inline(__always)
-    public func delinearize(_ strideIndex: Int) throws -> VoxelIndex {
-        if strideIndex < 0 || strideIndex >= edgeSize * edgeSize * edgeSize {
-            throw VoxelAccessError.outOfBounds("stride index out of bounds: \(strideIndex)")
-        }
-        return _unchecked_delinearize(strideIndex)
-    }
-
-    @inline(__always)
-    private func _unchecked_delinearize(_ strideIndex: Int) -> VoxelIndex {
-        let majorStride = edgeSize * edgeSize
-        let minorStride = edgeSize
-        var x = 0
-        if strideIndex >= majorStride {
-            x = strideIndex / majorStride
-        }
-
-        let remaining = strideIndex - (x * majorStride)
-        var y = 0
-        if remaining >= minorStride {
-            y = remaining / minorStride
-        }
-
-        let z = remaining - (y * minorStride)
-        return VoxelIndex(x, y, z)
-    }
-
     public func value(_ vi: VoxelIndex) throws -> T? {
-        let stride = try linearize(vi)
+        let stride = try bounds.linearize(vi)
         return _contents[stride]
     }
 
     public mutating func set(_ vi: VoxelIndex, newValue: T) throws {
-        let stride = try linearize(vi)
+        let stride = try bounds.linearize(vi)
         _contents[stride] = newValue
     }
 
@@ -105,7 +51,7 @@ extension VoxelArray: Sequence {
         }
 
         public mutating func next() -> T? {
-            if position < originalVoxelArray.size - 1 {
+            if position < originalVoxelArray.bounds.size - 1 {
                 position += 1
                 return originalVoxelArray[position]
             }

@@ -8,8 +8,8 @@ final class SurfaceNetTests: XCTestCase {
         let sphereSDF: SDFSampleable<Float> = SDF.sphere()
         var samples = VoxelArray<Float>(edge: 34, value: 0.0)
 
-        for i in 0 ..< (samples.size) {
-            let voxelIndex = try samples.delinearize(i)
+        for i in 0 ..< (samples.bounds.size) {
+            let voxelIndex = try samples.bounds.delinearize(i)
             let position: SIMD3<Float> = into_domain(array_dim: 32, voxelIndex)
             let value = sphereSDF.valueAt(position)
             try samples.set(voxelIndex, newValue: value)

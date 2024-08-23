@@ -30,7 +30,7 @@ extension VoxelMeshRenderer {
         sdf: VoxelArray<Float>,
         within bounds: VoxelBounds
     ) throws -> MeshBuffer {
-        var buffer = SurfaceNetsBuffer(arraySize: UInt(sdf.size))
+        var buffer = SurfaceNetsBuffer(arraySize: UInt(sdf.bounds.size))
 
         try estimate_surface(sdf: sdf, bounds: bounds, output: &buffer)
         try make_all_quads(sdf: sdf, bounds: bounds, output: &buffer)
@@ -47,7 +47,7 @@ extension VoxelMeshRenderer {
         for z in bounds.min.z ..< bounds.max.z {
             for y in bounds.min.y ..< bounds.max.y {
                 for x in bounds.min.x ..< bounds.max.x {
-                    let stride = try sdf.linearize(VoxelIndex(x, y, z))
+                    let stride = try sdf.bounds.linearize(VoxelIndex(x, y, z))
                     let position = SIMD3<Float>(Float(x), Float(y), Float(z))
                     if try estimate_surface_in_cube(sdf: sdf, position: position, min_corner_stride: stride, output: &output) {
                         output.stride_to_index[Int(stride)] = UInt32(output.meshbuffer.positions.count) - 1
@@ -79,7 +79,7 @@ extension VoxelMeshRenderer {
         var num_negative = 0
 
         for i in 0 ... 7 {
-            let additional_stride = try sdf.linearize(CUBE_CORNERS[i])
+            let additional_stride = try sdf.bounds.linearize(CUBE_CORNERS[i])
             let corner_stride = min_corner_stride + additional_stride
             let d = sdf[corner_stride]
             // let d = *unsafe { sdf.get_unchecked(corner_stride as usize) };
@@ -178,9 +178,9 @@ extension VoxelMeshRenderer {
         output: inout SurfaceNetsBuffer
     ) throws {
         let xyz_strides: [Int] = try [
-            sdf.linearize([1, 0, 0]),
-            sdf.linearize([0, 1, 0]),
-            sdf.linearize([0, 0, 1]),
+            sdf.bounds.linearize([1, 0, 0]),
+            sdf.bounds.linearize([0, 1, 0]),
+            sdf.bounds.linearize([0, 0, 1]),
         ]
 
         for (xyz, p_stride) in zip(
