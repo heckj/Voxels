@@ -60,3 +60,44 @@ public struct VoxelBounds: Sendable {
 }
 
 extension VoxelBounds: Equatable {}
+
+extension VoxelBounds: Sequence {
+    public func makeIterator() -> VoxelBoundsIterator {
+        VoxelBoundsIterator(self)
+    }
+
+    public struct VoxelBoundsIterator: IteratorProtocol {
+        let bounds: VoxelBounds
+        var x, y, z: Int
+
+        init(_ bounds: VoxelBounds) {
+            self.bounds = bounds
+            x = bounds.min.x
+            y = bounds.min.y
+            z = bounds.min.z
+        }
+
+        public mutating func next() -> VoxelIndex? {
+            // crazily converting a multiple wrapped for loop
+            // into an iterator pattern...
+            if x < bounds.max.x {
+                x += 1
+                return VoxelIndex(x: x, y: y, z: z)
+            } else {
+                x = bounds.min.x
+                if y < bounds.max.y {
+                    y += 1
+                    return VoxelIndex(x: x, y: y, z: z)
+                } else {
+                    y = bounds.min.y
+                    if z < bounds.max.z {
+                        z += 1
+                        return VoxelIndex(x: x, y: y, z: z)
+                    } else {
+                        return nil
+                    }
+                }
+            }
+        }
+    }
+}
