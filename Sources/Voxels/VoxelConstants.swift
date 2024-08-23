@@ -10,6 +10,32 @@ public let CUBE_CORNERS: [VoxelIndex] = [
     [1, 1, 1], // front, top, right
 ]
 
+let CUBE_CORNER_VECTORS: [SIMD3<Float>] = [
+    [0.0, 0.0, 0.0],
+    [1.0, 0.0, 0.0],
+    [0.0, 1.0, 0.0],
+    [1.0, 1.0, 0.0],
+    [0.0, 0.0, 1.0],
+    [1.0, 0.0, 1.0],
+    [0.0, 1.0, 1.0],
+    [1.0, 1.0, 1.0],
+]
+
+let CUBE_EDGES: [SIMD2<UInt32>] = [
+    [0b000, 0b001],
+    [0b000, 0b010],
+    [0b000, 0b100],
+    [0b001, 0b011],
+    [0b001, 0b101],
+    [0b010, 0b011],
+    [0b010, 0b110],
+    [0b011, 0b111],
+    [0b100, 0b101],
+    [0b100, 0b110],
+    [0b101, 0b111],
+    [0b110, 0b111],
+]
+
 /// The set of cube faces and relevant directions and coordinates of those faces.
 ///
 /// The coordinate structure for the resulting offsets assumes a right-handed, Y-up coordinate system with a default view looking down the -Z direction.
