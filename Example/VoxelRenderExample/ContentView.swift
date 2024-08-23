@@ -27,7 +27,7 @@ struct ContentView: View {
             try samples.set(voxelIndex, newValue: valueAtPosition)
         }
 
-        let buffer = try surface_nets(
+        let buffer = try VoxelMeshRenderer.surfaceNetMesh(
             sdf: samples,
             min: VoxelIndex(0, 0, 0),
             max: VoxelIndex(33, 33, 33)
