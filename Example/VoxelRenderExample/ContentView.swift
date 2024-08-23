@@ -74,7 +74,7 @@ struct ContentView: View {
 
     private func buildBareQuad(color: PlatformColor) -> ModelEntity {
         var buffer = MeshBuffer()
-        buffer.addQuad(p1: SIMD3<Float>(0, 1, 0), p2: SIMD3<Float>(0, 0, 0), p3: SIMD3<Float>(1, 1, 0), p4: SIMD3<Float>(1, 0, 0))
+        buffer.addQuadPoints(p1: SIMD3<Float>(0, 1, 0), p2: SIMD3<Float>(0, 0, 0), p3: SIMD3<Float>(1, 1, 0), p4: SIMD3<Float>(1, 0, 0))
         let descriptor = buffer.meshDescriptor()
         let mesh = try! MeshResource.generate(from: [descriptor])
         let material = SimpleMaterial(color: color, isMetallic: false)
