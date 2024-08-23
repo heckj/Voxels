@@ -18,4 +18,94 @@ class VoxelBoundsTests: XCTestCase {
     func testVoxelBoundsEmptySequence() throws {
         XCTAssertEqual(VoxelBounds([]), .empty)
     }
+
+    func testEmptyVoxelBoundsStride() throws {
+        let emptyBounds = VoxelBounds.empty
+        let index = try emptyBounds.linearize(emptyBounds.min)
+        XCTAssertEqual(index, 0)
+        XCTAssertEqual(emptyBounds.size, 0)
+    }
+
+    func testXOnlyBoundsStride() throws {
+        let smallBounds = VoxelBounds(min: [0, 0, 0], max: [0, 0, 2])
+        let index = try smallBounds.linearize(smallBounds.max)
+        XCTAssertEqual(smallBounds.size, 3)
+        XCTAssertEqual(index, 2)
+        for j in 0 ..< smallBounds.size {
+            let computedIndex = try smallBounds.delinearize(j)
+            XCTAssertEqual(try smallBounds.linearize(computedIndex), j)
+        }
+    }
+
+    func testYOnlyBoundsStride() throws {
+        let smallBounds = VoxelBounds(min: [0, 0, 0], max: [0, 2, 0])
+        let index = try smallBounds.linearize(smallBounds.max)
+        XCTAssertEqual(smallBounds.size, 3)
+        XCTAssertEqual(index, 2)
+        for j in 0 ..< smallBounds.size {
+            let computedIndex = try smallBounds.delinearize(j)
+            XCTAssertEqual(try smallBounds.linearize(computedIndex), j)
+        }
+    }
+
+    func testZOnlyBoundsStride() throws {
+        let smallBounds = VoxelBounds(min: [0, 0, 0], max: [2, 0, 0])
+        let index = try smallBounds.linearize(smallBounds.max)
+        XCTAssertEqual(smallBounds.size, 3)
+        XCTAssertEqual(index, 2)
+        for j in 0 ..< smallBounds.size {
+            let computedIndex = try smallBounds.delinearize(j)
+            XCTAssertEqual(try smallBounds.linearize(computedIndex), j)
+        }
+    }
+
+    func testSquareXYBoundsStride() throws {
+        let smallBounds = VoxelBounds(min: [0, 0, 0], max: [2, 2, 0])
+        let index = try smallBounds.linearize(smallBounds.max)
+        XCTAssertEqual(smallBounds.size, 9)
+        XCTAssertEqual(index, 8)
+        for j in 0 ..< smallBounds.size {
+            let computedIndex = try smallBounds.delinearize(j)
+            // print("stride location \(j) -delinearize-> \(computedIndex)")
+            let reversed = try smallBounds.linearize(computedIndex)
+            // print("\(computedIndex) -linearize-> \(reversed)")
+            XCTAssertEqual(reversed, j)
+        }
+    }
+
+    func testSquareYZBoundsStride() throws {
+        let smallBounds = VoxelBounds(min: [0, 0, 0], max: [0, 2, 2])
+        let index = try smallBounds.linearize(smallBounds.max)
+        XCTAssertEqual(smallBounds.size, 9)
+        XCTAssertEqual(index, 8)
+        for j in 0 ..< smallBounds.size {
+            let computedIndex = try smallBounds.delinearize(j)
+            XCTAssertEqual(try smallBounds.linearize(computedIndex), j)
+        }
+    }
+
+    func testSquareXZBoundsStride() throws {
+        let smallBounds = VoxelBounds(min: [0, 0, 0], max: [2, 0, 2])
+        let index = try smallBounds.linearize(smallBounds.max)
+        XCTAssertEqual(smallBounds.size, 9)
+        XCTAssertEqual(index, 8)
+        for j in 0 ..< smallBounds.size {
+            let computedIndex = try smallBounds.delinearize(j)
+            XCTAssertEqual(try smallBounds.linearize(computedIndex), j)
+        }
+    }
+
+    func testCubeBoundsStride() throws {
+        let smallBounds = VoxelBounds(min: [0, 0, 0], max: [2, 2, 2])
+        let index = try smallBounds.linearize(smallBounds.max)
+        XCTAssertEqual(smallBounds.size, 27)
+        XCTAssertEqual(index, 26)
+        for j in 0 ..< smallBounds.size {
+            let computedIndex = try smallBounds.delinearize(j)
+            // print("stride location \(j) -delinearize-> \(computedIndex)")
+            let reversed = try smallBounds.linearize(computedIndex)
+            // print("\(computedIndex) -linearize-> \(reversed)")
+            XCTAssertEqual(reversed, j)
+        }
+    }
 }
