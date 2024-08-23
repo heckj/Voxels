@@ -1,6 +1,6 @@
-public class VoxelMeshRenderer {
+public extension VoxelMeshRenderer {
     /// A fast and simple meshing algorithm that produces a single quad for every visible face of a block.
-    public static func fastBlockMesh(_ v: some VoxelAccessible, scale: VoxelScale<Float>) -> MeshBuffer {
+    static func fastBlockMesh(_ v: some VoxelAccessible, scale: VoxelScale<Float>) -> MeshBuffer {
         var buffer = MeshBuffer()
 
         for index in v.indices {

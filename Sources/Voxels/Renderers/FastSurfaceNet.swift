@@ -54,7 +54,7 @@ func estimate_surface(
                 let stride = try sdf.linearize(VoxelIndex(x, y, z))
                 let position = SIMD3<Float>(Float(x), Float(y), Float(z))
                 if try estimate_surface_in_cube(sdf: sdf, position: position, min_corner_stride: stride, output: &output) {
-                    output.stride_to_index[Int(stride)] = UInt32(output.positions.count) - 1
+                    output.stride_to_index[Int(stride)] = UInt32(output.meshbuffer.positions.count) - 1
                     output.surface_points.append(
                         SIMD3<UInt32>(x: UInt32(x), y: UInt32(y), z: UInt32(z))
                     )
@@ -101,8 +101,8 @@ func estimate_surface_in_cube(
 
     let centroid: SIMD3<Float> = centroid_of_edge_intersections(dists: corner_dists)
 
-    output.positions.append(position + centroid)
-    output.normals.append(sdf_gradient(dists: corner_dists, s: centroid))
+    output.meshbuffer.positions.append(position + centroid)
+    output.meshbuffer.normals.append(sdf_gradient(dists: corner_dists, s: centroid))
 
     return true
 }
@@ -226,12 +226,12 @@ func make_all_quads(
             maybe_make_quad(
                 sdf: sdf,
                 stride_to_index: output.stride_to_index,
-                positions: output.positions,
+                positions: output.meshbuffer.positions,
                 p1: p_stride,
                 p2: p_stride + xyz_strides[0],
                 axis_b_stride: xyz_strides[1],
                 axis_c_stride: xyz_strides[2],
-                indices: &output.indices
+                indices: &output.meshbuffer.indices
             )
         }
         // Do edges parallel with the Y axis
@@ -239,12 +239,12 @@ func make_all_quads(
             maybe_make_quad(
                 sdf: sdf,
                 stride_to_index: output.stride_to_index,
-                positions: output.positions,
+                positions: output.meshbuffer.positions,
                 p1: p_stride,
                 p2: p_stride + xyz_strides[1],
                 axis_b_stride: xyz_strides[2],
                 axis_c_stride: xyz_strides[0],
-                indices: &output.indices
+                indices: &output.meshbuffer.indices
             )
         }
         // Do edges parallel with the Z axis
@@ -252,12 +252,12 @@ func make_all_quads(
             maybe_make_quad(
                 sdf: sdf,
                 stride_to_index: output.stride_to_index,
-                positions: output.positions,
+                positions: output.meshbuffer.positions,
                 p1: p_stride,
                 p2: p_stride + xyz_strides[2],
                 axis_b_stride: xyz_strides[0],
                 axis_c_stride: xyz_strides[1],
-                indices: &output.indices
+                indices: &output.meshbuffer.indices
             )
         }
     }
