@@ -13,7 +13,7 @@ class VoxelHashTests: XCTestCase {
         let voxels = VoxelHash<Int>(defaultVoxel: Int.max)
 
         XCTAssertEqual(voxels.count, 0)
-        
+
         XCTAssertEqual(voxels.value(VoxelIndex(2, 2, 2)), Int.max)
     }
 
