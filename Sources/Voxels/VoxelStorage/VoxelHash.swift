@@ -1,6 +1,7 @@
 public struct VoxelHash<T: VoxelRenderable>: VoxelWritable {
     var _contents: [VoxelIndex: T]
     public var bounds: VoxelBounds
+    let defaultVoxel: T?
 
     public var indices: any Sequence<VoxelIndex> {
         _contents.keys
@@ -9,6 +10,13 @@ public struct VoxelHash<T: VoxelRenderable>: VoxelWritable {
     public init() {
         _contents = [:]
         bounds = .empty
+        defaultVoxel = nil
+    }
+
+    public init(defaultVoxel: T) {
+        _contents = [:]
+        bounds = .empty
+        self.defaultVoxel = defaultVoxel
     }
 
     public var count: Int {
@@ -16,7 +24,11 @@ public struct VoxelHash<T: VoxelRenderable>: VoxelWritable {
     }
 
     public func value(_ vi: VoxelIndex) -> T? {
-        _contents[vi]
+        if let aVoxel = _contents[vi] {
+            aVoxel
+        } else {
+            defaultVoxel
+        }
     }
 
     public mutating func set(_ vi: VoxelIndex, newValue: T) throws {
@@ -35,6 +47,20 @@ public struct VoxelHash<T: VoxelRenderable>: VoxelWritable {
         } else {
             _contents.removeValue(forKey: vi)
             updateBoundsRemoving(vi)
+        }
+    }
+
+    public mutating func set(_ vis: [VoxelIndex], newValue: T?) throws {
+        if let aValue = newValue {
+            for index in vis {
+                _contents[index] = aValue
+                updateBoundsAdding(index)
+            }
+        } else {
+            for index in vis {
+                _contents.removeValue(forKey: index)
+                updateBoundsRemoving(index)
+            }
         }
     }
 
