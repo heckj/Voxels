@@ -9,6 +9,14 @@ class VoxelHashTests: XCTestCase {
         XCTAssertNil(voxels.value(VoxelIndex(0, 0, 0)))
     }
 
+    func testVoxelHashInitializerDefault() throws {
+        let voxels = VoxelHash<Int>(defaultVoxel: Int.max)
+
+        XCTAssertEqual(voxels.count, 0)
+        
+        XCTAssertEqual(voxels.value(VoxelIndex(2, 2, 2)), Int.max)
+    }
+
     func testVoxelAccess() throws {
         var voxels = VoxelHash<Int>()
         try voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
