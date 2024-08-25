@@ -31,7 +31,7 @@ struct ContentView: View {
             sdf: samples,
             within: VoxelBounds(
                 min: VoxelIndex(0, 0, 0),
-                max: VoxelIndex(33, 33, 33)
+                max: VoxelIndex(32, 32, 32)
             )
         )
 

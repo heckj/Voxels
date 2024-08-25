@@ -30,6 +30,13 @@ extension VoxelMeshRenderer {
         sdf: VoxelArray<Float>,
         within bounds: VoxelBounds
     ) throws -> MeshBuffer {
+        // warning shown, or error thrown, when the bounds selected outstrip the bounds
+        // of the SDF?
+        let inset = sdf.bounds.max.adding(VoxelIndex(-1, -1, -1))
+        let insetBounds = VoxelBounds(min: sdf.bounds.min, max: inset)
+        precondition(insetBounds.contains(bounds.min))
+        precondition(insetBounds.contains(bounds.max))
+
         var buffer = SurfaceNetsBuffer(arraySize: UInt(sdf.bounds.size))
 
         try estimate_surface(sdf: sdf, bounds: bounds, output: &buffer)
@@ -44,11 +51,21 @@ extension VoxelMeshRenderer {
         bounds: VoxelBounds,
         output: inout SurfaceNetsBuffer
     ) throws {
-        for z in bounds.min.z ..< bounds.max.z {
-            for y in bounds.min.y ..< bounds.max.y {
-                for x in bounds.min.x ..< bounds.max.x {
+        // iterate throughout all the voxel indices possible within the space of the bounds provided
+
+        // NOTE(heckj): the order of iteration here is extremely important to the assembly of points
+        // and quads. I tried replacing the triple-loop with iterating through bounds to linearly
+        // increment through the voxel array, and that was a mistake. The rendering results exploded.
+        // (as it happens, bounds iteration has "z" on the fastest iteration loop, and "x" on the slowest.
+        for z in bounds.min.z ... bounds.max.z {
+            for y in bounds.min.y ... bounds.max.y {
+                for x in bounds.min.x ... bounds.max.x {
                     let stride = try sdf.bounds.linearize(VoxelIndex(x, y, z))
+                    // TODO: use a VoxelScale to map this position...
                     let position = SIMD3<Float>(Float(x), Float(y), Float(z))
+                    // this uses both a stride index for internal buffers, and a Float-based position calculated
+                    // from the VoxelIndex, in this case a direct mapping of Int -> Float position
+
                     if try estimate_surface_in_cube(sdf: sdf, position: position, min_corner_stride: stride, output: &output) {
                         output.stride_to_index[Int(stride)] = UInt32(output.meshbuffer.positions.count) - 1
                         output.surface_points.append(

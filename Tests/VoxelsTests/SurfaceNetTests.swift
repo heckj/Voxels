@@ -22,7 +22,7 @@ final class SurfaceNetTests: XCTestCase {
 
         let buffer = try VoxelMeshRenderer.surfaceNetMesh(
             sdf: samples,
-            within: VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(33, 33, 33))
+            within: VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(32, 32, 32))
         )
 
         XCTAssertTrue(buffer.positions.count > 1)
