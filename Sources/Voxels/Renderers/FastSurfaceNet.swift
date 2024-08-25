@@ -52,21 +52,30 @@ extension VoxelMeshRenderer {
         output: inout SurfaceNetsBuffer
     ) throws {
         // iterate throughout all the voxel indices possible within the space of the bounds provided
-        for stride in 0 ..< bounds.size {
-            let xyz: VoxelIndex = try bounds.delinearize(stride)
-            // TODO: use a VoxelScale to map this position...
-            let position = SIMD3<Float>(Float(xyz.x), Float(xyz.y), Float(xyz.z))
-            // this uses both a stride index for internal buffers, and a Float-based position calculated
-            // from the VoxelIndex, in this case a direct mapping of Int -> Float position
 
-            if try estimate_surface_in_cube(sdf: sdf, position: position, min_corner_stride: stride, output: &output) {
-                output.stride_to_index[Int(stride)] = UInt32(output.meshbuffer.positions.count) - 1
-                output.surface_points.append(
-                    SIMD3<UInt32>(x: UInt32(xyz.x), y: UInt32(xyz.y), z: UInt32(xyz.z))
-                )
-                output.surface_strides.append(UInt32(stride))
-            } else {
-                output.stride_to_index[stride] = NULL_VERTEX
+        // NOTE(heckj): the order of iteration here is extremely important to the assembly of points
+        // and quads. I tried replacing the triple-loop with iterating through bounds to linearly
+        // increment through the voxel array, and that was a mistake. The rendering results exploded.
+        // (as it happens, bounds iteration has "z" on the fastest iteration loop, and "x" on the slowest.
+        for z in bounds.min.z ... bounds.max.z {
+            for y in bounds.min.y ... bounds.max.y {
+                for x in bounds.min.x ... bounds.max.x {
+                    let stride = try sdf.bounds.linearize(VoxelIndex(x, y, z))
+                    // TODO: use a VoxelScale to map this position...
+                    let position = SIMD3<Float>(Float(x), Float(y), Float(z))
+                    // this uses both a stride index for internal buffers, and a Float-based position calculated
+                    // from the VoxelIndex, in this case a direct mapping of Int -> Float position
+
+                    if try estimate_surface_in_cube(sdf: sdf, position: position, min_corner_stride: stride, output: &output) {
+                        output.stride_to_index[Int(stride)] = UInt32(output.meshbuffer.positions.count) - 1
+                        output.surface_points.append(
+                            SIMD3<UInt32>(x: UInt32(x), y: UInt32(y), z: UInt32(z))
+                        )
+                        output.surface_strides.append(UInt32(stride))
+                    } else {
+                        output.stride_to_index[stride] = NULL_VERTEX
+                    }
+                }
             }
         }
     }
