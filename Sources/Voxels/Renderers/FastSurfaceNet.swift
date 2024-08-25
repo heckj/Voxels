@@ -30,6 +30,13 @@ extension VoxelMeshRenderer {
         sdf: VoxelArray<Float>,
         within bounds: VoxelBounds
     ) throws -> MeshBuffer {
+        // warning shown, or error thrown, when the bounds selected outstrip the bounds
+        // of the SDF?
+        let inset = sdf.bounds.max.adding(VoxelIndex(-1, -1, -1))
+        let insetBounds = VoxelBounds(min: sdf.bounds.min, max: inset)
+        precondition(insetBounds.contains(bounds.min))
+        precondition(insetBounds.contains(bounds.max))
+
         var buffer = SurfaceNetsBuffer(arraySize: UInt(sdf.bounds.size))
 
         try estimate_surface(sdf: sdf, bounds: bounds, output: &buffer)
@@ -44,10 +51,8 @@ extension VoxelMeshRenderer {
         bounds: VoxelBounds,
         output: inout SurfaceNetsBuffer
     ) throws {
-
         // iterate throughout all the voxel indices possible within the space of the bounds provided
         for stride in 0 ..< bounds.size {
-
             let xyz: VoxelIndex = try bounds.delinearize(stride)
             // TODO: use a VoxelScale to map this position...
             let position = SIMD3<Float>(Float(xyz.x), Float(xyz.y), Float(xyz.z))
