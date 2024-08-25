@@ -8,38 +8,20 @@ import Voxels
     typealias PlatformColor = NSColor
 #endif
 
+enum RendererChoice: String, CaseIterable, Identifiable, CustomStringConvertible {
+    case fastSurfaceNet
+    case fastSurfaceBlockMesh
+
+    var id: Self { self }
+
+    var description: String {
+        rawValue
+    }
+}
+
 struct ContentView: View {
     @State private var arcballState: ArcBallState
-
-    private func into_domain(array_dim: UInt, _ xyz: SIMD3<Int>) -> SIMD3<Float> {
-        // samples over a quadrant - starts at -1 and goes up to (2/edgeSize * (edgeSize-1)) - 1
-        (2.0 / Float(array_dim)) * SIMD3<Float>(Float(xyz.x), Float(xyz.y), Float(xyz.z)) - 1.0
-    }
-
-    private func buildMesh() throws -> ModelEntity {
-        let sphereSDF: SDFSampleable<Float> = SDF.sphere()
-        var samples = VoxelArray<Float>(edge: 34, value: 0.0)
-
-        for i in 0 ..< samples.bounds.size {
-            let voxelIndex = try samples.bounds.delinearize(i)
-            let position: SIMD3<Float> = into_domain(array_dim: 32, voxelIndex)
-            let valueAtPosition = sphereSDF.valueAt(position)
-            try samples.set(voxelIndex, newValue: valueAtPosition)
-        }
-
-        let buffer = try VoxelMeshRenderer.surfaceNetMesh(
-            sdf: samples,
-            within: VoxelBounds(
-                min: VoxelIndex(0, 0, 0),
-                max: VoxelIndex(32, 32, 32)
-            )
-        )
-
-        let descriptor = buffer.meshDescriptor()
-        let mesh = try! MeshResource.generate(from: [descriptor])
-        let material = SimpleMaterial(color: .green, isMetallic: false)
-        return ModelEntity(mesh: mesh, materials: [material])
-    }
+    @State private var selectedRenderer: RendererChoice = .fastSurfaceNet
 
     private func showTangentCoordinateSystems(modelEntity: ModelEntity, parent: Entity) {
         let axisLength: Float = 0.02
@@ -94,7 +76,7 @@ struct ContentView: View {
 
     init() {
         arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0),
-                                    radius: 5.0,
+                                    radius: 50.0,
                                     inclinationAngle: -Float.pi / 6.0, // around X, slightly "up"
                                     rotationAngle: 0.0, // around Y
                                     inclinationConstraint: -Float.pi / 2 ... 0, // 0 ... 90° 'up'
@@ -140,22 +122,27 @@ struct ContentView: View {
                     // BLUE: z
                     content.add(buildSphere(position: SIMD3<Float>(0, 0, 1), radius: 0.1, color: .blue))
 
-                    content.add(buildBareQuad(color: .brown))
+                    // content.add(buildBareQuad(color: .brown))
 
-                    do {
-                        try content.add(buildMesh())
-                    } catch {
-                        print("Failed to add voxel mesh: \(error)")
+                    switch selectedRenderer {
+                    case .fastSurfaceNet:
+                        content.add(EntityExample.surfaceNet)
+                    case .fastSurfaceBlockMesh:
+                        content.add(EntityExample.fastSurfaceBlockMesh)
                     }
+
                 }, update: {
                     // print("update")
                 })
                 .border(.blue)
-                //            RealityView { content in
-                //                showTangentCoordinateSystems(modelEntity: me, parent: me.parent!)
-                //            }
             }
             Text("Hello, world!")
+            Picker("Renderer Choice", selection: $selectedRenderer) {
+                ForEach(RendererChoice.allCases) { option in
+                    Text(option.rawValue)
+                }
+            }
+            // .pickerStyle(.wheel)
         }
         .padding()
         .onAppear {
