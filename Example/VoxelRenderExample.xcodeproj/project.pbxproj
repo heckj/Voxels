@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1A51C57C2C54556B0037FEEF /* Voxels in Frameworks */ = {isa = PBXBuildFile; productRef = 1A51C57B2C54556B0037FEEF /* Voxels */; };
 		1AACD7882C655E97001C91E7 /* Voxels in Frameworks */ = {isa = PBXBuildFile; productRef = 1AACD7872C655E97001C91E7 /* Voxels */; };
+		1ABADC7C2C7D325E0010B832 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 1ABADC7B2C7D325E0010B832 /* SnapshotTesting */; };
+		1ABADC822C7D34ED0010B832 /* InlineSnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 1ABADC812C7D34ED0010B832 /* InlineSnapshotTesting */; };
 		1AE5C7022C754CEB00236DA9 /* RealityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AE5C7012C754CEB00236DA9 /* RealityKit.framework */; };
 		1AE5C70D2C754D8700236DA9 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AE5C70C2C754D8700236DA9 /* SwiftUI.framework */; };
 		1AE5C70F2C754DBD00236DA9 /* Voxels in Frameworks */ = {isa = PBXBuildFile; productRef = 1AE5C70E2C754DBD00236DA9 /* Voxels */; };
@@ -33,8 +35,19 @@
 		1AE5C70C2C754D8700236DA9 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/SwiftUI.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		1ABADC842C7D3A8E0010B832 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ContentView.swift,
+				EntityExample.swift,
+			);
+			target = 1AE5C6F12C75496300236DA9 /* MiscUnitTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		1A51C56A2C5454EA0037FEEF /* VoxelRenderExample */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = VoxelRenderExample; sourceTree = "<group>"; };
+		1A51C56A2C5454EA0037FEEF /* VoxelRenderExample */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (1ABADC842C7D3A8E0010B832 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = VoxelRenderExample; sourceTree = "<group>"; };
 		1AE5C6D92C7548E300236DA9 /* CameraControlARView */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CameraControlARView; sourceTree = "<group>"; };
 		1AE5C6F32C75496300236DA9 /* MiscUnitTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = MiscUnitTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -54,8 +67,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				1AE5C70D2C754D8700236DA9 /* SwiftUI.framework in Frameworks */,
+				1ABADC7C2C7D325E0010B832 /* SnapshotTesting in Frameworks */,
 				1AE5C7022C754CEB00236DA9 /* RealityKit.framework in Frameworks */,
 				1AE5C70F2C754DBD00236DA9 /* Voxels in Frameworks */,
+				1ABADC822C7D34ED0010B832 /* InlineSnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,6 +156,8 @@
 			name = MiscUnitTests;
 			packageProductDependencies = (
 				1AE5C70E2C754DBD00236DA9 /* Voxels */,
+				1ABADC7B2C7D325E0010B832 /* SnapshotTesting */,
+				1ABADC812C7D34ED0010B832 /* InlineSnapshotTesting */,
 			);
 			productName = MiscUnitTests;
 			productReference = 1AE5C6F22C75496300236DA9 /* MiscUnitTests.xctest */;
@@ -175,6 +192,7 @@
 			mainGroup = 1A51C55F2C5454EA0037FEEF;
 			packageReferences = (
 				1AACD7862C655E97001C91E7 /* XCLocalSwiftPackageReference "../../Voxels" */,
+				1ABADC7A2C7D325E0010B832 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 			);
 			productRefGroup = 1A51C5692C5454EA0037FEEF /* Products */;
 			projectDirPath = "";
@@ -518,6 +536,17 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		1ABADC7A2C7D325E0010B832 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.17.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		1A51C57B2C54556B0037FEEF /* Voxels */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -526,6 +555,16 @@
 		1AACD7872C655E97001C91E7 /* Voxels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Voxels;
+		};
+		1ABADC7B2C7D325E0010B832 /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1ABADC7A2C7D325E0010B832 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+		1ABADC812C7D34ED0010B832 /* InlineSnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1ABADC7A2C7D325E0010B832 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = InlineSnapshotTesting;
 		};
 		1AE5C70E2C754DBD00236DA9 /* Voxels */ = {
 			isa = XCSwiftPackageProductDependency;
