@@ -112,19 +112,19 @@ public enum CubeFace: UInt8, CaseIterable, Sendable {
         case (.y, false): // aka "top", order viewed when looking "out"
             [[0, 1, 1], [0, 1, 0], [1, 1, 1], [1, 1, 0]]
         case (.yneg, true): // "bottom", order viewed when looking "in"
-            [[0, 0, 0], [0, 0, 1], [1, 0, 0], [1, 0, 1]]
-        case (.yneg, false): // "bottom", order viewed when looking "out"
             [[0, 0, 1], [0, 0, 0], [1, 0, 1], [1, 0, 0]]
+        case (.yneg, false): // "bottom", order viewed when looking "out"
+            [[0, 0, 0], [0, 0, 1], [1, 0, 0], [1, 0, 1]]
         case (.x, true): // "right", order viewed when looking "in"
-            [[1, 0, 1], [1, 1, 1], [1, 0, 0], [1, 1, 0]]
-        case (.x, false): // "right",order viewed when looking "out"
             [[1, 0, 0], [1, 1, 0], [1, 0, 1], [1, 1, 1]]
+        case (.x, false): // "right",order viewed when looking "out"
+            [[1, 0, 1], [1, 1, 1], [1, 0, 0], [1, 1, 0]]
         case (.xneg, true): // "left", order viewed when looking "in"
-            [[0, 0, 0], [0, 1, 0], [0, 0, 1], [0, 1, 1]]
-        case (.xneg, false): // "left", order viewed when looking "out"
             [[0, 0, 1], [0, 1, 1], [0, 0, 0], [0, 1, 0]]
+        case (.xneg, false): // "left", order viewed when looking "out"
+            [[0, 0, 0], [0, 1, 0], [0, 0, 1], [0, 1, 1]]
         case (.z, true): // "front", order viewed when looking "in"
-            [[0, 0, 1], [0, 1, 1], [1, 0, 1], [1, 1, 1]]
+            [[0, 1, 1], [0, 0, 1], [1, 1, 1], [1, 0, 1]]
         case (.z, false): // "front", order viewed when looking "out"
             [[1, 1, 1], [1, 0, 1], [0, 1, 1], [0, 0, 1]]
         case (.zneg, true): // "back", order viewed when looking "in"
