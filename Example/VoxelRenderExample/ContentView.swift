@@ -88,7 +88,7 @@ struct ContentView: View {
 
     init() {
         arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0),
-                                    radius: 8.0,
+                                    radius: 50.0,
                                     inclinationAngle: -Float.pi / 6.0, // around X, slightly "up"
                                     rotationAngle: 0.0, // around Y
                                     inclinationConstraint: -Float.pi / 2 ... 0, // 0 ... 90° 'up'
@@ -134,20 +134,20 @@ struct ContentView: View {
                     // BLUE: z
                     content.add(buildSphere(position: SIMD3<Float>(0, 0, 1), radius: 0.1, color: .blue))
 
-                    content.add(debugEntity())
+//                    content.add(debugEntity())
 
-//                    switch selectedRenderer {
-//                    case .fastSurfaceNet:
-//                        if let other = Global.arContainer.cameraARView.scene.findEntity(named: "fastSurfaceBlock") {
-//                            other.parent?.removeChild(other)
-//                        }
-//                        content.add(EntityExample.surfaceNet)
-//                    case .fastSurfaceBlockMesh:
-//                        if let other = Global.arContainer.cameraARView.scene.findEntity(named: "surfaceNet") {
-//                            other.parent?.removeChild(other)
-//                        }
-//                        content.add(EntityExample.fastSurfaceBlockMesh)
-//                    }
+                    switch selectedRenderer {
+                    case .fastSurfaceNet:
+                        if let other = Global.arContainer.cameraARView.scene.findEntity(named: "fastSurfaceBlock") {
+                            other.parent?.removeChild(other)
+                        }
+                        content.add(EntityExample.surfaceNet)
+                    case .fastSurfaceBlockMesh:
+                        if let other = Global.arContainer.cameraARView.scene.findEntity(named: "surfaceNet") {
+                            other.parent?.removeChild(other)
+                        }
+                        content.add(EntityExample.fastSurfaceBlockMesh)
+                    }
 
                 }, update: {
                     // print("update")
