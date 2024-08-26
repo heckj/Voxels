@@ -56,6 +56,18 @@ struct ContentView: View {
         return sphereEntity
     }
 
+    private func debugEntity() -> ModelEntity {
+        let voxels = EntityExample.oneByOne()
+        let buffer = VoxelMeshRenderer.fastBlockMesh(voxels, scale: .init())
+
+        let descriptor = buffer.meshDescriptor()
+        let mesh = try! MeshResource.generate(from: [descriptor])
+        let material = SimpleMaterial(color: .gray, isMetallic: false)
+        let entity = ModelEntity(mesh: mesh, materials: [material])
+        entity.name = "oneByOne"
+        return entity
+    }
+
     private func buildBareQuad(color: PlatformColor) -> ModelEntity {
         var buffer = MeshBuffer()
         buffer.addQuadPoints(p1: SIMD3<Float>(0, 1, 0), p2: SIMD3<Float>(0, 0, 0), p3: SIMD3<Float>(1, 1, 0), p4: SIMD3<Float>(1, 0, 0))
@@ -76,7 +88,7 @@ struct ContentView: View {
 
     init() {
         arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0),
-                                    radius: 50.0,
+                                    radius: 8.0,
                                     inclinationAngle: -Float.pi / 6.0, // around X, slightly "up"
                                     rotationAngle: 0.0, // around Y
                                     inclinationConstraint: -Float.pi / 2 ... 0, // 0 ... 90° 'up'
@@ -122,14 +134,20 @@ struct ContentView: View {
                     // BLUE: z
                     content.add(buildSphere(position: SIMD3<Float>(0, 0, 1), radius: 0.1, color: .blue))
 
-                    // content.add(buildBareQuad(color: .brown))
+                    content.add(debugEntity())
 
-                    switch selectedRenderer {
-                    case .fastSurfaceNet:
-                        content.add(EntityExample.surfaceNet)
-                    case .fastSurfaceBlockMesh:
-                        content.add(EntityExample.fastSurfaceBlockMesh)
-                    }
+//                    switch selectedRenderer {
+//                    case .fastSurfaceNet:
+//                        if let other = Global.arContainer.cameraARView.scene.findEntity(named: "fastSurfaceBlock") {
+//                            other.parent?.removeChild(other)
+//                        }
+//                        content.add(EntityExample.surfaceNet)
+//                    case .fastSurfaceBlockMesh:
+//                        if let other = Global.arContainer.cameraARView.scene.findEntity(named: "surfaceNet") {
+//                            other.parent?.removeChild(other)
+//                        }
+//                        content.add(EntityExample.fastSurfaceBlockMesh)
+//                    }
 
                 }, update: {
                     // print("update")

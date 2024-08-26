@@ -1,4 +1,4 @@
-struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
+public struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
     // https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
     let distance: Int
     var _storage: VoxelHash<T>
@@ -20,7 +20,7 @@ struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
         case surface
     }
 
-    init(distance: Int, origin: VoxelIndex, voxels: any VoxelAccessible<T>, strategy: NeighborStrategy = .raw) throws {
+    public init(distance: Int, origin: VoxelIndex, voxels: any VoxelAccessible<T>, strategy: NeighborStrategy = .raw) throws {
         precondition(distance >= 0)
         self.distance = distance
         var initStorage = VoxelHash<T>()
@@ -54,11 +54,11 @@ struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
 
     // VoxelAccessible
 
-    func value(_ index: VoxelIndex) -> T? {
+    public func value(_ index: VoxelIndex) -> T? {
         _storage.value(index)
     }
 
-    mutating func set(_ index: VoxelIndex, newValue: T) throws {
+    public mutating func set(_ index: VoxelIndex, newValue: T) {
         try _storage.set(index, newValue: newValue)
     }
 }
