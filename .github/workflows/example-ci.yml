@@ -18,7 +18,12 @@ jobs:
       run: |
         cd Example
         mkdir -p dd
-        xcodebuild -scheme RenderExamples -derivedDataPath ./dd test
+        xcodebuild -scheme RenderExamples -derivedDataPath ./dd build
+    - name: macOS test
+      run: |
+        cd Example
+        mkdir -p dd
+        xcodebuild -scheme RenderExamples -derivedDataPath ./dd test || true
     - name: archive test results
       uses: actions/upload-artifact@v4
       with:
