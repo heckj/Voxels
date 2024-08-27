@@ -76,24 +76,49 @@ public struct VoxelHash<T: VoxelRenderable>: VoxelWritable {
 }
 
 extension VoxelHash: Sequence {
-    public func makeIterator() -> VoxelHashIterator {
-        VoxelHashIterator(self)
+    public typealias Iterator = VoxelHashIndexIterator
+    public func makeIterator() -> VoxelHashIndexIterator {
+        VoxelHashIndexIterator(self)
     }
 
-    public struct VoxelHashIterator: IteratorProtocol {
-        var keys: [VoxelIndex]
+    public struct VoxelHashIndexIterator: IteratorProtocol {
+        var indexPosition: Dictionary<VoxelIndex, T>.Index
         let originalVoxelHash: VoxelHash<T>
 
         init(_ originalVoxelHash: VoxelHash<T>) {
-            keys = Array(originalVoxelHash._contents.keys)
             self.originalVoxelHash = originalVoxelHash
+            indexPosition = originalVoxelHash._contents.startIndex
         }
 
         public mutating func next() -> T? {
-            guard let key = keys.popLast() else {
+            indexPosition = originalVoxelHash._contents.index(after: indexPosition)
+            if indexPosition < originalVoxelHash._contents.endIndex {
+                let foo: (key: VoxelIndex, value: T) = originalVoxelHash._contents[indexPosition]
+                return foo.value
+            } else {
                 return nil
             }
-            return originalVoxelHash.value(key)
         }
+    }
+}
+
+extension VoxelHash: Collection {
+    public typealias Index = Dictionary<VoxelIndex, T>.Index
+
+    public var startIndex: Dictionary<VoxelIndex, T>.Index {
+        _contents.startIndex
+    }
+
+    public var endIndex: Dictionary<VoxelIndex, T>.Index {
+        _contents.endIndex
+    }
+
+    public func index(after: Dictionary<VoxelIndex, T>.Index) -> Dictionary<VoxelIndex, T>.Index {
+        _contents.index(after: after)
+    }
+
+    public subscript(position: Dictionary<VoxelIndex, T>.Index) -> T {
+        let foo: (key: VoxelIndex, value: T) = _contents[position]
+        return foo.value
     }
 }
