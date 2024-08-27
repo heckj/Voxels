@@ -24,14 +24,14 @@ public struct VoxelArray<T: VoxelRenderable>: VoxelWritable {
         _contents[stride] = newValue
     }
 
-    subscript(index: Int) -> T {
+    subscript(linearindex: Int) -> T {
         get {
-            precondition(index >= 0 && index < _contents.count)
-            return _contents[index]
+            precondition(linearindex >= 0 && linearindex < _contents.count)
+            return _contents[linearindex]
         }
         set(newValue) {
-            precondition(index >= 0 && index < _contents.count)
-            _contents[index] = newValue
+            precondition(linearindex >= 0 && linearindex < _contents.count)
+            _contents[linearindex] = newValue
         }
     }
 }
@@ -56,6 +56,34 @@ extension VoxelArray: Sequence {
                 return originalVoxelArray[position]
             }
             return nil
+        }
+    }
+}
+
+extension VoxelArray: Collection {
+    public func index(after i: VoxelIndex) -> VoxelIndex {
+        let linearPosition = bounds._unchecked_linearize(i)
+        return bounds._unchecked_delinearize(linearPosition + 1)
+    }
+
+    public var startIndex: VoxelIndex {
+        bounds._unchecked_delinearize(0)
+    }
+
+    public var endIndex: VoxelIndex {
+        bounds._unchecked_delinearize(count - 1)
+    }
+
+    public subscript(_ index: VoxelIndex) -> T {
+        get {
+            let linearPosition = bounds._unchecked_linearize(index)
+            precondition(linearPosition >= 0 && linearPosition < _contents.count)
+            return _contents[linearPosition]
+        }
+        set(newValue) {
+            let linearPosition = bounds._unchecked_linearize(index)
+            precondition(linearPosition >= 0 && linearPosition < _contents.count)
+            _contents[linearPosition] = newValue
         }
     }
 }
