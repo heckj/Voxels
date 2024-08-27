@@ -24,4 +24,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: xctest-files
-        path: dd/Logs/Test/**.xcresult/*
+        path: Example/dd/Logs/Test/**.xcresult/*
