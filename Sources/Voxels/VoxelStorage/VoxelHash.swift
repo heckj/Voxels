@@ -87,13 +87,13 @@ extension VoxelHash: Sequence {
 
         init(_ originalVoxelHash: VoxelHash<T>) {
             self.originalVoxelHash = originalVoxelHash
-            indexPosition = originalVoxelHash._contents.startIndex
+            indexPosition = self.originalVoxelHash._contents.startIndex
         }
 
         public mutating func next() -> T? {
-            indexPosition = originalVoxelHash._contents.index(after: indexPosition)
             if indexPosition < originalVoxelHash._contents.endIndex {
                 let foo: (key: VoxelIndex, value: T) = originalVoxelHash._contents[indexPosition]
+                indexPosition = originalVoxelHash._contents.index(after: indexPosition)
                 return foo.value
             } else {
                 return nil
