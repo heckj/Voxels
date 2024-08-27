@@ -52,6 +52,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1AA4B6DA2C7E9AB300C9796B /* RenderExamplesCI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RenderExamplesCI.xctestplan; sourceTree = "<group>"; };
 		1AEC43052C7E285E004809B3 /* ArcBallState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcBallState.swift; sourceTree = "<group>"; };
 		1AEC43062C7E285E004809B3 /* ARViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewContainer.swift; sourceTree = "<group>"; };
 		1AEC43072C7E285E004809B3 /* BirdsEyeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdsEyeState.swift; sourceTree = "<group>"; };
@@ -119,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				1AEC43382C7E2A39004809B3 /* RenderExamples.xctestplan */,
+				1AA4B6DA2C7E9AB300C9796B /* RenderExamplesCI.xctestplan */,
 				1AEC430F2C7E285E004809B3 /* CameraControlARView */,
 				1AF52B3D2C7E274B00B019D5 /* RenderExamples */,
 				1AF52B522C7E27A900B019D5 /* RenderExamplesTests */,

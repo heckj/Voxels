@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  validate:
+  macOS-test:
     runs-on: macOS-latest
     timeout-minutes: 15
     steps:
@@ -12,7 +12,16 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 1
-    - name: Select Xcode 15.2
-      run: sudo xcode-select -s /Applications/Xcode_15.2.app
-    - name: macOS build
-      run: cd Example; xcodebuild -scheme RenderExamples
+    - name: Select Xcode 15.4
+      run: sudo xcode-select -s /Applications/Xcode_15.4.app
+    - name: macOS test
+      run: |
+        cd Example
+        mkdir -p dd
+        xcodebuild -scheme RenderExamples -skipMacroValidation -derivedDataPath ./dd -testPlan RenderExamplesCI test
+    - name: archive test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: xctest-files
+        path: Example/dd/Logs/Test/**.xcresult/*
