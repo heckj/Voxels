@@ -1,4 +1,4 @@
-public protocol VoxelAccessible<Element>: Sequence where Element: VoxelRenderable {
+public protocol VoxelAccessible<Element>: Collection where Element: VoxelRenderable {
     func value(_: VoxelIndex) throws -> Element?
     var bounds: VoxelBounds { get }
     var indices: any Sequence<VoxelIndex> { get }
