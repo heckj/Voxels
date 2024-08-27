@@ -5,7 +5,8 @@ A multiplatform app for exploring and verifying voxel rendering.
 ## locally on the command line
 
     export DEVELOPER_DIR=/Applications/Xcode.app
-    xcodebuild -scheme RenderExamples test
+    mkdir -p dd
+    xcodebuild -scheme RenderExamples -skipMacroValidation -derivedDataPath ./dd test
 
 ## CI
 

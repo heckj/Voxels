@@ -15,4 +15,12 @@ jobs:
     - name: Select Xcode 15.2
       run: sudo xcode-select -s /Applications/Xcode_15.4.app
     - name: macOS build
-      run: cd Example; xcodebuild -scheme RenderExamples test
+      run: |
+        cd Example
+        mkdir -p dd
+        xcodebuild -scheme RenderExamples -derivedDataPath ./dd test
+    - name: archive test results
+      uses: actions/upload-artifacts@v4
+      with:
+        name: xctest-files
+        path: dd/Logs/Test/**.xcresult/*
