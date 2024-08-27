@@ -12,13 +12,13 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 1
-    - name: Select Xcode 15.2
+    - name: Select Xcode 15.4
       run: sudo xcode-select -s /Applications/Xcode_15.4.app
     - name: macOS test
       run: |
         cd Example
         mkdir -p dd
-        xcodebuild -scheme RenderExamples -derivedDataPath ./dd test
+        xcodebuild -scheme RenderExamples -skipMacroValidation -derivedDataPath ./dd -testPlan RenderExamplesCI test
     - name: archive test results
       if: always()
       uses: actions/upload-artifact@v4

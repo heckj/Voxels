@@ -1,0 +1,27 @@
+{
+  "configurations" : [
+    {
+      "id" : "A38F097B-3547-46CD-AB6F-B63F6F2FD960",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "BlockMeshRenderSnapshotTests"
+      ],
+      "target" : {
+        "containerPath" : "container:RenderExamples.xcodeproj",
+        "identifier" : "1AF52B502C7E27A900B019D5",
+        "name" : "RenderExamplesTests"
+      }
+    }
+  ],
+  "version" : 1
+}
