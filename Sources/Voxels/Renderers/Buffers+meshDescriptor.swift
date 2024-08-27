@@ -1,5 +1,5 @@
 #if canImport(RealityKit)
-    public import RealityKit
+    import RealityKit
 
     public extension SurfaceNetsBuffer {
         func meshDescriptor() -> MeshDescriptor {

@@ -1,4 +1,4 @@
-public import Foundation // for LocalizedError
+import Foundation // for LocalizedError
 
 public enum VoxelAccessError: Error {
     case outOfBounds(_ msg: String)

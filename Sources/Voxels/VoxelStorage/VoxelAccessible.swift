@@ -1,4 +1,3 @@
-
 public protocol VoxelAccessible<Element>: Sequence where Element: VoxelRenderable {
     func value(_: VoxelIndex) throws -> Element?
     var bounds: VoxelBounds { get }

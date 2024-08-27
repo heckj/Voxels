@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1600"
+   LastUpgradeVersion = "1540"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1A51C5672C5454EA0037FEEF"
-               BuildableName = "VoxelRenderExample.app"
-               BlueprintName = "VoxelRenderExample"
-               ReferencedContainer = "container:VoxelRenderExample.xcodeproj">
+               BlueprintIdentifier = "1AF52B3A2C7E274B00B019D5"
+               BuildableName = "RenderExamples.app"
+               BlueprintName = "RenderExamples"
+               ReferencedContainer = "container:RenderExamples.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -30,7 +30,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:VoxelRenderExample.xctestplan"
+            reference = "container:RenderExamples.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
@@ -40,10 +40,10 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1AE5C6F12C75496300236DA9"
-               BuildableName = "MiscUnitTests.xctest"
-               BlueprintName = "MiscUnitTests"
-               ReferencedContainer = "container:VoxelRenderExample.xcodeproj">
+               BlueprintIdentifier = "1AF52B502C7E27A900B019D5"
+               BuildableName = "RenderExamplesTests.xctest"
+               BlueprintName = "RenderExamplesTests"
+               ReferencedContainer = "container:RenderExamples.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -62,10 +62,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1A51C5672C5454EA0037FEEF"
-            BuildableName = "VoxelRenderExample.app"
-            BlueprintName = "VoxelRenderExample"
-            ReferencedContainer = "container:VoxelRenderExample.xcodeproj">
+            BlueprintIdentifier = "1AF52B3A2C7E274B00B019D5"
+            BuildableName = "RenderExamples.app"
+            BlueprintName = "RenderExamples"
+            ReferencedContainer = "container:RenderExamples.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -79,10 +79,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1A51C5672C5454EA0037FEEF"
-            BuildableName = "VoxelRenderExample.app"
-            BlueprintName = "VoxelRenderExample"
-            ReferencedContainer = "container:VoxelRenderExample.xcodeproj">
+            BlueprintIdentifier = "1AF52B3A2C7E274B00B019D5"
+            BuildableName = "RenderExamples.app"
+            BlueprintName = "RenderExamples"
+            ReferencedContainer = "container:RenderExamples.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
