@@ -1,7 +1,9 @@
 public protocol VoxelAccessible<Element>: Collection where Element: VoxelRenderable {
     func value(_: VoxelIndex) throws -> Element?
     var bounds: VoxelBounds { get }
+
     var indices: any Sequence<VoxelIndex> { get }
+    subscript(_: VoxelIndex) -> Element? { get set }
 
     func isSurface(_: VoxelIndex) throws -> Bool
 }

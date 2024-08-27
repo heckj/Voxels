@@ -73,6 +73,15 @@ public struct VoxelHash<T: VoxelRenderable>: VoxelWritable {
             bounds = VoxelBounds(Array(_contents.keys))
         }
     }
+
+    public subscript(_ index: VoxelIndex) -> T? {
+        get {
+            value(index)
+        }
+        set(newValue) {
+            set(index, newValue: newValue)
+        }
+    }
 }
 
 extension VoxelHash: Sequence {
