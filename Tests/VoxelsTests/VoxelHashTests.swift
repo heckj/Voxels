@@ -80,6 +80,7 @@ class VoxelHashTests: XCTestCase {
         voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
         voxels.set(VoxelIndex(1, 1, 1), newValue: 2)
 
+        // issue in filter with Collection iteration
         let ones = voxels.filter { $0 == 1 }
         XCTAssertEqual(ones.count, 1)
     }

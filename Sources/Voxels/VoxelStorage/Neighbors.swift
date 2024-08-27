@@ -1,4 +1,4 @@
-public struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
+public struct Neighbors<T: VoxelRenderable> { // VoxelAccessible {
     // https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
     let distance: Int
     var _storage: VoxelHash<T>
@@ -63,8 +63,8 @@ public struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
     }
 }
 
-extension Neighbors: Sequence {
-    public func makeIterator() -> VoxelHash<T>.VoxelHashIterator {
-        _storage.makeIterator()
-    }
-}
+// extension Neighbors: Sequence {
+//    public func makeIterator() -> VoxelHash<T>.VoxelHashIterator {
+//        _storage.makeIterator()
+//    }
+// }
