@@ -50,8 +50,11 @@ final class BlockMeshRenderSnapshotTests: XCTestCase {
     #if os(macOS)
         @MainActor
         func testBaselineARViewSphere() throws {
+            let ciCheck = ProcessInfo.processInfo.environment["CI"] != nil
+            print("CI check (ProcessInfo.processInfo.environment[\"CI\"] != nil) is \(ciCheck)")
             try XCTSkipIf(ProcessInfo.processInfo.environment["CI"] != nil, "CI Environment, skipping ARView snapshot image test")
 
+            print(ProcessInfo.processInfo.environment)
             // CAN NOT do a snapshot if the frame is .zero...
             let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
 
