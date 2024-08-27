@@ -19,8 +19,8 @@ class VoxelHashTests: XCTestCase {
 
     func testVoxelAccess() throws {
         var voxels = VoxelHash<Int>()
-        try voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
-        try voxels.set(VoxelIndex(1, 1, 1), newValue: 1)
+        voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
+        voxels.set(VoxelIndex(1, 1, 1), newValue: 1)
 
         XCTAssertEqual(voxels.count, 2)
         XCTAssertNil(voxels.value(VoxelIndex(2, 2, 2)))
@@ -29,8 +29,8 @@ class VoxelHashTests: XCTestCase {
 
     func testVoxelRemoval() throws {
         var voxels = VoxelHash<Int>()
-        try voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
-        try voxels.set(VoxelIndex(1, 1, 1), newValue: 1)
+        voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
+        voxels.set(VoxelIndex(1, 1, 1), newValue: 1)
 
         XCTAssertEqual(voxels.count, 2)
         try voxels.set(VoxelIndex(1, 1, 1), newValue: nil)
@@ -39,8 +39,8 @@ class VoxelHashTests: XCTestCase {
 
     func testVoxelBounds() throws {
         var voxels = VoxelHash<Int>()
-        try voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
-        try voxels.set(VoxelIndex(1, 1, 1), newValue: 1)
+        voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
+        voxels.set(VoxelIndex(1, 1, 1), newValue: 1)
 
         let bounds = voxels.bounds
         XCTAssertEqual(bounds.min, VoxelIndex(0, 0, 0))
@@ -54,17 +54,31 @@ class VoxelHashTests: XCTestCase {
 
     func testSingularVoxelBounds() throws {
         var voxels = VoxelHash<Int>()
-        try voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
+        voxels.set(VoxelIndex(1, 1, 1), newValue: 1)
 
-        let bounds = voxels.bounds
-        XCTAssertEqual(bounds.min, VoxelIndex(0, 0, 0))
-        XCTAssertEqual(bounds.max, VoxelIndex(0, 0, 0))
+        XCTAssertEqual(voxels.bounds.min, VoxelIndex(1, 1, 1))
+        XCTAssertEqual(voxels.bounds.max, VoxelIndex(1, 1, 1))
+    }
+
+    func testSingularVoxelBoundsExpansion() throws {
+        var voxels = VoxelHash<Int>()
+        voxels.set(VoxelIndex(1, 1, 1), newValue: 1)
+
+        XCTAssertEqual(voxels.bounds.min, VoxelIndex(1, 1, 1))
+        XCTAssertEqual(voxels.bounds.max, VoxelIndex(1, 1, 1))
+
+        voxels.set(VoxelIndex(2, 3, 4), newValue: 1)
+        voxels.set(VoxelIndex(4, 3, 2), newValue: 1)
+        voxels.set(VoxelIndex(2, 4, 3), newValue: 1)
+        XCTAssertEqual(voxels.count, 4)
+        XCTAssertEqual(voxels.bounds.min, VoxelIndex(1, 1, 1))
+        XCTAssertEqual(voxels.bounds.max, VoxelIndex(4, 4, 4))
     }
 
     func testVoxelSequence() throws {
         var voxels = VoxelHash<Int>()
-        try voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
-        try voxels.set(VoxelIndex(1, 1, 1), newValue: 2)
+        voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
+        voxels.set(VoxelIndex(1, 1, 1), newValue: 2)
 
         let ones = voxels.filter { $0 == 1 }
         XCTAssertEqual(ones.count, 1)

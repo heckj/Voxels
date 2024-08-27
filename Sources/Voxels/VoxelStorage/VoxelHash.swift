@@ -37,7 +37,11 @@ public struct VoxelHash<T: VoxelRenderable>: VoxelWritable {
     }
 
     private mutating func updateBoundsAdding(_ vi: VoxelIndex) {
-        bounds = bounds.adding(vi)
+        if _contents.count == 1 {
+            bounds = VoxelBounds(vi)
+        } else {
+            bounds = bounds.adding(vi)
+        }
     }
 
     public mutating func set(_ vi: VoxelIndex, newValue: T?) throws {

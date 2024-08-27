@@ -32,15 +32,15 @@ public struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
                         if let voxelData = try voxels.value(computedIndex) {
                             switch strategy {
                             case .raw:
-                                try initStorage.set(computedIndex, newValue: voxelData)
+                                initStorage.set(computedIndex, newValue: voxelData)
                             case .opaque:
                                 if voxelData.isOpaque() {
-                                    try initStorage.set(computedIndex, newValue: voxelData)
+                                    initStorage.set(computedIndex, newValue: voxelData)
                                 }
                             case .surface:
                                 do {
                                     if try voxels.isSurface(computedIndex) {
-                                        try initStorage.set(computedIndex, newValue: voxelData)
+                                        initStorage.set(computedIndex, newValue: voxelData)
                                     }
                                 } catch {}
                             }
@@ -59,7 +59,7 @@ public struct Neighbors<T: VoxelRenderable>: VoxelAccessible {
     }
 
     public mutating func set(_ index: VoxelIndex, newValue: T) {
-        try _storage.set(index, newValue: newValue)
+        _storage.set(index, newValue: newValue)
     }
 }
 

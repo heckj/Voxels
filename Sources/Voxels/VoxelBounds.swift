@@ -52,9 +52,17 @@ public struct VoxelBounds: Sendable {
             return self
         }
         if newPoint.x < min.x || newPoint.y < min.y || newPoint.z < min.z {
-            return VoxelBounds(min: newPoint, max: max)
+            let minX = Swift.min(min.x, newPoint.x)
+            let minY = Swift.min(min.y, newPoint.y)
+            let minZ = Swift.min(min.z, newPoint.z)
+            return VoxelBounds(min: VoxelIndex(minX, minY, minZ), max: max)
+        } else if newPoint.x > min.x || newPoint.y > min.y || newPoint.z > min.z {
+            let maxX = Swift.max(max.x, newPoint.x)
+            let maxY = Swift.max(max.y, newPoint.y)
+            let maxZ = Swift.max(max.z, newPoint.z)
+            return VoxelBounds(min: min, max: VoxelIndex(maxX, maxY, maxZ))
         } else {
-            return VoxelBounds(min: min, max: newPoint)
+            return self
         }
     }
 }
