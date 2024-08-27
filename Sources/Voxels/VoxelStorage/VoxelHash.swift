@@ -44,7 +44,7 @@ public struct VoxelHash<T: VoxelRenderable>: VoxelWritable {
         }
     }
 
-    public mutating func set(_ vi: VoxelIndex, newValue: T?) throws {
+    public mutating func set(_ vi: VoxelIndex, newValue: T?) {
         if let aValue = newValue {
             _contents[vi] = aValue
             updateBoundsAdding(vi)
@@ -54,7 +54,7 @@ public struct VoxelHash<T: VoxelRenderable>: VoxelWritable {
         }
     }
 
-    public mutating func set(_ vis: [VoxelIndex], newValue: T?) throws {
+    public mutating func set(_ vis: [VoxelIndex], newValue: T?) {
         if let aValue = newValue {
             for index in vis {
                 _contents[index] = aValue

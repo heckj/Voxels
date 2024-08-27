@@ -33,7 +33,7 @@ class VoxelHashTests: XCTestCase {
         voxels.set(VoxelIndex(1, 1, 1), newValue: 1)
 
         XCTAssertEqual(voxels.count, 2)
-        try voxels.set(VoxelIndex(1, 1, 1), newValue: nil)
+        voxels.set(VoxelIndex(1, 1, 1), newValue: nil)
         XCTAssertEqual(voxels.count, 1)
     }
 

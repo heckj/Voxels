@@ -14,3 +14,10 @@ public extension VoxelIndex {
         VoxelIndex(x + i.x, y + i.y, z + i.z)
     }
 }
+
+extension VoxelIndex: Comparable {
+    @inlinable
+    public static func < (lhs: SIMD3<Scalar>, rhs: SIMD3<Scalar>) -> Bool {
+        lhs.x < rhs.x || lhs.y < rhs.y || lhs.z < rhs.z
+    }
+}

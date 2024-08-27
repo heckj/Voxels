@@ -33,7 +33,7 @@ class VoxelNeighborsTests: XCTestCase {
         for i in 1 ... 3 {
             for j in 1 ... 3 {
                 for k in 1 ... 3 {
-                    try fiveByFive.set(VoxelIndex(i, j, k), newValue: 1)
+                    fiveByFive.set(VoxelIndex(i, j, k), newValue: 1)
                 }
             }
         }
