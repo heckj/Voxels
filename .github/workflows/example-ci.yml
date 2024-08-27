@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  validate:
+  macOS-test:
     runs-on: macOS-latest
     timeout-minutes: 15
     steps:
