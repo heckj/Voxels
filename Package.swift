@@ -9,8 +9,8 @@ var globalSwiftSettings: [PackageDescription.SwiftSetting] = [
     // .enableUpcomingFeature("StrictConcurrency")
     // .swiftLanguageVersion(.v5)
     .enableUpcomingFeature("ExistentialAny"),
-    //.enableExperimentalFeature("AccessLevelOnImport"),
-    //.enableUpcomingFeature("InternalImportsByDefault"),
+    // .enableExperimentalFeature("AccessLevelOnImport"),
+    // .enableUpcomingFeature("InternalImportsByDefault"),
 ]
 
 let package = Package(
