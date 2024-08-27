@@ -2,7 +2,7 @@ import RealityKit
 import Voxels
 
 enum EntityExample {
-    private static func into_domain(array_dim: UInt, _ xyz: SIMD3<Int>) -> SIMD3<Float> {
+    private static func into_domain(array_dim: UInt, _ xyz: VoxelIndex) -> SIMD3<Float> {
         // samples over a quadrant - starts at -1 and goes up to (2/edgeSize * (edgeSize-1)) - 1
         (2.0 / Float(array_dim)) * SIMD3<Float>(Float(xyz.x), Float(xyz.y), Float(xyz.z)) - 1.0
     }
@@ -45,14 +45,14 @@ enum EntityExample {
 
     static func manhattanNeighbor1() -> VoxelHash<Float> {
         var voxels = threeByThree()
-        voxels.set(SIMD3<Int>(2, 2, 2), newValue: -1)
+        voxels.set(VoxelIndex(2, 2, 2), newValue: -1)
 
-        voxels.set(SIMD3<Int>(1, 2, 2), newValue: -1)
-        voxels.set(SIMD3<Int>(3, 2, 2), newValue: -1)
-        voxels.set(SIMD3<Int>(2, 1, 2), newValue: -1)
-        voxels.set(SIMD3<Int>(2, 3, 2), newValue: -1)
-        voxels.set(SIMD3<Int>(2, 2, 1), newValue: -1)
-        voxels.set(SIMD3<Int>(2, 2, 3), newValue: -1)
+        voxels.set(VoxelIndex(1, 2, 2), newValue: -1)
+        voxels.set(VoxelIndex(3, 2, 2), newValue: -1)
+        voxels.set(VoxelIndex(2, 1, 2), newValue: -1)
+        voxels.set(VoxelIndex(2, 3, 2), newValue: -1)
+        voxels.set(VoxelIndex(2, 2, 1), newValue: -1)
+        voxels.set(VoxelIndex(2, 2, 3), newValue: -1)
         return voxels
     }
 
