@@ -2,6 +2,7 @@
 .swiftpm
 .vscode
 /.build
+build/
 /Packages
 /*.xcodeproj
 xcuserdata/
