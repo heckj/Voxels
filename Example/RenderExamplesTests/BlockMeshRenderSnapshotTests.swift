@@ -48,59 +48,10 @@ final class BlockMeshRenderSnapshotTests: XCTestCase {
 //    }
 
     #if os(macOS)
-        @MainActor
-        func testAnotherExampleRaw() async throws {
-            // let arView = ARView(frame: .zero)
-            let cameraControllerARView = CameraControlledARView(frame: .zero)
-
-            // set up the scene
-            var sphereMaterial = SimpleMaterial()
-            sphereMaterial.roughness = .float(0.0)
-            sphereMaterial.metallic = .float(0.3)
-
-            let sphereEntity = ModelEntity(mesh: .generateSphere(radius: 0.5),
-                                           materials: [sphereMaterial])
-
-            let sphereAnchor = AnchorEntity(world: .zero)
-            sphereAnchor.addChild(sphereEntity)
-            cameraControllerARView.scene.anchors.append(sphereAnchor)
-
-            let pointLight = PointLight()
-            pointLight.light.intensity = 50000
-            pointLight.light.color = .red
-            pointLight.position.z = 2.0
-            sphereAnchor.addChild(pointLight)
-            // create the SwiftUI view wrapping this...
-            let wrappedView = ExternalRealityKitView(realityKitView: cameraControllerARView).frame(width: 200, height: 200)
-
-            let renderer = ImageRenderer(content: wrappedView)
-
-            if let image = renderer.nsImage {
-                assertSnapshot(of: image, as: .image)
-
-                // NOTE: internal bits _aren't_ displayed - no image
-                // from the ARView
-            } else {
-                XCTFail("No image generated from ImageRenderer")
-            }
-        }
-    #endif
-
     @MainActor
-    func testRawARView() throws {
+    func testBaselineARViewSphere() throws {
         // CAN NOT do a snapshot if the frame is .zero...
-        #if os(iOS)
-            // NOTE(heckj): this is failing with a timeout expectation - apparently non-AR view
-            // isn't rendering with snapshot properly in the simulator. Messages include:
-            //
-            // Compiler failed to build request
-            // makeRenderPipelineState failed [reading from a rendertarget is not supported].
-            // Pipeline for technique meshShadowCasterProgrammableBlending failed compilation!
-
-            let arView = ARView(frame: CGRect(x: 0, y: 0, width: 300, height: 300), cameraMode: .nonAR, automaticallyConfigureSession: false)
-        #else
-            let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
-        #endif
+        let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
 
         // set up the scene
         var sphereMaterial = SimpleMaterial()
@@ -120,23 +71,18 @@ final class BlockMeshRenderSnapshotTests: XCTestCase {
         pointLight.position.z = 2.0
         sphereAnchor.addChild(pointLight)
 
-        #if os(iOS)
-            let view: UIView = arView
-            assertSnapshot(of: view, as: .image(size: view.intrinsicContentSize))
-        // Failing - empty view is generated through simulator
-        #else
-            print("Generating Snapshot!!!")
-            let imageExpectation = expectation(description: "a 3D image")
-            arView.snapshot(saveToHDR: false) { image in
-                print("Checking the returned image... \(image.debugDescription)")
-                guard let image else {
-                    XCTFail("No image generated from ARView snapshot()")
-                    return
-                }
-                assertSnapshot(of: image, as: .image)
-                imageExpectation.fulfill()
+        print("Generating Snapshot!!!")
+        let imageExpectation = expectation(description: "a 3D image")
+        arView.snapshot(saveToHDR: false) { image in
+            print("Checking the returned image... \(image.debugDescription)")
+            guard let image else {
+                XCTFail("No image generated from ARView snapshot()")
+                return
             }
-            wait(for: [imageExpectation], timeout: 10) // 10 seconds?
-        #endif
+            assertSnapshot(of: image, as: .image)
+            imageExpectation.fulfill()
+        }
+        wait(for: [imageExpectation], timeout: 10)
     }
+    #endif
 }
