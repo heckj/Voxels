@@ -75,6 +75,17 @@ class VoxelHashTests: XCTestCase {
         XCTAssertEqual(voxels.bounds.max, VoxelIndex(4, 4, 4))
     }
 
+    func testVoxelSequenceIterator() throws {
+        var voxels = VoxelHash<Int>()
+        voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
+        voxels.set(VoxelIndex(1, 1, 1), newValue: 2)
+
+        var iterator = voxels.makeIterator()
+        XCTAssertNotNil(iterator.next())
+        XCTAssertNotNil(iterator.next())
+        XCTAssertNil(iterator.next())
+    }
+
     func testVoxelSequence() throws {
         var voxels = VoxelHash<Int>()
         voxels.set(VoxelIndex(0, 0, 0), newValue: 1)

@@ -37,7 +37,7 @@ final class SurfaceNetTests: XCTestCase {
         XCTAssertEqual(sphereSDF.valueAt(x: 1, y: 0, z: 0), 0.5)
     }
 
-    func into_domain(array_dim: UInt, _ xyz: SIMD3<Int>) -> SIMD3<Float> {
+    func into_domain(array_dim: UInt, _ xyz: VoxelIndex) -> SIMD3<Float> {
         // samples over a quadrant - starts at -1 and goes up to (2/edgeSize * (edgeSize-1)) - 1
         (2.0 / Float(array_dim)) * SIMD3<Float>(Float(xyz.x), Float(xyz.y), Float(xyz.z)) - 1.0
     }
