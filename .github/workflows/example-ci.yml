@@ -20,7 +20,7 @@ jobs:
         mkdir -p dd
         xcodebuild -scheme RenderExamples -derivedDataPath ./dd test
     - name: archive test results
-      uses: actions/upload-artifacts@v4
+      uses: actions/upload-artifact@v4
       with:
         name: xctest-files
         path: dd/Logs/Test/**.xcresult/*
