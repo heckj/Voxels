@@ -24,19 +24,32 @@ public struct VoxelArray<T: VoxelRenderable>: VoxelWritable {
         _contents[stride] = newValue
     }
 
-    subscript(linearindex: Int) -> T {
+    public subscript(_ index: VoxelIndex) -> T? {
         get {
-            precondition(linearindex >= 0 && linearindex < _contents.count)
-            return _contents[linearindex]
+            let linearPosition = bounds._unchecked_linearize(index)
+            if linearPosition >= 0 || linearPosition < _contents.count {
+                return nil
+            } else {
+                return _contents[linearPosition]
+            }
         }
         set(newValue) {
-            precondition(linearindex >= 0 && linearindex < _contents.count)
-            _contents[linearindex] = newValue
+            guard let value = newValue else {
+                return
+            }
+            let linearPosition = bounds._unchecked_linearize(index)
+            if linearPosition >= 0 || linearPosition < _contents.count {
+                return
+            }
+            precondition(linearPosition >= 0 && linearPosition < _contents.count)
+            _contents[linearPosition] = value
         }
     }
 }
 
 extension VoxelArray: Sequence {
+    public typealias Iterator = VoxelArrayIterator
+
     public func makeIterator() -> VoxelArrayIterator {
         VoxelArrayIterator(self)
     }
@@ -61,29 +74,29 @@ extension VoxelArray: Sequence {
 }
 
 extension VoxelArray: Collection {
-    public func index(after i: VoxelIndex) -> VoxelIndex {
-        let linearPosition = bounds._unchecked_linearize(i)
-        return bounds._unchecked_delinearize(linearPosition + 1)
+    // public typealias Index = VoxelIndex
+    public typealias Index = Int
+
+    public func index(after i: Int) -> Int {
+        i + 1
     }
 
-    public var startIndex: VoxelIndex {
-        bounds._unchecked_delinearize(0)
+    public var startIndex: Int {
+        0
     }
 
-    public var endIndex: VoxelIndex {
-        bounds._unchecked_delinearize(count - 1)
+    public var endIndex: Int {
+        _contents.count - 1
     }
 
-    public subscript(_ index: VoxelIndex) -> T {
+    public subscript(linearindex: Int) -> T {
         get {
-            let linearPosition = bounds._unchecked_linearize(index)
-            precondition(linearPosition >= 0 && linearPosition < _contents.count)
-            return _contents[linearPosition]
+            precondition(linearindex >= 0 && linearindex < _contents.count)
+            return _contents[linearindex]
         }
         set(newValue) {
-            let linearPosition = bounds._unchecked_linearize(index)
-            precondition(linearPosition >= 0 && linearPosition < _contents.count)
-            _contents[linearPosition] = newValue
+            precondition(linearindex >= 0 && linearindex < _contents.count)
+            _contents[linearindex] = newValue
         }
     }
 }
