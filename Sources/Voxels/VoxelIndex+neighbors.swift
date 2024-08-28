@@ -1,19 +1,18 @@
-extension VoxelIndex {
-    
-    public static func manhattan_distance(from: VoxelIndex, to: VoxelIndex) -> Int {
+public extension VoxelIndex {
+    static func manhattan_distance(from: VoxelIndex, to: VoxelIndex) -> Int {
         abs(from.x - to.x) + abs(from.y - to.y) + abs(from.z - to.z)
     }
 
-    public enum NeighborStrategy {
+    enum NeighborStrategy {
         case raw
         case opaque
         case surface
     }
 
-    public static func neighbors(distance: Int, origin: VoxelIndex, voxels: any VoxelAccessible, strategy: NeighborStrategy = .raw) throws -> Set<VoxelIndex> {
+    static func neighbors(distance: Int, origin: VoxelIndex, voxels: any VoxelAccessible, strategy: NeighborStrategy = .raw) throws -> Set<VoxelIndex> {
         precondition(distance >= 0)
         var indices: Set<VoxelIndex> = [origin]
-        
+
         for i in origin.x - distance ... origin.x + distance {
             for j in origin.y - distance ... origin.y + distance {
                 for k in origin.z - distance ... origin.z + distance {

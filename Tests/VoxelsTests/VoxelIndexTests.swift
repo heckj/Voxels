@@ -23,9 +23,9 @@ class VoxelIndexTests: XCTestCase {
         XCTAssertTrue(VoxelIndex(0, 0, 0) != VoxelIndex(2, 2, 2))
         XCTAssertTrue(VoxelIndex(2, 2, 2) == VoxelIndex(2, 2, 2))
     }
-    
+
     // MARK: Neighbors
-    
+
     func testDistance() throws {
         XCTAssertEqual(VoxelIndex.manhattan_distance(from: VoxelIndex(0, 0, 0), to: VoxelIndex(0, 0, 1)), 1)
 
