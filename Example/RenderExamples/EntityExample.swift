@@ -1,13 +1,13 @@
 import RealityKit
 import Voxels
 
-enum EntityExample {
+public enum EntityExample {
     private static func into_domain(array_dim: UInt, _ xyz: VoxelIndex) -> SIMD3<Float> {
         // samples over a quadrant - starts at -1 and goes up to (2/edgeSize * (edgeSize-1)) - 1
         (2.0 / Float(array_dim)) * SIMD3<Float>(Float(xyz.x), Float(xyz.y), Float(xyz.z)) - 1.0
     }
 
-    static func sampledSDFSphere() -> VoxelArray<Float> {
+    public static func sampledSDFSphere() -> VoxelArray<Float> {
         let sphereSDF: SDFSampleable<Float> = SDF.sphere()
         var samples = VoxelArray<Float>(edge: 34, value: 0.0)
 
@@ -24,13 +24,13 @@ enum EntityExample {
         return samples
     }
 
-    static func oneByOne() -> VoxelHash<Float> {
+    public static func oneByOne() -> VoxelHash<Float> {
         var voxels = VoxelHash<Float>()
         voxels.set(VoxelIndex(2, 2, 2), newValue: -1.0)
         return voxels
     }
 
-    static func threeByThree() -> VoxelHash<Float> {
+    public static func threeByThree() -> VoxelHash<Float> {
         var threeByThree = VoxelHash<Float>()
         // create cube in the middle
         for i in 1 ... 3 {
@@ -43,8 +43,8 @@ enum EntityExample {
         return threeByThree
     }
 
-    static func manhattanNeighbor1() -> VoxelHash<Float> {
-        var voxels = threeByThree()
+    public static func manhattanNeighbor1() -> VoxelHash<Float> {
+        var voxels = VoxelHash<Float>()
         voxels.set(VoxelIndex(2, 2, 2), newValue: -1)
 
         voxels.set(VoxelIndex(1, 2, 2), newValue: -1)
@@ -56,7 +56,7 @@ enum EntityExample {
         return voxels
     }
 
-    static var surfaceNet: ModelEntity {
+    public static var surfaceNetSphere: ModelEntity {
         let samples = sampledSDFSphere()
         do {
             let buffer = try VoxelMeshRenderer.surfaceNetMesh(
@@ -78,7 +78,7 @@ enum EntityExample {
         }
     }
 
-    static var fastSurfaceBlockMesh: ModelEntity {
+    public static var fastSurfaceBlockMeshSphere: ModelEntity {
         let samples = sampledSDFSphere()
         let buffer = VoxelMeshRenderer.fastBlockMesh(samples, scale: .init())
 

@@ -141,12 +141,12 @@ struct ContentView: View {
                         if let other = Global.arContainer.cameraARView.scene.findEntity(named: "fastSurfaceBlock") {
                             other.parent?.removeChild(other)
                         }
-                        content.add(EntityExample.surfaceNet)
+                        content.add(EntityExample.surfaceNetSphere)
                     case .fastSurfaceBlockMesh:
                         if let other = Global.arContainer.cameraARView.scene.findEntity(named: "surfaceNet") {
                             other.parent?.removeChild(other)
                         }
-                        content.add(EntityExample.fastSurfaceBlockMesh)
+                        content.add(EntityExample.fastSurfaceBlockMeshSphere)
                     }
 
                 }, update: {
