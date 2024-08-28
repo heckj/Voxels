@@ -1,8 +1,9 @@
-@testable import RenderExamples
-
 import RealityKit
+import RenderExamples
 import SnapshotTesting
+import Spatial
 import SwiftUI
+import Voxels
 import XCTest
 
 final class BlockMeshRenderSnapshotTests: XCTestCase {
@@ -25,27 +26,6 @@ final class BlockMeshRenderSnapshotTests: XCTestCase {
             assertSnapshot(of: view, as: Snapshotting.image)
         }
     #endif
-
-    // expression ambiguous - so there's something missing in either format to render a snapshot result type - akin to running on macOS
-//    @MainActor
-//    func testExampleSwiftUIView() async throws {
-//        let view = VoxelRenderExample.ContentView()
-//        assertSnapshot(of: view, as: .image)
-//        XCTAssertNotNil(view)
-//    }
-
-//    @MainActor
-//    func testExample() async throws {
-//        let view = VoxelRenderExample.ContentView()
-//        Global.arContainer.cameraARView.snapshot(saveToHDR: false) { image in
-//            if let capturedSnapshot = image {
-//                assertSnapshot(of: capturedSnapshot, as: .image)
-//            } else {
-//                XCTFail("No image was generated")
-//            }
-//        }
-//        XCTAssertNotNil(view)
-//    }
 
     #if os(macOS)
         @MainActor
@@ -72,6 +52,153 @@ final class BlockMeshRenderSnapshotTests: XCTestCase {
             sphereAnchor.addChild(pointLight)
 
             print("Generating Snapshot!!!")
+            let imageExpectation = expectation(description: "a 3D image")
+            arView.snapshot(saveToHDR: false) { image in
+                print("Checking the returned image... \(image.debugDescription)")
+                guard let image else {
+                    XCTFail("No image generated from ARView snapshot()")
+                    return
+                }
+                assertSnapshot(of: image, as: .image)
+                imageExpectation.fulfill()
+            }
+            wait(for: [imageExpectation], timeout: 10)
+        }
+
+        func establishCamera(_ arView: ARView, at camera_position: Point3D, lookingAt: Point3D) {
+            // Establish an explicit camera for the scene
+            let cameraEntity = PerspectiveCamera()
+            cameraEntity.camera.fieldOfViewInDegrees = 60
+            let cameraAnchor = AnchorEntity(world: .zero)
+            cameraAnchor.addChild(cameraEntity)
+            arView.scene.addAnchor(cameraAnchor)
+            // position the camera
+            let lookRotation = Rotation3D(position: lookingAt,
+                                          target: camera_position,
+                                          up: Vector3D(x: 0, y: 1, z: 0))
+            cameraAnchor.transform = Transform(scale: .one, rotation: simd_quatf(lookRotation), translation: SIMD3<Float>(camera_position))
+        }
+
+        func addEntity(_ entity: ModelEntity, to arView: ARView) {
+            let originAnchor = AnchorEntity(world: .zero)
+            originAnchor.addChild(entity)
+            arView.scene.anchors.append(originAnchor)
+        }
+
+        func blockMeshEntity(_ samples: some VoxelAccessible) -> ModelEntity {
+            let buffer = VoxelMeshRenderer.fastBlockMesh(samples, scale: .init())
+            let descriptor = buffer.meshDescriptor()
+            let mesh = try! MeshResource.generate(from: [descriptor])
+            let material = SimpleMaterial(color: .green, isMetallic: false)
+            let entity = ModelEntity(mesh: mesh, materials: [material])
+            return entity
+        }
+
+        @MainActor
+        func testSurfaceNetSphereRender() throws {
+            // CAN NOT do a snapshot if the frame is .zero...
+            let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
+
+            addEntity(EntityExample.surfaceNetSphere, to: arView)
+            establishCamera(arView, at: Point3D(x: 30, y: 30, z: 50), lookingAt: Point3D(x: 0, y: 0, z: 0))
+
+            // print("Generating Snapshot!!!")
+
+            let imageExpectation = expectation(description: "a 3D image")
+            arView.snapshot(saveToHDR: false) { image in
+                print("Checking the returned image... \(image.debugDescription)")
+                guard let image else {
+                    XCTFail("No image generated from ARView snapshot()")
+                    return
+                }
+                assertSnapshot(of: image, as: .image)
+                imageExpectation.fulfill()
+            }
+            wait(for: [imageExpectation], timeout: 10)
+        }
+
+        @MainActor
+        func testBlockMeshSphereRender() throws {
+            // CAN NOT do a snapshot if the frame is .zero...
+            let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
+
+            addEntity(EntityExample.fastSurfaceBlockMeshSphere, to: arView)
+            establishCamera(arView, at: Point3D(x: 30, y: 30, z: 50), lookingAt: Point3D(x: 0, y: 0, z: 0))
+
+            // print("Generating Snapshot!!!")
+
+            let imageExpectation = expectation(description: "a 3D image")
+            arView.snapshot(saveToHDR: false) { image in
+                print("Checking the returned image... \(image.debugDescription)")
+                guard let image else {
+                    XCTFail("No image generated from ARView snapshot()")
+                    return
+                }
+                assertSnapshot(of: image, as: .image)
+                imageExpectation.fulfill()
+            }
+            wait(for: [imageExpectation], timeout: 10)
+        }
+
+        @MainActor
+        func testBlockMeshSingleVoxel() throws {
+            // CAN NOT do a snapshot if the frame is .zero...
+            let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
+
+            let entity = blockMeshEntity(EntityExample.oneByOne())
+            addEntity(entity, to: arView)
+            establishCamera(arView, at: Point3D(x: 6, y: 6, z: 10), lookingAt: Point3D(x: 0, y: 0, z: 0))
+
+            // print("Generating Snapshot!!!")
+
+            let imageExpectation = expectation(description: "a 3D image")
+            arView.snapshot(saveToHDR: false) { image in
+                print("Checking the returned image... \(image.debugDescription)")
+                guard let image else {
+                    XCTFail("No image generated from ARView snapshot()")
+                    return
+                }
+                assertSnapshot(of: image, as: .image)
+                imageExpectation.fulfill()
+            }
+            wait(for: [imageExpectation], timeout: 10)
+        }
+
+        @MainActor
+        func testBlockMeshThreeByThreeVoxel() throws {
+            // CAN NOT do a snapshot if the frame is .zero...
+            let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
+
+            let entity = blockMeshEntity(EntityExample.threeByThree())
+            addEntity(entity, to: arView)
+            establishCamera(arView, at: Point3D(x: 6, y: 6, z: 10), lookingAt: Point3D(x: 0, y: 0, z: 0))
+
+            // print("Generating Snapshot!!!")
+
+            let imageExpectation = expectation(description: "a 3D image")
+            arView.snapshot(saveToHDR: false) { image in
+                print("Checking the returned image... \(image.debugDescription)")
+                guard let image else {
+                    XCTFail("No image generated from ARView snapshot()")
+                    return
+                }
+                assertSnapshot(of: image, as: .image)
+                imageExpectation.fulfill()
+            }
+            wait(for: [imageExpectation], timeout: 10)
+        }
+
+        @MainActor
+        func testBlockMeshManhattanNeighborOneVoxel() throws {
+            // CAN NOT do a snapshot if the frame is .zero...
+            let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
+
+            let entity = blockMeshEntity(EntityExample.manhattanNeighbor1())
+            addEntity(entity, to: arView)
+            establishCamera(arView, at: Point3D(x: 6, y: 6, z: 10), lookingAt: Point3D(x: 0, y: 0, z: 0))
+
+            // print("Generating Snapshot!!!")
+
             let imageExpectation = expectation(description: "a 3D image")
             arView.snapshot(saveToHDR: false) { image in
                 print("Checking the returned image... \(image.debugDescription)")
