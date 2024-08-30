@@ -19,4 +19,25 @@ class VoxelMeshRendererTests: XCTestCase {
         // _6_ sides, with 9 faces in each, 2 triangles per face
         XCTAssertEqual(6 * 9 * 2, numberOfTriangles)
     }
+
+    public static func manhattanNeighbor1() -> VoxelHash<Float> {
+        var voxels = VoxelHash<Float>()
+        voxels.set(VoxelIndex(2, 2, 2), newValue: -1)
+
+        voxels.set(VoxelIndex(1, 2, 2), newValue: -1)
+        voxels.set(VoxelIndex(3, 2, 2), newValue: -1)
+        voxels.set(VoxelIndex(2, 1, 2), newValue: -1)
+        voxels.set(VoxelIndex(2, 3, 2), newValue: -1)
+        voxels.set(VoxelIndex(2, 2, 1), newValue: -1)
+        voxels.set(VoxelIndex(2, 2, 3), newValue: -1)
+        return voxels
+    }
+
+    func testManhattanNeighborMesh() throws {
+        let voxels = Self.manhattanNeighbor1()
+        let meshbuffer = VoxelMeshRenderer.fastBlockMesh(voxels, scale: .init())
+        let numberOfTriangles = meshbuffer.indices.count / 3
+        // _6_ cubes, with 5 faces in each, 2 triangles per face
+        XCTAssertEqual(6 * 5 * 2, numberOfTriangles)
+    }
 }
