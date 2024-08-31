@@ -12,7 +12,8 @@
     }
 
     public extension MeshBuffer {
-        func meshDescriptor() -> MeshDescriptor {
+        func meshDescriptor() -> MeshDescriptor? {
+            if indices.isEmpty || positions.isEmpty || normals.isEmpty { return nil }
             var meshDescriptor = MeshDescriptor()
             meshDescriptor.primitives = .triangles(indices)
             meshDescriptor.positions = MeshBuffers.Positions(positions)

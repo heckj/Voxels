@@ -61,7 +61,7 @@ struct ContentView: View {
         let buffer = VoxelMeshRenderer.fastBlockMesh(voxels, scale: .init())
 
         let descriptor = buffer.meshDescriptor()
-        let mesh = try! MeshResource.generate(from: [descriptor])
+        let mesh = try! MeshResource.generate(from: [descriptor!])
         let material = SimpleMaterial(color: .gray, isMetallic: false)
         let entity = ModelEntity(mesh: mesh, materials: [material])
         entity.name = "oneByOne"
@@ -72,7 +72,7 @@ struct ContentView: View {
         var buffer = MeshBuffer()
         buffer.addQuadPoints(p1: SIMD3<Float>(0, 1, 0), p2: SIMD3<Float>(0, 0, 0), p3: SIMD3<Float>(1, 1, 0), p4: SIMD3<Float>(1, 0, 0))
         let descriptor = buffer.meshDescriptor()
-        let mesh = try! MeshResource.generate(from: [descriptor])
+        let mesh = try! MeshResource.generate(from: [descriptor!])
         let material = SimpleMaterial(color: color, isMetallic: false)
         return ModelEntity(mesh: mesh, materials: [material])
     }

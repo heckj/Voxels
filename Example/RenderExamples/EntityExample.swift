@@ -56,6 +56,16 @@ public enum EntityExample {
         return voxels
     }
 
+    public static func flatYBlock() -> VoxelHash<Float> {
+        var flatVoxelBlock = VoxelHash<Float>()
+        // create cube in the middle
+        let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(9, 0, 9))
+        for i in 0 ..< bounds.size {
+            flatVoxelBlock.set(try! bounds.delinearize(i), newValue: -1.0)
+        }
+        return flatVoxelBlock
+    }
+
     public static var surfaceNetSphere: ModelEntity {
         let samples = sampledSDFSphere()
         do {
@@ -67,26 +77,30 @@ public enum EntityExample {
                 )
             )
 
-            let descriptor = buffer.meshDescriptor()
-            let mesh = try! MeshResource.generate(from: [descriptor])
-            let material = SimpleMaterial(color: .green, isMetallic: false)
-            let entity = ModelEntity(mesh: mesh, materials: [material])
-            entity.name = "surfaceNet"
-            return entity
+            if let descriptor = buffer.meshDescriptor() {
+                let mesh = try MeshResource.generate(from: [descriptor])
+                let material = SimpleMaterial(color: .green, isMetallic: false)
+                let entity = ModelEntity(mesh: mesh, materials: [material])
+                entity.name = "surfaceNet"
+                return entity
+            }
         } catch {
             fatalError("Issue while rendering surface-net mesh: \(error)")
         }
+        fatalError("Issue while rendering surface-net mesh: Empty Buffer")
     }
 
     public static var fastSurfaceBlockMeshSphere: ModelEntity {
         let samples = sampledSDFSphere()
-        let buffer = VoxelMeshRenderer.fastBlockMesh(samples, scale: .init())
+        let buffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(samples, scale: .init())
 
-        let descriptor = buffer.meshDescriptor()
-        let mesh = try! MeshResource.generate(from: [descriptor])
-        let material = SimpleMaterial(color: .green, isMetallic: false)
-        let entity = ModelEntity(mesh: mesh, materials: [material])
-        entity.name = "fastSurfaceBlock"
-        return entity
+        if let descriptor = buffer.meshDescriptor() {
+            let mesh = try! MeshResource.generate(from: [descriptor])
+            let material = SimpleMaterial(color: .green, isMetallic: false)
+            let entity = ModelEntity(mesh: mesh, materials: [material])
+            entity.name = "fastSurfaceBlock"
+            return entity
+        }
+        fatalError("Issue while rendering surface-net mesh: Empty Buffer")
     }
 }

@@ -88,7 +88,7 @@ final class BlockMeshRenderSnapshotTests: XCTestCase {
         func blockMeshEntity(_ samples: some VoxelAccessible) -> ModelEntity {
             let buffer = VoxelMeshRenderer.fastBlockMesh(samples, scale: .init())
             let descriptor = buffer.meshDescriptor()
-            let mesh = try! MeshResource.generate(from: [descriptor])
+            let mesh = try! MeshResource.generate(from: [descriptor!])
             let material = SimpleMaterial(color: .green, isMetallic: false)
             let entity = ModelEntity(mesh: mesh, materials: [material])
             return entity
@@ -211,5 +211,32 @@ final class BlockMeshRenderSnapshotTests: XCTestCase {
             }
             wait(for: [imageExpectation], timeout: 10)
         }
+
+        @MainActor
+        func testBlockMeshFlatYBlock() throws {
+            // CAN NOT do a snapshot if the frame is .zero...
+            let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
+
+            let voxels = EntityExample.flatYBlock()
+            XCTAssertEqual(voxels.count, 100)
+            let entity = blockMeshEntity(voxels)
+            addEntity(entity, to: arView)
+            establishCamera(arView, at: Point3D(x: 15, y: 6, z: 7), lookingAt: Point3D(x: 5, y: 0, z: 5))
+
+            // print("Generating Snapshot!!!")
+
+            let imageExpectation = expectation(description: "a 3D image")
+            arView.snapshot(saveToHDR: false) { image in
+                print("Checking the returned image... \(image.debugDescription)")
+                guard let image else {
+                    XCTFail("No image generated from ARView snapshot()")
+                    return
+                }
+                assertSnapshot(of: image, as: .image)
+                imageExpectation.fulfill()
+            }
+            wait(for: [imageExpectation], timeout: 10)
+        }
+
     #endif
 }
