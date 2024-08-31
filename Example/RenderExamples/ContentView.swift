@@ -79,20 +79,20 @@ struct ContentView: View {
 
     private func buildFloor(color: PlatformColor) -> ModelEntity {
         let floorEntity = ModelEntity(
-            mesh: .generatePlane(width: 1.0, depth: 1.0),
+            mesh: .generatePlane(width: 100.0, depth: 100.0),
             materials: [SimpleMaterial(color: color, isMetallic: false)]
         )
-        floorEntity.position = [0.5, 0, 0.5]
+        floorEntity.position = [50, 0, 50]
         return floorEntity
     }
 
     init() {
-        arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0),
+        arcballState = ArcBallState(arcballTarget: SIMD3<Float>(20, 5, 20),
                                     radius: 50.0,
                                     inclinationAngle: -Float.pi / 6.0, // around X, slightly "up"
                                     rotationAngle: 0.0, // around Y
                                     inclinationConstraint: -Float.pi / 2 ... 0, // 0 ... 90° 'up'
-                                    radiusConstraint: 0.1 ... 50.0)
+                                    radiusConstraint: 0.1 ... 150.0)
     }
 
     var body: some View {
