@@ -3,7 +3,7 @@ public struct VoxelArray<T: VoxelRenderable>: VoxelWritable {
     public let edgeSize: Int
     public var bounds: VoxelBounds
 
-    public var indices: any Sequence<VoxelIndex> {
+    public var indices: [VoxelIndex] {
         (0 ..< bounds.size).map { bounds._unchecked_delinearize($0) }
     }
 

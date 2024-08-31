@@ -3,8 +3,8 @@ public struct VoxelHash<T: VoxelRenderable>: VoxelWritable {
     public var bounds: VoxelBounds
     let defaultVoxel: T?
 
-    public var indices: any Sequence<VoxelIndex> {
-        _contents.keys
+    public var indices: [VoxelIndex] {
+        bounds.indices
     }
 
     public init() {

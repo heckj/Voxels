@@ -20,7 +20,7 @@ class VoxelAccessibleTests: XCTestCase {
 
         XCTAssertEqual(voxels.count, 7)
         let indices = Array(voxels.indices)
-        XCTAssertEqual(indices.count, 7)
+        XCTAssertEqual(indices.count, 27)
 
         var count = 0
         for i: VoxelIndex in voxels.indices {

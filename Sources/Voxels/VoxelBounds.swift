@@ -254,4 +254,8 @@ extension VoxelBounds: StrideIndexable {
         //    y = Lower Bound of Column                                    = 0
         //    z = Lower Bound of Width                                     = 0
     }
+
+    var indices: [VoxelIndex] {
+        (0 ..< size).map { _unchecked_delinearize($0) }
+    }
 }
