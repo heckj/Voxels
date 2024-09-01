@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A88422B2C8505F300F7EADD /* RealityGeometries in Frameworks */ = {isa = PBXBuildFile; productRef = 1A88422A2C8505F300F7EADD /* RealityGeometries */; };
+		1A88422E2C85062E00F7EADD /* DebugModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88422D2C85062E00F7EADD /* DebugModels.swift */; };
+		1A88422F2C85062E00F7EADD /* DebugModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88422D2C85062E00F7EADD /* DebugModels.swift */; };
+		1A8842312C85092600F7EADD /* QuickCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8842302C85092600F7EADD /* QuickCheckView.swift */; };
+		1A8842322C85092600F7EADD /* QuickCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8842302C85092600F7EADD /* QuickCheckView.swift */; };
 		1AEC43102C7E285E004809B3 /* Transforms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430E2C7E285E004809B3 /* Transforms.swift */; };
 		1AEC43112C7E285E004809B3 /* RealityKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430C2C7E285E004809B3 /* RealityKitView.swift */; };
 		1AEC43122C7E285E004809B3 /* ArcBallState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43052C7E285E004809B3 /* ArcBallState.swift */; };
@@ -52,6 +57,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A88422D2C85062E00F7EADD /* DebugModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugModels.swift; sourceTree = "<group>"; };
+		1A8842302C85092600F7EADD /* QuickCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickCheckView.swift; sourceTree = "<group>"; };
 		1AA4B6DA2C7E9AB300C9796B /* RenderExamplesCI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RenderExamplesCI.xctestplan; sourceTree = "<group>"; };
 		1AEC43052C7E285E004809B3 /* ArcBallState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcBallState.swift; sourceTree = "<group>"; };
 		1AEC43062C7E285E004809B3 /* ARViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewContainer.swift; sourceTree = "<group>"; };
@@ -84,6 +91,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1AEC43322C7E2968004809B3 /* Voxels in Frameworks */,
+				1A88422B2C8505F300F7EADD /* RealityGeometries in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +107,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A88422C2C85060000F7EADD /* DebugMeshResources */ = {
+			isa = PBXGroup;
+			children = (
+				1A88422D2C85062E00F7EADD /* DebugModels.swift */,
+			);
+			path = DebugMeshResources;
+			sourceTree = "<group>";
+		};
 		1AEC430F2C7E285E004809B3 /* CameraControlARView */ = {
 			isa = PBXGroup;
 			children = (
@@ -119,6 +135,7 @@
 		1AF52B322C7E274B00B019D5 = {
 			isa = PBXGroup;
 			children = (
+				1A88422C2C85060000F7EADD /* DebugMeshResources */,
 				1AEC43382C7E2A39004809B3 /* RenderExamples.xctestplan */,
 				1AA4B6DA2C7E9AB300C9796B /* RenderExamplesCI.xctestplan */,
 				1AEC430F2C7E285E004809B3 /* CameraControlARView */,
@@ -142,6 +159,7 @@
 			children = (
 				1AEC43282C7E28EE004809B3 /* blackdome.skybox */,
 				1AEC43292C7E28EE004809B3 /* ContentView.swift */,
+				1A8842302C85092600F7EADD /* QuickCheckView.swift */,
 				1AEC432A2C7E28EE004809B3 /* EntityExample.swift */,
 				1AEC432B2C7E28EE004809B3 /* whitedome.skybox */,
 				1AF52B3E2C7E274B00B019D5 /* RenderExamplesApp.swift */,
@@ -185,6 +203,9 @@
 			dependencies = (
 			);
 			name = RenderExamples;
+			packageProductDependencies = (
+				1A88422A2C8505F300F7EADD /* RealityGeometries */,
+			);
 			productName = RenderExamples;
 			productReference = 1AF52B3B2C7E274B00B019D5 /* RenderExamples.app */;
 			productType = "com.apple.product-type.application";
@@ -238,6 +259,7 @@
 			packageReferences = (
 				1AEC43302C7E2968004809B3 /* XCLocalSwiftPackageReference "../../Voxels" */,
 				1AEC43332C7E29FD004809B3 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+				1A8842292C8505F300F7EADD /* XCRemoteSwiftPackageReference "RealityGeometries" */,
 			);
 			productRefGroup = 1AF52B3C2C7E274B00B019D5 /* Products */;
 			projectDirPath = "";
@@ -276,6 +298,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1AEC432C2C7E28EE004809B3 /* EntityExample.swift in Sources */,
+				1A8842312C85092600F7EADD /* QuickCheckView.swift in Sources */,
 				1AEC432D2C7E28EE004809B3 /* ContentView.swift in Sources */,
 				1AEC431A2C7E285E004809B3 /* Transforms.swift in Sources */,
 				1AEC431B2C7E285E004809B3 /* RealityKitView.swift in Sources */,
@@ -284,6 +307,7 @@
 				1AEC431E2C7E285E004809B3 /* MotionMode.swift in Sources */,
 				1AEC431F2C7E285E004809B3 /* BirdsEyeState.swift in Sources */,
 				1AEC43202C7E285E004809B3 /* ARViewContainer.swift in Sources */,
+				1A88422E2C85062E00F7EADD /* DebugModels.swift in Sources */,
 				1AEC43212C7E285E004809B3 /* CameraControlledARView.swift in Sources */,
 				1AEC43222C7E285E004809B3 /* Comparable+clamped.swift in Sources */,
 				1AEC43232C7E285E004809B3 /* TopDownVectorImage.swift in Sources */,
@@ -296,6 +320,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1AEC43102C7E285E004809B3 /* Transforms.swift in Sources */,
+				1A8842322C85092600F7EADD /* QuickCheckView.swift in Sources */,
 				1AEC43112C7E285E004809B3 /* RealityKitView.swift in Sources */,
 				1AEC43122C7E285E004809B3 /* ArcBallState.swift in Sources */,
 				1AEC43262C7E2877004809B3 /* CameraControlARViewTests.swift in Sources */,
@@ -305,6 +330,7 @@
 				1AEC43152C7E285E004809B3 /* BirdsEyeState.swift in Sources */,
 				1AEC43162C7E285E004809B3 /* ARViewContainer.swift in Sources */,
 				1AEC43172C7E285E004809B3 /* CameraControlledARView.swift in Sources */,
+				1A88422F2C85062E00F7EADD /* DebugModels.swift in Sources */,
 				1AEC43182C7E285E004809B3 /* Comparable+clamped.swift in Sources */,
 				1AEC43192C7E285E004809B3 /* TopDownVectorImage.swift in Sources */,
 			);
@@ -589,6 +615,14 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1A8842292C8505F300F7EADD /* XCRemoteSwiftPackageReference "RealityGeometries" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/maxxfrazer/RealityGeometries";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.2;
+			};
+		};
 		1AEC43332C7E29FD004809B3 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
@@ -600,6 +634,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1A88422A2C8505F300F7EADD /* RealityGeometries */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A8842292C8505F300F7EADD /* XCRemoteSwiftPackageReference "RealityGeometries" */;
+			productName = RealityGeometries;
+		};
 		1AEC43312C7E2968004809B3 /* Voxels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Voxels;
