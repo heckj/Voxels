@@ -11,7 +11,8 @@ import SwiftUI
 struct RenderExamplesApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            // ContentView()
+            QuickCheckView()
         }
     }
 }
