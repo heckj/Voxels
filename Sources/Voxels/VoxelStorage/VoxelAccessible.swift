@@ -2,7 +2,7 @@ public protocol VoxelAccessible<Element>: Collection where Element: VoxelRendera
     func value(_: VoxelIndex) throws -> Element?
     var bounds: VoxelBounds { get }
 
-    var indices: any Sequence<VoxelIndex> { get }
+    var indices: [VoxelIndex] { get }
     subscript(_: VoxelIndex) -> Element? { get set }
 
     func isSurface(_: VoxelIndex) throws -> Bool
