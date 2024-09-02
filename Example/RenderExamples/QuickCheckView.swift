@@ -57,5 +57,5 @@ struct QuickCheckView: View {
 }
 
 #Preview {
-    ContentView()
+    QuickCheckView()
 }
