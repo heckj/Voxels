@@ -13,7 +13,7 @@ struct QuickCheckView: View {
 
     init() {
         arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0),
-                                    radius: 15.0,
+                                    radius: 25.0,
                                     inclinationAngle: -Float.pi / 6.0, // around X, slightly "up"
                                     rotationAngle: Float.pi / 8.0, // around Y, slightly to the "right"
                                     inclinationConstraint: -Float.pi / 2 ... 0, // 0 ... 90° 'up'
@@ -45,21 +45,7 @@ struct QuickCheckView: View {
 //                                                   radius: 0.1,
 //                                                   material: SimpleMaterial(color: .blue, isMetallic: false)))
 
-                    let yArrow: ModelEntity = DebugModels.arrow(material: SimpleMaterial(color: .green, isMetallic: false))
-                    content.add(yArrow)
-                    let xArrow: ModelEntity = DebugModels.arrow(material: SimpleMaterial(color: .red, isMetallic: false))
-                    xArrow.transform.rotation = simd_quatf(
-                        Rotation3D(angle: Angle2D(degrees: -90), axis: RotationAxis3D.z)
-                    )
-                    xArrow.position = SIMD3<Float>(4, 0, 0)
-                    content.add(xArrow)
-
-                    let zArrow: ModelEntity = DebugModels.arrow(material: SimpleMaterial(color: .blue, isMetallic: false))
-                    zArrow.transform.rotation = simd_quatf(
-                        Rotation3D(angle: Angle2D(degrees: 90), axis: RotationAxis3D.x)
-                    )
-                    zArrow.position = SIMD3<Float>(0, 0, 4)
-                    content.add(zArrow)
+                    content.add(DebugModels.gizmo(edge_length: 2))
                 }
                 .border(.blue)
             }
