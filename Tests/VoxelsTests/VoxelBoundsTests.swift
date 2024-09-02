@@ -23,7 +23,7 @@ class VoxelBoundsTests: XCTestCase {
         let emptyBounds = VoxelBounds.empty
         let index = try emptyBounds.linearize(emptyBounds.min)
         XCTAssertEqual(index, 0)
-        XCTAssertEqual(emptyBounds.size, 0)
+        XCTAssertEqual(emptyBounds.size, 1)
     }
 
     func testXOnlyBoundsStride() throws {
@@ -107,5 +107,16 @@ class VoxelBoundsTests: XCTestCase {
             // print("\(computedIndex) -linearize-> \(reversed)")
             XCTAssertEqual(reversed, j)
         }
+    }
+
+    func testVoxelBoundsSingleIndex() {
+        let bounds = VoxelBounds(VoxelIndex(2, 2, 2))
+        XCTAssertEqual(bounds.indices.count, 1)
+    }
+
+    func testVoxelBoundsTwoIndixes() {
+        let bounds = VoxelBounds(min: VoxelIndex(2, 2, 2), max: VoxelIndex(3, 2, 2))
+        XCTAssertEqual(bounds.size, 2)
+        XCTAssertEqual(bounds.indices.count, 2)
     }
 }

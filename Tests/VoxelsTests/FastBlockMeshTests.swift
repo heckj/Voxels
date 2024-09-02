@@ -114,4 +114,24 @@ class VoxelMeshRendererTests: XCTestCase {
 
         XCTAssertNil(collectionOfBuffers[0])
     }
+
+    func testSingleVoxelBlockMesh() throws {
+        var voxels = VoxelHash<Float>()
+        voxels.set(VoxelIndex(2, 2, 2), newValue: -1.0)
+        let meshbuffer = VoxelMeshRenderer.fastBlockMesh(voxels, scale: .init())
+
+        let numberOfTriangles = meshbuffer.indices.count / 3
+        // _1_ cubes, with 6 faces in each, 2 triangles per face
+        XCTAssertEqual(1 * 6 * 2, numberOfTriangles)
+    }
+
+    func testSingleVoxelBlockMeshSurfaceFaces() throws {
+        var voxels = VoxelHash<Float>()
+        voxels.set(VoxelIndex(2, 2, 2), newValue: -1.0)
+        let meshbuffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(voxels, scale: .init())
+
+        let numberOfTriangles = meshbuffer.indices.count / 3
+        // _1_ cubes, with 6 faces in each, 2 triangles per face
+        XCTAssertEqual(1 * 6 * 2, numberOfTriangles)
+    }
 }
