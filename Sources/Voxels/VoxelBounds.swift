@@ -100,7 +100,7 @@ extension VoxelBounds: StrideIndexable {
 
         // MARK: 0D
         case (false, false, false):
-            return 0
+            return 1
         }
     }
 
@@ -255,7 +255,7 @@ extension VoxelBounds: StrideIndexable {
         //    z = Lower Bound of Width                                     = 0
     }
 
-    var indices: [VoxelIndex] {
+    public var indices: [VoxelIndex] {
         (0 ..< size).map { _unchecked_delinearize($0) }
     }
 }
