@@ -284,6 +284,17 @@ extension VoxelBounds: StrideIndexable {
     }
 
     public var indices: [VoxelIndex] {
-        (0 ..< size).map { _unchecked_delinearize($0) }
+        // previous I'd used this, but just unrolling the loops
+        // rather than doing the calculations ended up being slightly faster
+        // (0 ..< size).map { _unchecked_delinearize($0) }
+        var setOfIndices: [VoxelIndex] = []
+        for x in self.min.x ... self.max.x {
+            for y in self.min.y ... self.max.y {
+                for z in self.min.z ... self.max.z {
+                    setOfIndices.append(VoxelIndex(x, y, z))
+                }
+            }
+        }
+        return setOfIndices
     }
 }
