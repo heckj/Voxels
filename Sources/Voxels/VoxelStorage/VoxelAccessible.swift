@@ -18,9 +18,9 @@ public extension VoxelAccessible {
     }
 
     func isSurface(_ vindex: VoxelIndex) throws -> Bool {
-        if vindex.x < 1 || vindex.y < 1 || vindex.z < 1 {
-            throw VoxelAccessError.outOfBounds("Out of Bounds [\(vindex.x), \(vindex.y), \(vindex.z)]")
-        }
+//        if vindex.x < 0 || vindex.y < 0 || vindex.z < 0 {
+//            throw VoxelAccessError.outOfBounds("Out of Bounds [\(vindex.x), \(vindex.y), \(vindex.z)]")
+//        }
         guard let voxel = try value(vindex), voxel.isOpaque() else {
             return false
         }
