@@ -63,15 +63,3 @@ public extension VoxelAccessible {
         }
     }
 }
-
-public protocol VoxelRenderable {
-    func isOpaque() -> Bool
-    // consider adding a color type here?
-}
-
-public protocol StrideIndexable {
-    func linearize(_ arr: VoxelIndex) throws -> Int
-    func delinearize(_ arr: Int) throws -> VoxelIndex
-
-    var size: Int { get }
-}
