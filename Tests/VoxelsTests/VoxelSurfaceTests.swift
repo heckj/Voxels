@@ -24,13 +24,13 @@ class VoxelSurfaceTests: XCTestCase {
 
     func testOpaqueSurfaceHashOutOfBounds() throws {
         let fiveByFive = VoxelHash<Int>()
-        XCTAssertThrowsError(try fiveByFive.isSurface((0, 0, 0)))
+        XCTAssertFalse(try fiveByFive.isSurface((0, 0, 0)))
         XCTAssertFalse(try fiveByFive.isSurface((9, 9, 9)))
     }
 
     func testOpaqueSurfaceArrayOutOfBounds() throws {
         let fiveByFive = VoxelArray(edge: 5, value: 0)
-        XCTAssertThrowsError(try fiveByFive.isSurface((0, 0, 0)))
+        XCTAssertFalse(try fiveByFive.isSurface((0, 0, 0)))
         XCTAssertThrowsError(try fiveByFive.isSurface((9, 9, 9)))
     }
 
