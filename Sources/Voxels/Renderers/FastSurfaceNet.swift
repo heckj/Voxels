@@ -27,7 +27,7 @@ extension VoxelMeshRenderer {
     /// Note that the scheme illustrated above implies that chunks must be padded with a 1-voxel border copied from neighboring
     /// voxels in order to connect seamlessly.
     public static func surfaceNetMesh(
-        sdf: VoxelArray<Float>,
+        sdf: some VoxelAccessible,
         within bounds: VoxelBounds
     ) throws -> MeshBuffer {
         // warning shown, or error thrown, when the bounds selected outstrip the bounds
@@ -47,7 +47,7 @@ extension VoxelMeshRenderer {
     // Find all vertex positions and normals.
     // Also generate a map from grid position to vertex index to be used to look up vertices when generating quads.
     static func estimate_surface(
-        sdf: VoxelArray<Float>,
+        sdf: some VoxelAccessible,
         bounds: VoxelBounds,
         output: inout SurfaceNetsBuffer
     ) throws {
@@ -66,7 +66,7 @@ extension VoxelMeshRenderer {
                     // this uses both a stride index for internal buffers, and a Float-based position calculated
                     // from the VoxelIndex, in this case a direct mapping of Int -> Float position
 
-                    if try estimate_surface_in_cube(sdf: sdf, position: position, min_corner_stride: stride, output: &output) {
+                    if try estimate_surface_in_cube(sdf: sdf, position: position, cornerIndex: VoxelIndex(x, y, z), output: &output) {
                         output.stride_to_index[Int(stride)] = UInt32(output.meshbuffer.positions.count) - 1
                         output.surface_points.append(
                             SIMD3<UInt32>(x: UInt32(x), y: UInt32(y), z: UInt32(z))
@@ -86,9 +86,9 @@ extension VoxelMeshRenderer {
     // This is done by estimating, for each cube edge, where the isosurface crosses the edge (if it does at all). Then the estimated
     // surface point is the average of these edge crossings.
     static func estimate_surface_in_cube(
-        sdf: VoxelArray<Float>,
+        sdf: some VoxelAccessible,
         position: SIMD3<Float>,
-        min_corner_stride: Int,
+        cornerIndex: VoxelIndex,
         output: inout SurfaceNetsBuffer
     ) throws -> Bool {
         // Get the signed distance values at each corner of this cube.
@@ -96,11 +96,10 @@ extension VoxelMeshRenderer {
         var num_negative = 0
 
         for i in 0 ... 7 {
-            let additional_stride = try sdf.bounds.linearize(CUBE_CORNERS[i])
-            let corner_stride = min_corner_stride + additional_stride
-            let d = sdf[corner_stride]
-            // let d = *unsafe { sdf.get_unchecked(corner_stride as usize) };
-            // *dist = d.into();
+            let indexToCheck = cornerIndex.adding(CUBE_CORNERS[i])
+            guard let d = sdf[indexToCheck]?.distanceAboveSurface() else {
+                fatalError("unable to check distance at index \(indexToCheck)")
+            }
             corner_dists[i] = d
             if d < 0 {
                 num_negative += 1
@@ -112,6 +111,7 @@ extension VoxelMeshRenderer {
             return false
         }
 
+        // if there is an intersection, compute the centroid and gradients
         let centroid: SIMD3<Float> = centroid_of_edge_intersections(dists: corner_dists)
 
         output.meshbuffer.positions.append(position + centroid)
@@ -190,7 +190,7 @@ extension VoxelMeshRenderer {
     // "centers" are actually the vertex positions found earlier. Also make sure the triangles are facing the right way. See the
     // comments on `maybe_make_quad` to help with understanding the indexing.
     static func make_all_quads(
-        sdf: VoxelArray<Float>,
+        sdf: some VoxelAccessible,
         bounds: VoxelBounds,
         output: inout SurfaceNetsBuffer
     ) throws {
@@ -278,7 +278,7 @@ extension VoxelMeshRenderer {
     // then we must find the other 3 quad corners by moving along the other two axes (those orthogonal to A) in the negative
     // directions; these are axis B and axis C.
     static func maybe_make_quad(
-        sdf: VoxelArray<Float>,
+        sdf: some VoxelAccessible,
         stride_to_index: [UInt32],
         positions: [SIMD3<Float>],
         p1: Int,

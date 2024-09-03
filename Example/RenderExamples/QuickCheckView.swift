@@ -13,7 +13,7 @@ struct QuickCheckView: View {
 
     init() {
         arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0),
-                                    radius: 125.0,
+                                    radius: 15.0,
                                     inclinationAngle: -Float.pi / 6.0, // around X, slightly "up"
                                     rotationAngle: Float.pi / 8.0, // around Y, slightly to the "right"
                                     inclinationConstraint: -Float.pi / 2 ... 0, // 0 ... 90° 'up'
@@ -32,21 +32,12 @@ struct QuickCheckView: View {
                     content.add(DebugModels.sphere(position: SIMD3<Float>(0, 0, 0),
                                                    radius: 0.2,
                                                    material: SimpleMaterial(color: .black, isMetallic: false)))
-//                    // RED: x
-//                    content.add(DebugModels.sphere(position: SIMD3<Float>(1, 0, 0),
-//                                                   radius: 0.1,
-//                                                   material: SimpleMaterial(color: .red, isMetallic: false)))
-//                    // GREEN: y
-//                    content.add(DebugModels.sphere(position: SIMD3<Float>(0, 1, 0),
-//                                                   radius: 0.1,
-//                                                   material: SimpleMaterial(color: .green, isMetallic: false)))
-//                    // BLUE: z
-//                    content.add(DebugModels.sphere(position: SIMD3<Float>(0, 0, 1),
-//                                                   radius: 0.1,
-//                                                   material: SimpleMaterial(color: .blue, isMetallic: false)))
 
-                    content.add(DebugModels.gizmo(edge_length: 10))
-                    content.add(DebugModels.gridWall(edge_length: 100))
+                    // Debug view helpers
+                    // content.add(DebugModels.gizmo(edge_length: 10))
+                    // content.add(DebugModels.gridWall(edge_length: 100))
+
+                    content.add(EntityExample.surfaceNetBrick)
                 }
                 .border(.blue)
             }
