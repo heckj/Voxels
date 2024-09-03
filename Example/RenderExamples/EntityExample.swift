@@ -104,56 +104,56 @@ public enum EntityExample {
         fatalError("Issue while rendering surface-net mesh: Empty Buffer")
     }
 
-    public static var surfaceNetBrick: ModelEntity {
-        // set up standard SDF volume space
-        var voxels = VoxelHash(defaultVoxel: Float.greatestFiniteMagnitude)
-        // < 0 : inside surface (distance to)
-        // 0 : at surface
-        // > 0 : outside surface (distance to)
-        // voxels are measured at the centroid of their space
-
-        let layer0values: [[Float]] = [
-            [1.5, 1.0, 1.0, 1.0, 1.5],
-            [1.0, 0.0, 0.0, 0.0, 1.0],
-            [1.0, 0.0, -1.0, 0.0, 1.0],
-            [1.0, 0.0, -1.0, 0.0, 1.0],
-            [1.0, 0.0, -1.0, 0.0, 1.0],
-            [1.0, 0.0, -1.0, 0.0, 1.0],
-            [1.0, 0.0, -1.0, 0.0, 1.0],
-            [1.0, 0.0, 0.0, 0.0, 1.0],
-            [1.5, 1.0, 1.0, 1.0, 1.5],
-        ]
-        for z in 0 ..< layer0values.count {
-            for x in 0 ..< layer0values[z].count {
-                voxels.set(VoxelIndex(x, 0, z), newValue: layer0values[z][x])
-            }
-        }
-        let layer1values: [[Float]] = [
-            [1.5, 1.0, 1.0, 1.0, 1.5],
-            [1.0, 0.5, 0.5, 0.5, 1.0],
-            [1.0, 0.5, -0.5, 0.5, 1.0],
-            [1.0, 0.5, -0.5, 0.5, 1.0],
-            [1.0, 0.5, -0.5, 0.5, 1.0],
-            [1.0, 0.5, -0.5, 0.5, 1.0],
-            [1.0, 0.5, -0.5, 0.5, 1.0],
-            [1.0, 0.5, 0.5, 0.5, 1.0],
-            [1.5, 1.0, 1.0, 1.0, 1.5],
-        ]
-        for z in 0 ..< layer1values.count {
-            for x in 0 ..< layer1values[z].count {
-                voxels.set(VoxelIndex(x, 1, z), newValue: layer1values[z][x])
-            }
-        }
-
-        let generatedMeshBuffer = try! VoxelMeshRenderer.surfaceNetMesh(sdf: voxels, within: voxels.bounds)
-
-        guard let descriptor = generatedMeshBuffer.meshDescriptor() else {
-            fatalError("Invalid mesh - no descriptor")
-        }
-        let mesh = try! MeshResource.generate(from: [descriptor])
-        let material = SimpleMaterial(color: .green, isMetallic: false)
-        let entity = ModelEntity(mesh: mesh, materials: [material])
-        entity.name = "surfaceNet"
-        return entity
-    }
+//    public static var surfaceNetBrick: ModelEntity {
+//        // set up standard SDF volume space
+//        var voxels = VoxelHash(defaultVoxel: Float.greatestFiniteMagnitude)
+//        // < 0 : inside surface (distance to)
+//        // 0 : at surface
+//        // > 0 : outside surface (distance to)
+//        // voxels are measured at the centroid of their space
+//
+//        let layer0values: [[Float]] = [
+//            [1.5, 1.0, 1.0, 1.0, 1.5],
+//            [1.0, 0.0, 0.0, 0.0, 1.0],
+//            [1.0, 0.0, -1.0, 0.0, 1.0],
+//            [1.0, 0.0, -1.0, 0.0, 1.0],
+//            [1.0, 0.0, -1.0, 0.0, 1.0],
+//            [1.0, 0.0, -1.0, 0.0, 1.0],
+//            [1.0, 0.0, -1.0, 0.0, 1.0],
+//            [1.0, 0.0, 0.0, 0.0, 1.0],
+//            [1.5, 1.0, 1.0, 1.0, 1.5],
+//        ]
+//        for z in 0 ..< layer0values.count {
+//            for x in 0 ..< layer0values[z].count {
+//                voxels.set(VoxelIndex(x, 0, z), newValue: layer0values[z][x])
+//            }
+//        }
+//        let layer1values: [[Float]] = [
+//            [1.5, 1.0, 1.0, 1.0, 1.5],
+//            [1.0, 0.5, 0.5, 0.5, 1.0],
+//            [1.0, 0.5, -0.5, 0.5, 1.0],
+//            [1.0, 0.5, -0.5, 0.5, 1.0],
+//            [1.0, 0.5, -0.5, 0.5, 1.0],
+//            [1.0, 0.5, -0.5, 0.5, 1.0],
+//            [1.0, 0.5, -0.5, 0.5, 1.0],
+//            [1.0, 0.5, 0.5, 0.5, 1.0],
+//            [1.5, 1.0, 1.0, 1.0, 1.5],
+//        ]
+//        for z in 0 ..< layer1values.count {
+//            for x in 0 ..< layer1values[z].count {
+//                voxels.set(VoxelIndex(x, 1, z), newValue: layer1values[z][x])
+//            }
+//        }
+//
+//        let generatedMeshBuffer = try! VoxelMeshRenderer.surfaceNetMesh(sdf: voxels, within: voxels.bounds)
+//
+//        guard let descriptor = generatedMeshBuffer.meshDescriptor() else {
+//            fatalError("Invalid mesh - no descriptor")
+//        }
+//        let mesh = try! MeshResource.generate(from: [descriptor])
+//        let material = SimpleMaterial(color: .green, isMetallic: false)
+//        let entity = ModelEntity(mesh: mesh, materials: [material])
+//        entity.name = "surfaceNet"
+//        return entity
+//    }
 }
