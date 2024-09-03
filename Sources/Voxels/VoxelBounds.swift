@@ -122,26 +122,25 @@ extension VoxelBounds: StrideIndexable {
 
     @inline(__always)
     func _unchecked_delinearize(_ strideIndex: Int) -> VoxelIndex {
-        let xDistance = self.max.x - self.min.x // 2
+        let xDistance = self.max.x - self.min.x // 1
         let yDistance = self.max.y - self.min.y // 2
-        let zDistance = self.max.z - self.min.z // 0
-
-        // 2
+        let zDistance = self.max.z - self.min.z // 3
 
         switch (xDistance > 0, yDistance > 0, zDistance > 0) {
         // MARK: 3D
 
-        case (true, true, true):
-            let majorStride = (xDistance + 1) * (yDistance + 1)
-            let minorStride = (yDistance + 1)
-            var x = 0
-            if strideIndex >= majorStride {
+        // example value 3 - should be [0,0,3]
+        case (true, true, true): // example for max [1,2,3]
+            let majorStride = (yDistance + 1) * (zDistance + 1) // (2+1) * (3+1) = 12
+            let minorStride = (zDistance + 1) // (3+1) = 4
+            var x = 0 // x = 0
+            if strideIndex >= majorStride { // 3 < 12, so no change
                 x = strideIndex / majorStride
             }
 
-            let remaining = strideIndex - (x * majorStride)
-            var y = 0
-            if remaining >= minorStride {
+            let remaining = strideIndex - (x * majorStride) // remaining stays at 3
+            var y = 0 // y = 0
+            if remaining >= minorStride { // y < 4, so no change
                 y = remaining / minorStride
             }
 
@@ -202,9 +201,38 @@ extension VoxelBounds: StrideIndexable {
         // MARK: 3D
 
         case (true, true, true):
+            //    24 total in [1,2,3] => 2 * 3 * 4 -> 0...23
+            //       xDistance = 2, yDistance = 3, zDistance = 4
+            //     - minorOffset = 4 = zDist
+            //       majorOffset = 12 = yDist * zDist
+            //    0  [ 0, 0, 0 ] // xValue * majorOffset + yValue * minorOffset + zValue
+            //    1  [ 0, 0, 1 ] // xValue * majorOffset + yValue * minorOffset + zValue
+            //    2  [ 0, 0, 2 ] // xValue * majorOffset + yValue * minorOffset + zValue
+            //    3  [ 0, 0, 3 ] // xValue * majorOffset + yValue * minorOffset + zValue
+            //    4  [ 0, 1, 0 ] // xValue * majorOffset + yValue * minorOffset + zValue
+            //    5  [ 0, 1, 1 ] // xValue * majorOffset + yValue * minorOffset + zValue
+            //    6  [ 0, 1, 2 ] // xValue * majorOffset + yValue * minorOffset + zValue
+            //    7  [ 0, 1, 3 ] // xValue * majorOffset + yValue * minorOffset + zValue
+            //    8  [ 0, 2, 0 ] // xValue * majorOffset + yValue * minorOffset + zValue
+            //    9  [ 0, 2, 1 ] // xValue * majorOffset + yValue * minorOffset + zValue
+            //    10 [ 0, 2, 2 ] // xValue * majorOffset + yValue * minorOffset + zValue
+            //    11 [ 0, 2, 3 ] // xValue * majorOffset + yValue * minorOffset + zValue
+            //    12 [ 1, 0, 0 ] // xValue * majorOffset + yValue * minorOffset + zValue
+            //    13 [ 1, 0, 1 ]
+            //    14 [ 1, 0, 2 ]
+            //    15 [ 1, 0, 3 ]
+            //    16 [ 1, 1, 0 ]
+            //    17 [ 1, 1, 1 ]
+            //    18 [ 1, 1, 2 ]
+            //    19 [ 1, 1, 3 ]
+            //    20 [ 1, 2, 0 ]
+            //    21 [ 1, 2, 1 ]
+            //    22 [ 1, 2, 2 ]
+            //    23 [ 1, 2, 3 ]
+
             // print("3d")
-            let majorStride = (xDistance + 1) * (yDistance + 1)
-            let minorStride = yDistance + 1
+            let majorStride = (yDistance + 1) * (zDistance + 1)
+            let minorStride = (zDistance + 1)
             let majorOffset = (vi.x - min.x) * majorStride
             let minorOffset = (vi.y - min.y) * minorStride
             let finalOffset = (vi.z - min.z)
