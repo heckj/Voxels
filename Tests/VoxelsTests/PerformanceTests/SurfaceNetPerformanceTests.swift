@@ -14,4 +14,13 @@ final class SurfaceNetPerformanceTests: XCTestCase {
             )
         }
     }
+
+    func testBoundsIndices() throws {
+        let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(32, 32, 32))
+
+        // 0.012
+        measure {
+            _ = bounds.indices
+        }
+    }
 }
