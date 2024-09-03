@@ -1,7 +1,7 @@
 import Voxels
 import XCTest
 
-final class SurfaceNetTests: XCTestCase {
+final class OriginalSurfaceNetTests: XCTestCase {
     func testVoxelArraySampling() throws {
         let samples = try VoxelTestHelpers.voxelArrayFromSphere()
         let insides = samples.filter { val in

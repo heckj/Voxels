@@ -37,6 +37,11 @@ public struct VoxelIndex: Hashable, Equatable, Sendable {
     public func adding(_ i: Self) -> VoxelIndex {
         VoxelIndex(x: _storage.x + i.x, y: _storage.y + i.y, z: _storage.z + i.z)
     }
+
+    @inline(__always)
+    public func subtracting(_ i: Self) -> VoxelIndex {
+        VoxelIndex(x: _storage.x - i.x, y: _storage.y - i.y, z: _storage.z - i.z)
+    }
 }
 
 extension VoxelIndex: ExpressibleByArrayLiteral {
