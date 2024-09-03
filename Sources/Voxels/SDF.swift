@@ -34,15 +34,3 @@ public enum SDF {
         }
     }
 }
-
-extension Float: VoxelRenderable {
-    public func isOpaque() -> Bool {
-        self < 0
-    }
-}
-
-extension Int: VoxelRenderable {
-    public func isOpaque() -> Bool {
-        self > 0
-    }
-}
