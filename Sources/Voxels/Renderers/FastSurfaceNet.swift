@@ -27,7 +27,7 @@ extension VoxelMeshRenderer {
     /// Note that the scheme illustrated above implies that chunks must be padded with a 1-voxel border copied from neighboring
     /// voxels in order to connect seamlessly.
     public static func surfaceNetMesh(
-        sdf: some VoxelAccessible,
+        sdf: VoxelArray<Float>,
         within bounds: VoxelBounds
     ) throws -> MeshBuffer {
         // warning shown, or error thrown, when the bounds selected outstrip the bounds
@@ -47,7 +47,7 @@ extension VoxelMeshRenderer {
     // Find all vertex positions and normals.
     // Also generate a map from grid position to vertex index to be used to look up vertices when generating quads.
     static func estimate_surface(
-        sdf: some VoxelAccessible,
+        sdf: VoxelArray<Float>,
         bounds: VoxelBounds,
         output: inout SurfaceNetsBuffer
     ) throws {
@@ -86,7 +86,7 @@ extension VoxelMeshRenderer {
     // This is done by estimating, for each cube edge, where the isosurface crosses the edge (if it does at all). Then the estimated
     // surface point is the average of these edge crossings.
     static func estimate_surface_in_cube(
-        sdf: some VoxelAccessible,
+        sdf: VoxelArray<Float>,
         position: SIMD3<Float>,
         cornerIndex: VoxelIndex,
         output: inout SurfaceNetsBuffer
@@ -97,9 +97,10 @@ extension VoxelMeshRenderer {
 
         for i in 0 ... 7 {
             let indexToCheck = cornerIndex.adding(CUBE_CORNERS[i])
-            guard let d = sdf[indexToCheck]?.distanceAboveSurface() else {
+            guard let voxelData = sdf[indexToCheck] else {
                 fatalError("unable to check distance at index \(indexToCheck)")
             }
+            let d = voxelData.distanceAboveSurface()
             corner_dists[i] = d
             if d < 0 {
                 num_negative += 1
@@ -124,8 +125,8 @@ extension VoxelMeshRenderer {
         var count = 0
         var sum = SIMD3<Float>.zero
         for corners in CUBE_EDGES {
-            let corner1 = corners.x
-            let corner2 = corners.y
+            let corner1 = corners.x // cube_corner_index
+            let corner2 = corners.y // cube_corner_index
             let d1 = dists[Int(corner1)]
             let d2 = dists[Int(corner2)]
             if (d1 < 0.0) != (d2 < 0.0) {
@@ -135,14 +136,15 @@ extension VoxelMeshRenderer {
         }
 
         return sum / Float(count)
+        // returns an estimates SIMD3<Float>[x,y,z] in unit coordinates (0...1) from the corner of this vertex
     }
 
     // Given two cube corners, find the point between them where the SDF is zero. (This might not exist).
     static func estimate_surface_edge_intersection(
-        corner1: UInt32,
-        corner2: UInt32,
-        value1: Float,
-        value2: Float
+        corner1: UInt32, // cube_corner_index
+        corner2: UInt32, // cube_corner_index
+        value1: Float, // SDF value at that corner
+        value2: Float // SDF value at that corner
     ) -> SIMD3<Float> {
         let interp1 = value1 / (value1 - value2)
         let interp2 = 1.0 - interp1
@@ -190,7 +192,7 @@ extension VoxelMeshRenderer {
     // "centers" are actually the vertex positions found earlier. Also make sure the triangles are facing the right way. See the
     // comments on `maybe_make_quad` to help with understanding the indexing.
     static func make_all_quads(
-        sdf: some VoxelAccessible,
+        sdf: VoxelArray<Float>,
         bounds: VoxelBounds,
         output: inout SurfaceNetsBuffer
     ) throws {
@@ -278,7 +280,7 @@ extension VoxelMeshRenderer {
     // then we must find the other 3 quad corners by moving along the other two axes (those orthogonal to A) in the negative
     // directions; these are axis B and axis C.
     static func maybe_make_quad(
-        sdf: some VoxelAccessible,
+        sdf: VoxelArray<Float>,
         stride_to_index: [UInt32],
         positions: [SIMD3<Float>],
         p1: Int,

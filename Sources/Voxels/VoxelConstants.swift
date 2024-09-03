@@ -22,18 +22,18 @@ let CUBE_CORNER_VECTORS: [SIMD3<Float>] = [
 ]
 
 let CUBE_EDGES: [SIMD2<UInt32>] = [
-    [0b000, 0b001],
-    [0b000, 0b010],
-    [0b000, 0b100],
-    [0b001, 0b011],
-    [0b001, 0b101],
-    [0b010, 0b011],
-    [0b010, 0b110],
-    [0b011, 0b111],
-    [0b100, 0b101],
-    [0b100, 0b110],
-    [0b101, 0b111],
-    [0b110, 0b111],
+    [0b000, 0b001], // 0, 1 - referencing cube corner index positions
+    [0b000, 0b010], // 0, 2
+    [0b000, 0b100], // 0, 4
+    [0b001, 0b011], // 1, 3
+    [0b001, 0b101], // 1, 5
+    [0b010, 0b011], // 2, 3
+    [0b010, 0b110], // 2, 6
+    [0b011, 0b111], // 3, 7
+    [0b100, 0b101], // 4, 5
+    [0b100, 0b110], // 4, 6
+    [0b101, 0b111], // 5, 7
+    [0b110, 0b111], // 6, 7
 ]
 
 /// The set of cube faces and relevant directions and coordinates of those faces.

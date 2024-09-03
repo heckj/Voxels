@@ -27,7 +27,7 @@ public struct VoxelArray<T: VoxelRenderable>: VoxelWritable {
     public subscript(_ index: VoxelIndex) -> T? {
         get {
             let linearPosition = bounds._unchecked_linearize(index)
-            if linearPosition >= 0 || linearPosition < _contents.count {
+            if linearPosition < 0 || linearPosition > (_contents.count - 1) {
                 return nil
             } else {
                 return _contents[linearPosition]
