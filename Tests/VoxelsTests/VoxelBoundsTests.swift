@@ -1,4 +1,4 @@
-import Voxels
+@testable import Voxels
 import XCTest
 
 class VoxelBoundsTests: XCTestCase {
@@ -33,6 +33,7 @@ class VoxelBoundsTests: XCTestCase {
         XCTAssertEqual(index, 2)
         for j in 0 ..< smallBounds.size {
             let computedIndex = try smallBounds.delinearize(j)
+            XCTAssertTrue(smallBounds.contains(computedIndex))
             XCTAssertEqual(try smallBounds.linearize(computedIndex), j)
         }
     }
@@ -44,6 +45,7 @@ class VoxelBoundsTests: XCTestCase {
         XCTAssertEqual(index, 2)
         for j in 0 ..< smallBounds.size {
             let computedIndex = try smallBounds.delinearize(j)
+            XCTAssertTrue(smallBounds.contains(computedIndex))
             XCTAssertEqual(try smallBounds.linearize(computedIndex), j)
         }
     }
@@ -55,6 +57,7 @@ class VoxelBoundsTests: XCTestCase {
         XCTAssertEqual(index, 2)
         for j in 0 ..< smallBounds.size {
             let computedIndex = try smallBounds.delinearize(j)
+            XCTAssertTrue(smallBounds.contains(computedIndex))
             XCTAssertEqual(try smallBounds.linearize(computedIndex), j)
         }
     }
@@ -67,6 +70,7 @@ class VoxelBoundsTests: XCTestCase {
         for j in 0 ..< smallBounds.size {
             let computedIndex = try smallBounds.delinearize(j)
             // print("stride location \(j) -delinearize-> \(computedIndex)")
+            XCTAssertTrue(smallBounds.contains(computedIndex))
             let reversed = try smallBounds.linearize(computedIndex)
             // print("\(computedIndex) -linearize-> \(reversed)")
             XCTAssertEqual(reversed, j)
@@ -80,6 +84,7 @@ class VoxelBoundsTests: XCTestCase {
         XCTAssertEqual(index, 8)
         for j in 0 ..< smallBounds.size {
             let computedIndex = try smallBounds.delinearize(j)
+            XCTAssertTrue(smallBounds.contains(computedIndex))
             XCTAssertEqual(try smallBounds.linearize(computedIndex), j)
         }
     }
@@ -91,6 +96,7 @@ class VoxelBoundsTests: XCTestCase {
         XCTAssertEqual(index, 8)
         for j in 0 ..< smallBounds.size {
             let computedIndex = try smallBounds.delinearize(j)
+            XCTAssertTrue(smallBounds.contains(computedIndex))
             XCTAssertEqual(try smallBounds.linearize(computedIndex), j)
         }
     }
@@ -103,8 +109,26 @@ class VoxelBoundsTests: XCTestCase {
         for j in 0 ..< smallBounds.size {
             let computedIndex = try smallBounds.delinearize(j)
             // print("stride location \(j) -delinearize-> \(computedIndex)")
+            XCTAssertTrue(smallBounds.contains(computedIndex))
+
             let reversed = try smallBounds.linearize(computedIndex)
             // print("\(computedIndex) -linearize-> \(reversed)")
+            XCTAssertEqual(reversed, j)
+        }
+    }
+
+    func test3DBoxBoundsStride() throws {
+        let smallBounds = VoxelBounds(min: [0, 0, 0], max: [1, 2, 3])
+        let index = try smallBounds.linearize(smallBounds.max)
+        XCTAssertEqual(smallBounds.size, 2 * 3 * 4) // 24
+        XCTAssertEqual(index, (2 * 3 * 4) - 1) // 23
+        for j in 0 ..< smallBounds.size {
+            let computedIndex = try smallBounds.delinearize(j)
+            print("stride location \(j) -delinearize-> \(computedIndex)")
+            XCTAssertTrue(smallBounds.contains(computedIndex))
+
+            let reversed = try smallBounds.linearize(computedIndex)
+            print("\(computedIndex) -linearize-> \(reversed)")
             XCTAssertEqual(reversed, j)
         }
     }
@@ -112,11 +136,25 @@ class VoxelBoundsTests: XCTestCase {
     func testVoxelBoundsSingleIndex() {
         let bounds = VoxelBounds(VoxelIndex(2, 2, 2))
         XCTAssertEqual(bounds.indices.count, 1)
+        XCTAssertEqual(bounds.indices[0], VoxelIndex(2, 2, 2))
     }
 
-    func testVoxelBoundsTwoIndixes() {
+    func testVoxelBoundsTwoIndices() {
         let bounds = VoxelBounds(min: VoxelIndex(2, 2, 2), max: VoxelIndex(3, 2, 2))
         XCTAssertEqual(bounds.size, 2)
         XCTAssertEqual(bounds.indices.count, 2)
+        for idx in bounds.indices {
+            XCTAssertTrue(bounds.contains(idx))
+        }
+    }
+
+    func testVoxelBoundsIndicesWithinBounds() {
+        let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(4, 1, 8))
+
+        let indices = bounds.indices
+        XCTAssertEqual(indices.count, 2 * 5 * 9)
+        for idx in indices {
+            XCTAssertTrue(bounds.contains(idx))
+        }
     }
 }
