@@ -13,7 +13,9 @@ public extension VoxelMeshRenderer {
                         }
                     }
                 }
-            } catch {}
+            } catch {
+                fatalError(error.localizedDescription)
+            }
         }
 
         return buffer
