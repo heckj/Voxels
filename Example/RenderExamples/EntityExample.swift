@@ -69,7 +69,7 @@ public enum EntityExample {
 
     public static var fastSurfaceBlockMeshSphere: ModelEntity {
         let samples = sampledSDFSphere()
-        let buffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(samples, scale: .init())
+        let buffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(samples, scale: .init(), within: samples.bounds.insetQuadrant())
 
         if let descriptor = buffer.meshDescriptor() {
             let mesh = try! MeshResource.generate(from: [descriptor])
@@ -84,7 +84,7 @@ public enum EntityExample {
     public static var surfaceNetBrick: ModelEntity {
         let voxels = Voxels.SampleMeshData.SDFBrick()
         let renderer = SurfaceNetRenderer()
-        let generatedMeshBuffer = try! renderer.render(voxelData: voxels, scale: .init(), within: voxels.bounds)
+        let generatedMeshBuffer = try! renderer.render(voxelData: voxels, scale: .init(), within: voxels.bounds.expand())
 
         guard let descriptor = generatedMeshBuffer.meshDescriptor() else {
             fatalError("Invalid mesh - no descriptor")
@@ -99,7 +99,7 @@ public enum EntityExample {
     public static var flatYBlock: ModelEntity {
         let voxels = Voxels.SampleMeshData.flatYBlock()
         let renderer = SurfaceNetRenderer()
-        let generatedMeshBuffer = try! renderer.render(voxelData: voxels, scale: .init(), within: voxels.bounds)
+        let generatedMeshBuffer = try! renderer.render(voxelData: voxels, scale: .init(), within: voxels.bounds.expand())
 
         guard let descriptor = generatedMeshBuffer.meshDescriptor() else {
             fatalError("Invalid mesh - no descriptor")
