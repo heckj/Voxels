@@ -39,21 +39,19 @@ public class SurfaceNetRenderer {
     /// voxels in order to connect seamlessly.
     public func render(voxelData: some VoxelAccessible,
                        scale: VoxelScale<Float>,
-                       within bounds: VoxelBounds? = nil) throws -> MeshBuffer
+                       within bounds: VoxelBounds) throws -> MeshBuffer
     {
         var meshbuffer = MeshBuffer()
         // warning shown, or error thrown, when the bounds selected outstrip the bounds
         // of the SDF?
-        let insetFromData = VoxelBounds(min: voxelData.bounds.min, max: voxelData.bounds.max.adding(VoxelIndex(-1, -1, -1)))
-        let insetBounds = bounds ?? insetFromData
         // configured bounds __must__ be within the voxel data we're exploring...
-        precondition(voxelData.bounds.contains(insetBounds.min))
-        precondition(voxelData.bounds.contains(insetBounds.max))
+        precondition(voxelData.bounds.contains(bounds.min))
+        precondition(voxelData.bounds.contains(bounds.max))
 
         // set the position and normal into the meshbuffer if the relevant voxel index is a surface voxel
-        try estimate_surface(voxelData: voxelData, scale: scale, bounds: insetBounds, meshbuffer: &meshbuffer)
+        try estimate_surface(voxelData: voxelData, scale: scale, bounds: bounds, meshbuffer: &meshbuffer)
 
-        try make_all_quads(voxelData: voxelData, bounds: insetBounds, meshbuffer: &meshbuffer)
+        try make_all_quads(voxelData: voxelData, bounds: bounds, meshbuffer: &meshbuffer)
         return meshbuffer
     }
 
