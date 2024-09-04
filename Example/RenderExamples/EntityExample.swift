@@ -43,29 +43,6 @@ public enum EntityExample {
         return threeByThree
     }
 
-    public static func manhattanNeighbor1() -> VoxelHash<Float> {
-        var voxels = VoxelHash<Float>()
-        voxels.set(VoxelIndex(2, 2, 2), newValue: -1)
-
-        voxels.set(VoxelIndex(1, 2, 2), newValue: -1)
-        voxels.set(VoxelIndex(3, 2, 2), newValue: -1)
-        voxels.set(VoxelIndex(2, 1, 2), newValue: -1)
-        voxels.set(VoxelIndex(2, 3, 2), newValue: -1)
-        voxels.set(VoxelIndex(2, 2, 1), newValue: -1)
-        voxels.set(VoxelIndex(2, 2, 3), newValue: -1)
-        return voxels
-    }
-
-    public static func flatYBlock() -> VoxelHash<Float> {
-        var flatVoxelBlock = VoxelHash<Float>()
-        // create cube in the middle
-        let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(9, 0, 9))
-        for i in 0 ..< bounds.size {
-            flatVoxelBlock.set(try! bounds.delinearize(i), newValue: -1.0)
-        }
-        return flatVoxelBlock
-    }
-
     public static var surfaceNetSphere: ModelEntity {
         let samples = sampledSDFSphere()
         do {
@@ -105,46 +82,7 @@ public enum EntityExample {
     }
 
     public static var surfaceNetBrick: ModelEntity {
-        // set up standard SDF volume space
-        var voxels = VoxelHash(defaultVoxel: Float.greatestFiniteMagnitude)
-        // < 0 : inside surface (distance to)
-        // 0 : at surface
-        // > 0 : outside surface (distance to)
-        // voxels are measured at the centroid of their space
-
-        let layer0values: [[Float]] = [
-            [1.5, 1.0, 1.0, 1.0, 1.5],
-            [1.0, 0.0, 0.0, 0.0, 1.0],
-            [1.0, 0.0, -1.0, 0.0, 1.0],
-            [1.0, 0.0, -1.0, 0.0, 1.0],
-            [1.0, 0.0, -1.0, 0.0, 1.0],
-            [1.0, 0.0, -1.0, 0.0, 1.0],
-            [1.0, 0.0, -1.0, 0.0, 1.0],
-            [1.0, 0.0, 0.0, 0.0, 1.0],
-            [1.5, 1.0, 1.0, 1.0, 1.5],
-        ]
-        for z in 0 ..< layer0values.count {
-            for x in 0 ..< layer0values[z].count {
-                voxels.set(VoxelIndex(x, 0, z), newValue: layer0values[z][x])
-            }
-        }
-        let layer1values: [[Float]] = [
-            [1.5, 1.0, 1.0, 1.0, 1.5],
-            [1.0, 0.5, 0.5, 0.5, 1.0],
-            [1.0, 0.5, -0.5, 0.5, 1.0],
-            [1.0, 0.5, -0.5, 0.5, 1.0],
-            [1.0, 0.5, -0.5, 0.5, 1.0],
-            [1.0, 0.5, -0.5, 0.5, 1.0],
-            [1.0, 0.5, -0.5, 0.5, 1.0],
-            [1.0, 0.5, 0.5, 0.5, 1.0],
-            [1.5, 1.0, 1.0, 1.0, 1.5],
-        ]
-        for z in 0 ..< layer1values.count {
-            for x in 0 ..< layer1values[z].count {
-                voxels.set(VoxelIndex(x, 1, z), newValue: layer1values[z][x])
-            }
-        }
-
+        let voxels = Voxels.SampleMeshData.SDFBrick()
         let renderer = SurfaceNetRenderer()
         let generatedMeshBuffer = try! renderer.render(voxelData: voxels, scale: .init())
 

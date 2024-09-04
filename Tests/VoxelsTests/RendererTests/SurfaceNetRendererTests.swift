@@ -3,7 +3,7 @@ import XCTest
 
 final class SurfaceNetRendererTests: XCTestCase {
     func testSurfaceNetRenderer() throws {
-        let samples = try VoxelTestHelpers.voxelArrayFromSphere()
+        let samples = try SampleMeshData.voxelArrayFromSphere()
 
         let originalResultBuffer = try VoxelMeshRenderer.surfaceNetMesh(
             sdf: samples,
