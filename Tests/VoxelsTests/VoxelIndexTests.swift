@@ -72,9 +72,9 @@ class VoxelIndexTests: XCTestCase {
         XCTAssertEqual(VoxelIndex.one.y, 1)
         XCTAssertEqual(VoxelIndex.one.z, 1)
 
-        XCTAssertEqual(VoxelIndex.one.x, 0)
-        XCTAssertEqual(VoxelIndex.one.y, 0)
-        XCTAssertEqual(VoxelIndex.one.z, 0)
+        XCTAssertEqual(VoxelIndex.zero.x, 0)
+        XCTAssertEqual(VoxelIndex.zero.y, 0)
+        XCTAssertEqual(VoxelIndex.zero.z, 0)
     }
 
     func testDescription() throws {
