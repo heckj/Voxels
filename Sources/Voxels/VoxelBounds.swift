@@ -66,15 +66,31 @@ public struct VoxelBounds: Sendable {
         }
     }
 
-    /// Insets the bounds of the max index down to 0,0,0
-    /// - Parameter insetAmount: <#insetAmount description#>
-    /// - Returns: <#description#>
+    /// Insets the bounds by decreasing the maximum size by the amount you provide, collapsing down to the minimum bounds.
+    /// - Parameter insetAmount: The amount to inset, default of 1.
+    /// - Returns: the inset bounds.
     @inlinable
-    public func insetQuadrant(_: Int = 1) -> VoxelBounds {
-        let newMax = VoxelIndex(Swift.max(self.max.x - 1, 0),
-                                Swift.max(self.max.y - 1, 0),
-                                Swift.max(self.max.z - 1, 0))
+    public func insetQuadrant(_ amount: Int = 1) -> VoxelBounds {
+        let newMax = VoxelIndex(Swift.max(self.max.x - amount, self.min.x),
+                                Swift.max(self.max.y - amount, self.min.y),
+                                Swift.max(self.max.z - amount, self.min.z))
         return VoxelBounds(min: min, max: newMax)
+    }
+
+    /// Expands the bounds by increasing both the maximum and minimum away from the bounds midpoint.
+    /// - Parameter insetAmount: The amount to expand, default of 1.
+    /// - Returns: the expanded bounds.
+    @inlinable
+    public func expand(_ amount: Int = 1) -> VoxelBounds {
+        let relativeIndex = VoxelIndex(amount, amount, amount)
+        let newMax = self.max.adding(relativeIndex)
+        let newMin = self.min.subtracting(relativeIndex)
+        return VoxelBounds(min: newMin, max: newMax)
+    }
+
+    @inlinable
+    public func contains(_ bounds: VoxelBounds) -> Bool {
+        contains(bounds.min) && contains(bounds.max)
     }
 }
 
