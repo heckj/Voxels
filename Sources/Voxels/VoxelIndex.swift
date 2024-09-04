@@ -47,6 +47,11 @@ public struct VoxelIndex: Hashable, Equatable, Sendable {
     public static var one: VoxelIndex {
         VoxelIndex(1, 1, 1)
     }
+
+    @inlinable
+    public static var zero: VoxelIndex {
+        VoxelIndex(0, 0, 0)
+    }
 }
 
 extension VoxelIndex: ExpressibleByArrayLiteral {

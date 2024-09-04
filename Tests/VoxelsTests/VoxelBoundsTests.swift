@@ -213,4 +213,12 @@ class VoxelBoundsTests: XCTestCase {
         XCTAssertEqual(expanded.max, VoxelIndex(4, 4, 4))
         XCTAssertEqual(expanded.min, VoxelIndex(-2, -2, -2))
     }
+
+    func testDescription() throws {
+        let bounds = VoxelBounds(.zero)
+        let expanded = bounds.expand(2)
+
+        XCTAssertEqual("\(bounds)", "[0, 0, 0]...[0, 0, 0]")
+        XCTAssertEqual("\(expanded)", "[-2, -2, -2]...[2, 2, 2]")
+    }
 }

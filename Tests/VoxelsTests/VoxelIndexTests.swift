@@ -71,5 +71,13 @@ class VoxelIndexTests: XCTestCase {
         XCTAssertEqual(VoxelIndex.one.x, 1)
         XCTAssertEqual(VoxelIndex.one.y, 1)
         XCTAssertEqual(VoxelIndex.one.z, 1)
+
+        XCTAssertEqual(VoxelIndex.one.x, 0)
+        XCTAssertEqual(VoxelIndex.one.y, 0)
+        XCTAssertEqual(VoxelIndex.one.z, 0)
+    }
+
+    func testDescription() throws {
+        XCTAssertEqual("\(VoxelIndex.one)", "[1, 1, 1]")
     }
 }
