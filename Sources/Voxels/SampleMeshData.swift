@@ -33,7 +33,7 @@ public enum SampleMeshData {
     public static func flatYBlock() -> VoxelHash<Float> {
         var flatVoxelBlock = VoxelHash<Float>(defaultVoxel: Float.greatestFiniteMagnitude)
         // create cube in the middle
-        let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(9, 0, 9))
+        let bounds = VoxelBounds(min: VoxelIndex(0, 2, 0), max: VoxelIndex(9, 2, 9))
         for i in 0 ..< bounds.size {
             flatVoxelBlock.set(try! bounds.delinearize(i), newValue: -1.0)
         }
@@ -60,7 +60,7 @@ public enum SampleMeshData {
         ]
         for z in 0 ..< layer0values.count {
             for x in 0 ..< layer0values[z].count {
-                voxels.set(VoxelIndex(x, 0, z), newValue: layer0values[z][x])
+                voxels.set(VoxelIndex(x, 1, z), newValue: layer0values[z][x])
             }
         }
         let layer1values: [[Float]] = [
@@ -76,7 +76,7 @@ public enum SampleMeshData {
         ]
         for z in 0 ..< layer1values.count {
             for x in 0 ..< layer1values[z].count {
-                voxels.set(VoxelIndex(x, 1, z), newValue: layer1values[z][x])
+                voxels.set(VoxelIndex(x, 2, z), newValue: layer1values[z][x])
             }
         }
         return voxels
