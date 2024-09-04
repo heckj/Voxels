@@ -1,0 +1,14 @@
+{
+  "kind": "group",
+  "title": "All results",
+  "directory": "Results",
+  "contents": [
+    {
+      "kind": "chart",
+      "title": "VoxelHash<Float>",
+      "tasks": [
+        "VoxelHash<Float> insert",
+      ]
+    },
+  ]
+}

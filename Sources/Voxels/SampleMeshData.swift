@@ -33,9 +33,9 @@ public enum SampleMeshData {
     public static func flatYBlock() -> VoxelHash<Float> {
         var flatVoxelBlock = VoxelHash<Float>(defaultVoxel: Float.greatestFiniteMagnitude)
         // create cube in the middle
-        let bounds = VoxelBounds(min: VoxelIndex(0, 2, 0), max: VoxelIndex(9, 2, 9))
-        for i in 0 ..< bounds.size {
-            flatVoxelBlock.set(try! bounds.delinearize(i), newValue: -1.0)
+        let bounds = VoxelBounds(min: VoxelIndex(0, 2, 0), max: VoxelIndex(9, 3, 9))
+        for i in bounds.indices {
+            flatVoxelBlock.set(i, newValue: -1.0)
         }
         return flatVoxelBlock
     }

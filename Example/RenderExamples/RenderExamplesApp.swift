@@ -12,7 +12,8 @@ struct RenderExamplesApp: App {
     var body: some Scene {
         WindowGroup {
             // ContentView()
-            QuickCheckView()
+            // QuickCheckView()
+            VoxelExplorerView()
         }
     }
 }

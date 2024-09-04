@@ -13,4 +13,9 @@ Fast Surface Nets
 - [Dual Contouring Tutorial](https://www.boristhebrave.com/2018/04/15/dual-contouring-tutorial/)
   - [associated code examples (python)](https://github.com/BorisTheBrave/mc-dc/tree/master)
 
-Copies of some of these articles and papers are in [refs](refs/). 
+Copies of some of these articles and papers are in [refs](refs/).
+
+
+## benchmark notes
+
+swift run -c release voxel-benchmarks library run --library Benchmarks/Library.json devcheck

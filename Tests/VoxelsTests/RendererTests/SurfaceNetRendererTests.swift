@@ -24,21 +24,21 @@ final class SurfaceNetRendererTests: XCTestCase {
         let samples = SampleMeshData.flatYBlock()
 
         let newThing = SurfaceNetRenderer()
-        let newResultBuffer = try newThing.render(voxelData: samples, scale: .init(), within: samples.bounds)
+        let newResultBuffer = try newThing.render(voxelData: samples, scale: .init(), within: samples.bounds.expand(2))
 
         try newResultBuffer.validate()
-        XCTAssertEqual(newResultBuffer.positions.count, 100)
-        XCTAssertEqual(newResultBuffer.quads, 81)
+        XCTAssertEqual(newResultBuffer.positions.count, 282)
+        XCTAssertEqual(newResultBuffer.quads, 280)
     }
 
     func testSurfaceNetRendererSDFBrick() throws {
         let samples = SampleMeshData.SDFBrick()
 
         let newThing = SurfaceNetRenderer()
-        let newResultBuffer = try newThing.render(voxelData: samples, scale: .init(), within: samples.bounds)
+        let newResultBuffer = try newThing.render(voxelData: samples, scale: .init(), within: samples.bounds.expand(2))
 
         try newResultBuffer.validate()
-        XCTAssertEqual(newResultBuffer.positions.count, 24)
-        XCTAssertEqual(newResultBuffer.quads, 17)
+        XCTAssertEqual(newResultBuffer.positions.count, 36)
+        XCTAssertEqual(newResultBuffer.quads, 34)
     }
 }
