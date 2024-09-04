@@ -157,4 +157,60 @@ class VoxelBoundsTests: XCTestCase {
             XCTAssertTrue(bounds.contains(idx))
         }
     }
+
+    func testVoxelBoundsInset() {
+        let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(4, 1, 8))
+
+        XCTAssertEqual(bounds.insetQuadrant().min, bounds.min)
+        XCTAssertEqual(bounds.insetQuadrant().max, VoxelIndex(3, 0, 7))
+        XCTAssertTrue(bounds.contains(bounds.insetQuadrant().min))
+        XCTAssertTrue(bounds.contains(bounds.insetQuadrant().max))
+    }
+
+    func testVoxelBoundsInsetByValue() {
+        let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(124, 12, 18))
+
+        let insetBounds = bounds.insetQuadrant(3)
+        XCTAssertEqual(insetBounds.min, VoxelIndex(0, 0, 0))
+        XCTAssertEqual(insetBounds.max, VoxelIndex(121, 9, 15))
+    }
+
+    func testVoxelBoundsInsetEdgeCase() {
+        let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(4, 1, 8))
+
+        XCTAssertTrue(bounds.contains(bounds.insetQuadrant().insetQuadrant()))
+
+        let squarebounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(2, 2, 2))
+        let shrunkToZero = squarebounds.insetQuadrant().insetQuadrant()
+        XCTAssertEqual(shrunkToZero.max, shrunkToZero.min)
+        // verify doesn't shrink or callapse any further
+        XCTAssertEqual(shrunkToZero, shrunkToZero.insetQuadrant())
+    }
+
+    func testVoxelBoundsExpand() {
+        let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(4, 1, 8))
+        let expanded = bounds.expand()
+        XCTAssertTrue(expanded.contains(bounds))
+
+        XCTAssertEqual(expanded.max, VoxelIndex(5, 2, 9))
+        XCTAssertEqual(expanded.min, VoxelIndex(-1, -1, -1))
+    }
+
+    func testVoxelBoundsExpandFromOne() {
+        let bounds = VoxelBounds(.one)
+        let expanded = bounds.expand()
+        XCTAssertTrue(expanded.contains(bounds))
+
+        XCTAssertEqual(expanded.max, VoxelIndex(2, 2, 2))
+        XCTAssertEqual(expanded.min, VoxelIndex(0, 0, 0))
+    }
+
+    func testVoxelBoundsExpandByValue() {
+        let bounds = VoxelBounds(.one)
+        let expanded = bounds.expand(3)
+        XCTAssertTrue(expanded.contains(bounds))
+
+        XCTAssertEqual(expanded.max, VoxelIndex(4, 4, 4))
+        XCTAssertEqual(expanded.min, VoxelIndex(-2, -2, -2))
+    }
 }

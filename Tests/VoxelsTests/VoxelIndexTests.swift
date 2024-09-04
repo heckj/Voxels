@@ -66,4 +66,10 @@ class VoxelIndexTests: XCTestCase {
         let neighbors = try VoxelIndex.neighbors(distance: 0, origin: VoxelIndex(2, 2, 2), voxels: fiveByFive, strategy: .raw)
         XCTAssertEqual(neighbors.count, 1)
     }
+
+    func testBuiltins() throws {
+        XCTAssertEqual(VoxelIndex.one.x, 1)
+        XCTAssertEqual(VoxelIndex.one.y, 1)
+        XCTAssertEqual(VoxelIndex.one.z, 1)
+    }
 }
