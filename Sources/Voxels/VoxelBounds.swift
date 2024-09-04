@@ -325,3 +325,9 @@ extension VoxelBounds: StrideIndexable {
         return setOfIndices
     }
 }
+
+extension VoxelBounds: CustomStringConvertible {
+    public var description: String {
+        "\(min)...\(max)"
+    }
+}

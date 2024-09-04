@@ -61,3 +61,9 @@ extension VoxelIndex: Comparable {
         lhs.x < rhs.x || lhs.y < rhs.y || lhs.z < rhs.z
     }
 }
+
+extension VoxelIndex: CustomStringConvertible {
+    public var description: String {
+        "[\(x), \(y), \(z)]"
+    }
+}
