@@ -65,6 +65,17 @@ public struct VoxelBounds: Sendable {
             return self
         }
     }
+
+    /// Insets the bounds of the max index down to 0,0,0
+    /// - Parameter insetAmount: <#insetAmount description#>
+    /// - Returns: <#description#>
+    @inlinable
+    public func insetQuadrant(_: Int = 1) -> VoxelBounds {
+        let newMax = VoxelIndex(Swift.max(self.max.x - 1, 0),
+                                Swift.max(self.max.y - 1, 0),
+                                Swift.max(self.max.z - 1, 0))
+        return VoxelBounds(min: min, max: newMax)
+    }
 }
 
 extension VoxelBounds: Equatable {}

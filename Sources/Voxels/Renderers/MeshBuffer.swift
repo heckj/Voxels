@@ -1,3 +1,5 @@
+import Foundation
+
 /// The raw data collection that supports generating a MeshDescriptor
 public struct MeshBuffer: Sendable {
     /// The triangle mesh positions.
@@ -8,6 +10,26 @@ public struct MeshBuffer: Sendable {
 
     /// The triangle mesh indices.
     public var indices: [UInt32]
+
+    public var triangles: Int {
+        indices.count / 3
+    }
+
+    public var quads: Int {
+        triangles / 2
+    }
+
+    public func validate() throws {
+        if positions.isEmpty || normals.isEmpty {
+            throw GeneratedMeshError.empty
+        }
+        if positions.count != normals.count {
+            throw GeneratedMeshError.missingNormals(positions.count, normals.count)
+        }
+        if indices.count % 3 != 0 {
+            throw GeneratedMeshError.invalidIndices(indices.count, indices.count % 3)
+        }
+    }
 
     /// Clears all of the buffers, but keeps the memory allocated for reuse.
     public mutating func reset() {
@@ -66,5 +88,29 @@ public struct MeshBuffer: Sendable {
         self.positions = positions
         self.normals = normals
         self.indices = indices
+    }
+
+    public enum GeneratedMeshError: LocalizedError {
+        case empty
+        case missingNormals(_ countPositions: Int, _ countNormals: Int)
+        case noIndices
+        case invalidIndices(_ count: Int, _ remainder: Int)
+
+        /// A localized message describing what error occurred.
+        public var errorDescription: String? {
+            switch self {
+            case .empty:
+                "The meshbuffer doesn't have any normals, vertices."
+            case let .missingNormals(pos, norms):
+                "The generated buffer is missing normals. There are \(pos) vertices and \(norms) normals recorded."
+            case .noIndices:
+                "The meshbuffer doesn't have any indices."
+            case let .invalidIndices(cnt, remainder):
+                "The meshbuffer has in invalid number of indices: \(cnt), which leaves a remainder of \(remainder)"
+            }
+        }
+
+        /// A localized message describing the reason for the failure.
+        public var failureReason: String? { nil }
     }
 }
