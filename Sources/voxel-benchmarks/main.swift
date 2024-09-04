@@ -21,32 +21,38 @@ import Voxels
 // numbers where each number is within the range 0...i where i is the index of the element order. It's useful for
 // testing random insertions.
 
-var benchmark = Benchmark(title: "CRDT")
+var benchmark = Benchmark(title: "Voxels")
 
 benchmark.addSimple(
-    title: "GSet<String,Int> insert",
+    title: "VoxelHash<Float> insert",
     input: [Int].self
 ) { input in
+    let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(1000, 1000, 1000))
     // var set = GSet<String, Int>(actorId: "A")
+    var voxelHash = VoxelHash(defaultVoxel: Float.greatestFiniteMagnitude)
     for i in input {
-        // set.insert(i)
+        let index = bounds._unchecked_delinearize(i)
+        voxelHash[index] = -1
     }
-    // precondition(set.count == input.count)
-    // blackHole(set)
+    precondition(voxelHash.count == input.count)
+    blackHole(voxelHash)
 }
 
-benchmark.add(
-    title: "Set remove",
-    input: ([Int], [Int]).self
-) { input, removals in
-    { timer in
-        var set = Set<Int>(input)
-        timer.measure {
-            for i in removals {
-                set.remove(i)
-            }
-        }
-        precondition(set.count == 0)
-        blackHole(set)
-    }
-}
+// benchmark.add(
+//    title: "Set remove",
+//    input: ([Int], [Int]).self
+// ) { input, removals in
+//    { timer in
+//        var set = Set<Int>(input)
+//        timer.measure {
+//            for i in removals {
+//                set.remove(i)
+//            }
+//        }
+//        precondition(set.count == 0)
+//        blackHole(set)
+//    }
+// }
+
+// Execute the benchmark tool with the above definitions.
+benchmark.main()

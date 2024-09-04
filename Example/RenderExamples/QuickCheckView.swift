@@ -30,7 +30,7 @@ struct QuickCheckView: View {
                     // Debug view helpers
                     content.add(DebugModels.gizmo(edge_length: 10))
                     // content.add(DebugModels.gridWall(edge_length: 100))
-                    // content.add(EntityExample.surfaceNetBrick)
+//                    content.add(EntityExample.surfaceNetBrick)
                     // content.add(EntityExample.flatYBlock)
                 }
                 .border(.blue)

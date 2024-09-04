@@ -12,6 +12,7 @@
 		1A88422F2C85062E00F7EADD /* DebugModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88422D2C85062E00F7EADD /* DebugModels.swift */; };
 		1A8842312C85092600F7EADD /* QuickCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8842302C85092600F7EADD /* QuickCheckView.swift */; };
 		1A8842322C85092600F7EADD /* QuickCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8842302C85092600F7EADD /* QuickCheckView.swift */; };
+		1AD4AF692C88EC8300FF4C1C /* VoxelExplorerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4AF682C88EC8300FF4C1C /* VoxelExplorerView.swift */; };
 		1AEC43102C7E285E004809B3 /* Transforms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430E2C7E285E004809B3 /* Transforms.swift */; };
 		1AEC43112C7E285E004809B3 /* RealityKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430C2C7E285E004809B3 /* RealityKitView.swift */; };
 		1AEC43122C7E285E004809B3 /* ArcBallState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43052C7E285E004809B3 /* ArcBallState.swift */; };
@@ -60,6 +61,7 @@
 		1A88422D2C85062E00F7EADD /* DebugModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugModels.swift; sourceTree = "<group>"; };
 		1A8842302C85092600F7EADD /* QuickCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickCheckView.swift; sourceTree = "<group>"; };
 		1AA4B6DA2C7E9AB300C9796B /* RenderExamplesCI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RenderExamplesCI.xctestplan; sourceTree = "<group>"; };
+		1AD4AF682C88EC8300FF4C1C /* VoxelExplorerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoxelExplorerView.swift; sourceTree = "<group>"; };
 		1AEC43052C7E285E004809B3 /* ArcBallState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcBallState.swift; sourceTree = "<group>"; };
 		1AEC43062C7E285E004809B3 /* ARViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewContainer.swift; sourceTree = "<group>"; };
 		1AEC43072C7E285E004809B3 /* BirdsEyeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdsEyeState.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 				1AEC43282C7E28EE004809B3 /* blackdome.skybox */,
 				1AEC43292C7E28EE004809B3 /* ContentView.swift */,
 				1A8842302C85092600F7EADD /* QuickCheckView.swift */,
+				1AD4AF682C88EC8300FF4C1C /* VoxelExplorerView.swift */,
 				1AEC432A2C7E28EE004809B3 /* EntityExample.swift */,
 				1AEC432B2C7E28EE004809B3 /* whitedome.skybox */,
 				1AF52B3E2C7E274B00B019D5 /* RenderExamplesApp.swift */,
@@ -309,6 +312,7 @@
 				1AEC43202C7E285E004809B3 /* ARViewContainer.swift in Sources */,
 				1A88422E2C85062E00F7EADD /* DebugModels.swift in Sources */,
 				1AEC43212C7E285E004809B3 /* CameraControlledARView.swift in Sources */,
+				1AD4AF692C88EC8300FF4C1C /* VoxelExplorerView.swift in Sources */,
 				1AEC43222C7E285E004809B3 /* Comparable+clamped.swift in Sources */,
 				1AEC43232C7E285E004809B3 /* TopDownVectorImage.swift in Sources */,
 				1AF52B3F2C7E274B00B019D5 /* RenderExamplesApp.swift in Sources */,

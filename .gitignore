@@ -11,3 +11,7 @@ DerivedData/
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
 .netrc
 dd/
+
+# benchmark script outputs to ignore
+devcheck
+diff.html
