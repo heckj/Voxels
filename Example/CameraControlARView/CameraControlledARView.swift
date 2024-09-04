@@ -296,7 +296,7 @@ import RealityKit
         switch motionMode {
         case .arcball, .arcball_direct:
             arcball_state.rotationAngle -= deltaX * movementSpeed
-            arcball_state.inclinationAngle += deltaY * movementSpeed
+            arcball_state.inclinationAngle -= deltaY * movementSpeed
             updateCamera(arcball_state)
         case .firstperson:
             // print("delta X is \(deltaX)")
