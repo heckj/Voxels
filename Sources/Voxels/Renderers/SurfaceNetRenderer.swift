@@ -44,9 +44,6 @@ public class SurfaceNetRenderer {
         var meshbuffer = MeshBuffer()
         // warning shown, or error thrown, when the bounds selected outstrip the bounds
         // of the SDF?
-        // configured bounds __must__ be within the voxel data we're exploring...
-        precondition(voxelData.bounds.contains(bounds.min))
-        precondition(voxelData.bounds.contains(bounds.max))
 
         // set the position and normal into the meshbuffer if the relevant voxel index is a surface voxel
         try estimate_surface(voxelData: voxelData, scale: scale, bounds: bounds, meshbuffer: &meshbuffer)

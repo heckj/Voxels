@@ -84,7 +84,7 @@ public enum EntityExample {
     public static var surfaceNetBrick: ModelEntity {
         let voxels = Voxels.SampleMeshData.SDFBrick()
         let renderer = SurfaceNetRenderer()
-        let generatedMeshBuffer = try! renderer.render(voxelData: voxels, scale: .init(), within: voxels.bounds.expand())
+        let generatedMeshBuffer = try! renderer.render(voxelData: voxels, scale: .init(), within: voxels.bounds.expand(2))
 
         guard let descriptor = generatedMeshBuffer.meshDescriptor() else {
             fatalError("Invalid mesh - no descriptor")
