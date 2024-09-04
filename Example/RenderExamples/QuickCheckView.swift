@@ -2,12 +2,6 @@ import RealityKit
 import Spatial
 import SwiftUI
 
-// #if os(iOS)
-//    typealias PlatformColor = UIColor
-// #elseif os(macOS)
-//    typealias PlatformColor = NSColor
-// #endif
-
 struct QuickCheckView: View {
     @State private var arcballState: ArcBallState
 
@@ -34,9 +28,8 @@ struct QuickCheckView: View {
                                                    material: SimpleMaterial(color: .black, isMetallic: false)))
 
                     // Debug view helpers
-                    // content.add(DebugModels.gizmo(edge_length: 10))
+                    content.add(DebugModels.gizmo(edge_length: 10))
                     // content.add(DebugModels.gridWall(edge_length: 100))
-
                     // content.add(EntityExample.surfaceNetBrick)
                 }
                 .border(.blue)

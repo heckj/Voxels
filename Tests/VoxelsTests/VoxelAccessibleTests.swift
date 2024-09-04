@@ -3,7 +3,7 @@ import XCTest
 
 class VoxelAccessibleTests: XCTestCase {
     func testVoxelHashInitializer() throws {
-        let voxels = VoxelTestHelpers.manhattanNeighbor1()
+        let voxels = SampleMeshData.manhattanNeighbor1()
 
         XCTAssertEqual(voxels.count, 7)
         let indices = Array(voxels.indices)

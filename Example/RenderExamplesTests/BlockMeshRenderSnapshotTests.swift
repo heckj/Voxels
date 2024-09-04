@@ -193,7 +193,7 @@ final class BlockMeshRenderSnapshotTests: XCTestCase {
             // CAN NOT do a snapshot if the frame is .zero...
             let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
 
-            let entity = blockMeshEntity(EntityExample.manhattanNeighbor1())
+            let entity = blockMeshEntity(SampleMeshData.manhattanNeighbor1())
             addEntity(entity, to: arView)
             establishCamera(arView, at: Point3D(x: 6, y: 6, z: 10), lookingAt: Point3D(x: 0, y: 0, z: 0))
 
@@ -217,7 +217,7 @@ final class BlockMeshRenderSnapshotTests: XCTestCase {
             // CAN NOT do a snapshot if the frame is .zero...
             let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
 
-            let voxels = EntityExample.flatYBlock()
+            let voxels = SampleMeshData.flatYBlock()
             XCTAssertEqual(voxels.count, 100)
             let entity = blockMeshEntity(voxels)
             addEntity(entity, to: arView)
