@@ -48,7 +48,7 @@ struct VoxelExplorerView: View {
             .border(.blue)
             .padding()
             Spacer()
-            Text("Quick Check")
+            VoxelDataView(voxelData: voxelData, bounds: voxelData.bounds.expand(2))
         }
         .padding()
     }
