@@ -7,7 +7,7 @@ struct QuickCheckView: View {
 
     init() {
         arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0),
-                                    radius: 15.0,
+                                    radius: 25.0,
                                     inclinationAngle: -Float.pi / 6.0, // around X, slightly "up"
                                     rotationAngle: Float.pi / 8.0, // around Y, slightly to the "right"
                                     inclinationConstraint: -Float.pi / 2 ... 0, // 0 ... 90° 'up'
@@ -30,7 +30,8 @@ struct QuickCheckView: View {
                     // Debug view helpers
                     content.add(DebugModels.gizmo(edge_length: 10))
                     // content.add(DebugModels.gridWall(edge_length: 100))
-                    // content.add(EntityExample.surfaceNetBrick)
+                    content.add(EntityExample.surfaceNetBrick)
+                    // content.add(EntityExample.flatYBlock)
                 }
                 .border(.blue)
             }

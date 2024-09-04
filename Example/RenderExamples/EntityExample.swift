@@ -84,7 +84,7 @@ public enum EntityExample {
     public static var surfaceNetBrick: ModelEntity {
         let voxels = Voxels.SampleMeshData.SDFBrick()
         let renderer = SurfaceNetRenderer()
-        let generatedMeshBuffer = try! renderer.render(voxelData: voxels, scale: .init())
+        let generatedMeshBuffer = try! renderer.render(voxelData: voxels, scale: .init(), within: voxels.bounds)
 
         guard let descriptor = generatedMeshBuffer.meshDescriptor() else {
             fatalError("Invalid mesh - no descriptor")
@@ -92,7 +92,22 @@ public enum EntityExample {
         let mesh = try! MeshResource.generate(from: [descriptor])
         let material = SimpleMaterial(color: .green, isMetallic: false)
         let entity = ModelEntity(mesh: mesh, materials: [material])
-        entity.name = "surfaceNet"
+        entity.name = "SDFBrick"
+        return entity
+    }
+
+    public static var flatYBlock: ModelEntity {
+        let voxels = Voxels.SampleMeshData.flatYBlock()
+        let renderer = SurfaceNetRenderer()
+        let generatedMeshBuffer = try! renderer.render(voxelData: voxels, scale: .init(), within: voxels.bounds)
+
+        guard let descriptor = generatedMeshBuffer.meshDescriptor() else {
+            fatalError("Invalid mesh - no descriptor")
+        }
+        let mesh = try! MeshResource.generate(from: [descriptor])
+        let material = SimpleMaterial(color: .green, isMetallic: false)
+        let entity = ModelEntity(mesh: mesh, materials: [material])
+        entity.name = "flatYBlock"
         return entity
     }
 }
