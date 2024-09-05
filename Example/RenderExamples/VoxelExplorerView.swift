@@ -22,8 +22,12 @@ struct VoxelExplorerView: View {
         // Load a surface shader function named mySurfaceShader.
         let surfaceShader = CustomMaterial.SurfaceShader(named: "wireframeMaterialSurfaceShader", in: library)
         do {
-            let baseMaterial = SimpleMaterial(color: .gray, isMetallic: false)
-            let material = try CustomMaterial(surfaceShader: surfaceShader, geometryModifier: geometryModifier, lightingModel: .clearcoat)
+            #if os(macOS)
+                let baseMaterial = SimpleMaterial(color: .lightGray, isMetallic: false)
+            #else
+                let baseMaterial = SimpleMaterial(color: .lightGray, isMetallic: false)
+            #endif
+//            let material = try CustomMaterial(surfaceShader: surfaceShader, geometryModifier: geometryModifier, lightingModel: .clearcoat)
 //            let material = try CustomMaterial(from: baseMaterial, surfaceShader: surfaceShader)
 //            let material = try CustomMaterial(surfaceShader: surfaceShader, lightingModel: .unlit)
 
@@ -33,9 +37,8 @@ struct VoxelExplorerView: View {
                 fatalError("Invalid mesh - no descriptor")
             }
             let mesh = try! MeshResource.generate(from: [descriptor])
-            let entity = ModelEntity(mesh: mesh, materials: [material])
+            let entity = ModelEntity(mesh: mesh, materials: [baseMaterial])
             // entity.name = "SDFBrick"
-            print("RENDERING, REALLY!!!")
             return entity
 
         } catch {
@@ -45,7 +48,7 @@ struct VoxelExplorerView: View {
 
     init() {
         arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0),
-                                    radius: 25.0,
+                                    radius: 15.0,
                                     inclinationAngle: -Float.pi / 6.0, // around X, slightly "up"
                                     rotationAngle: Float.pi / 8.0, // around Y, slightly to the "right"
                                     inclinationConstraint: -Float.pi / 2 ... 0, // 0 ... 90° 'up'

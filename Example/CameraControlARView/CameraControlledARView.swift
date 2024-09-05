@@ -412,7 +412,7 @@ import RealityKit
 
         override public dynamic func rotate(with event: NSEvent) {
             // Two fingers moving in opposite semicircles is a gesture meaning rotate.
-            print("rotate EVENT: \(event)")
+            // print("rotate EVENT: \(event)")
             if event.phase == .began {
                 birdseye_state.radiusStart = birdseye_state.radius
                 birdseye_state.rotationStart = birdseye_state.rotation
@@ -620,7 +620,7 @@ import RealityKit
         override public dynamic func magnify(with event: NSEvent) {
             // Pinching movements (in or out) are gestures meaning zoom out or zoom in (also called magnification).
             if event.phase == NSEvent.Phase.ended {
-                print("magnify: \(event)")
+                // print("magnify: \(event)")
             }
             switch motionMode {
             case .arcball, .arcball_direct:

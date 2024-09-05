@@ -31,7 +31,7 @@ public enum SampleMeshData {
     }
 
     public static func flatYBlock() -> VoxelHash<Float> {
-        var flatVoxelBlock = VoxelHash<Float>(defaultVoxel: Float.greatestFiniteMagnitude)
+        var flatVoxelBlock = VoxelHash<Float>(defaultVoxel: Float(10.0))
         // create cube in the middle
         let bounds = VoxelBounds(min: VoxelIndex(0, 2, 0), max: VoxelIndex(9, 3, 9))
         for i in bounds.indices {
@@ -41,7 +41,7 @@ public enum SampleMeshData {
     }
 
     public static func SDFBrick() -> VoxelHash<Float> {
-        var voxels = VoxelHash(defaultVoxel: Float.greatestFiniteMagnitude)
+        var voxels = VoxelHash(defaultVoxel: Float(10.0))
         // < 0 : inside surface (distance to)
         // 0 : at surface
         // > 0 : outside surface (distance to)
