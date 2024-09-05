@@ -12,6 +12,7 @@
 		1A88422F2C85062E00F7EADD /* DebugModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88422D2C85062E00F7EADD /* DebugModels.swift */; };
 		1A8842312C85092600F7EADD /* QuickCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8842302C85092600F7EADD /* QuickCheckView.swift */; };
 		1A8842322C85092600F7EADD /* QuickCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8842302C85092600F7EADD /* QuickCheckView.swift */; };
+		1AA3032C2C890B4B004B0660 /* wireframeMaterial.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1AA3032B2C890B4B004B0660 /* wireframeMaterial.metal */; };
 		1AD4AF692C88EC8300FF4C1C /* VoxelExplorerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4AF682C88EC8300FF4C1C /* VoxelExplorerView.swift */; };
 		1AD4AF6B2C88F00900FF4C1C /* VoxelDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4AF6A2C88F00900FF4C1C /* VoxelDataView.swift */; };
 		1AEC43102C7E285E004809B3 /* Transforms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430E2C7E285E004809B3 /* Transforms.swift */; };
@@ -61,6 +62,7 @@
 /* Begin PBXFileReference section */
 		1A88422D2C85062E00F7EADD /* DebugModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugModels.swift; sourceTree = "<group>"; };
 		1A8842302C85092600F7EADD /* QuickCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickCheckView.swift; sourceTree = "<group>"; };
+		1AA3032B2C890B4B004B0660 /* wireframeMaterial.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = wireframeMaterial.metal; sourceTree = "<group>"; };
 		1AA4B6DA2C7E9AB300C9796B /* RenderExamplesCI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RenderExamplesCI.xctestplan; sourceTree = "<group>"; };
 		1AD4AF682C88EC8300FF4C1C /* VoxelExplorerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoxelExplorerView.swift; sourceTree = "<group>"; };
 		1AD4AF6A2C88F00900FF4C1C /* VoxelDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoxelDataView.swift; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				1AF52B422C7E274C00B019D5 /* Assets.xcassets */,
 				1AF52B442C7E274C00B019D5 /* RenderExamples.entitlements */,
 				1AF52B452C7E274C00B019D5 /* Preview Content */,
+				1AA3032B2C890B4B004B0660 /* wireframeMaterial.metal */,
 			);
 			path = RenderExamples;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1AEC432C2C7E28EE004809B3 /* EntityExample.swift in Sources */,
+				1AA3032C2C890B4B004B0660 /* wireframeMaterial.metal in Sources */,
 				1A8842312C85092600F7EADD /* QuickCheckView.swift in Sources */,
 				1AEC432D2C7E28EE004809B3 /* ContentView.swift in Sources */,
 				1AEC431A2C7E285E004809B3 /* Transforms.swift in Sources */,

@@ -10,17 +10,37 @@ struct VoxelExplorerView: View {
     let renderer = SurfaceNetRenderer()
 
     func entityRender(_ voxels: some VoxelAccessible) -> ModelEntity {
-        // let voxels = Voxels.SampleMeshData.SDFBrick()
-        let generatedMeshBuffer = try! renderer.render(voxelData: voxels, scale: .init(), within: voxels.bounds.expand(2))
-
-        guard let descriptor = generatedMeshBuffer.meshDescriptor() else {
-            fatalError("Invalid mesh - no descriptor")
+        // Get the Metal Device, then the library from the device
+        guard let device = MTLCreateSystemDefaultDevice(),
+              let library = device.makeDefaultLibrary()
+        else {
+            fatalError("Error creating default metal device.")
         }
-        let mesh = try! MeshResource.generate(from: [descriptor])
-        let material = SimpleMaterial(color: .green, isMetallic: false)
-        let entity = ModelEntity(mesh: mesh, materials: [material])
-        // entity.name = "SDFBrick"
-        return entity
+
+        let geometryModifier = CustomMaterial.GeometryModifier(named: "wireframeMaterialGeometryModifier", in: library)
+
+        // Load a surface shader function named mySurfaceShader.
+        let surfaceShader = CustomMaterial.SurfaceShader(named: "wireframeMaterialSurfaceShader", in: library)
+        do {
+            let baseMaterial = SimpleMaterial(color: .gray, isMetallic: false)
+            let material = try CustomMaterial(surfaceShader: surfaceShader, geometryModifier: geometryModifier, lightingModel: .clearcoat)
+//            let material = try CustomMaterial(from: baseMaterial, surfaceShader: surfaceShader)
+//            let material = try CustomMaterial(surfaceShader: surfaceShader, lightingModel: .unlit)
+
+            let generatedMeshBuffer = try! renderer.render(voxelData: voxels, scale: .init(), within: voxels.bounds.expand(2))
+
+            guard let descriptor = generatedMeshBuffer.meshDescriptor() else {
+                fatalError("Invalid mesh - no descriptor")
+            }
+            let mesh = try! MeshResource.generate(from: [descriptor])
+            let entity = ModelEntity(mesh: mesh, materials: [material])
+            // entity.name = "SDFBrick"
+            print("RENDERING, REALLY!!!")
+            return entity
+
+        } catch {
+            fatalError(error.localizedDescription)
+        }
     }
 
     init() {
