@@ -8,10 +8,13 @@ class ObservableVoxelData {
     public var wrappedVoxelData: VoxelHash<Float>
     let renderer: SurfaceNetRenderer
     let voxelEntity: ModelEntity
+    let blockEntity: ModelEntity
     #if os(macOS)
         let baseMaterial = SimpleMaterial(color: .lightGray, isMetallic: false)
+        let alphaMaterial = SimpleMaterial(color: NSColor(red: 50, green: 50, blue: 250, alpha: 0.75), isMetallic: false)
     #else
         let baseMaterial = SimpleMaterial(color: .lightGray, isMetallic: false)
+        let alphaMaterial = SimpleMaterial(color: UIColor(red: 50, green: 50, blue: 250, alpha: 0.75), roughness: 0.7, isMetallic: false)
     #endif
 
     let clock = ContinuousClock()
@@ -23,12 +26,20 @@ class ObservableVoxelData {
                                                        scale: .init(),
                                                        within: data.bounds.expand(2))
 
-        guard let descriptor = generatedMeshBuffer.meshDescriptor() else {
+//        let blockMeshBuffer = VoxelMeshRenderer.fastBlockMesh(data, scale: .init())
+        let blockMeshBuffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(data, scale: .init(), within: data.bounds.expand(2))
+
+        guard let descriptor = generatedMeshBuffer.meshDescriptor(), let blockDescriptor = blockMeshBuffer.meshDescriptor() else {
             fatalError("Invalid mesh - no descriptor")
         }
         let mesh = try! MeshResource.generate(from: [descriptor])
+        let blockMesh = try! MeshResource.generate(from: [blockDescriptor])
         voxelEntity = ModelEntity(mesh: mesh, materials: [baseMaterial])
         voxelEntity.name = "VoxelData"
+
+        blockEntity = ModelEntity(mesh: blockMesh, materials: [alphaMaterial])
+        blockEntity.name = "BlockMesh"
+        voxelEntity.addChild(blockEntity)
     }
 
     func binding(_ index: VoxelIndex) -> Binding<String> {
@@ -58,13 +69,23 @@ class ObservableVoxelData {
                                                        scale: .init(),
                                                        within: wrappedVoxelData.bounds.expand(2))
         let timeToRender = clock.now - startTime
-
-        print("Render Duration: \(timeToRender.formatted(.units(allowed: [.milliseconds, .microseconds], width: .abbreviated))) (\(timeToRender.description))")
+        print("SurfaceNet Render Duration: \(timeToRender.formatted(.units(allowed: [.milliseconds, .microseconds], width: .abbreviated))) (\(timeToRender.description))")
         guard let descriptor = generatedMeshBuffer.meshDescriptor() else {
             return
         }
         let mesh = try! MeshResource.generate(from: [descriptor])
         voxelEntity.model?.mesh = mesh
+
+        let startTime2 = clock.now
+        let newBlockBuffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(wrappedVoxelData, scale: .init(), within: wrappedVoxelData.bounds.expand(2))
+        let timeToRender2 = clock.now - startTime2
+        print("BlockMesh Render Duration: \(timeToRender2.formatted(.units(allowed: [.milliseconds, .microseconds], width: .abbreviated))) (\(timeToRender2.description))")
+
+        guard let descriptor2 = newBlockBuffer.meshDescriptor() else {
+            return
+        }
+        let blockMesh = try! MeshResource.generate(from: [descriptor2])
+        blockEntity.model?.mesh = blockMesh
     }
 
 //    func renderEntity(_ voxels: some VoxelAccessible) -> ModelEntity {
