@@ -1,11 +1,6 @@
 import SwiftUI
 import Voxels
 
-struct IndexedDistance: Identifiable {
-    let id: VoxelIndex
-    let value: String
-}
-
 struct VoxelDataView: View {
     let voxelData: any VoxelAccessible
     let bounds: VoxelBounds
@@ -21,14 +16,14 @@ struct VoxelDataView: View {
         return x
     }
 
-    func rowsFromYLevel(y: Int, z: Int) -> [IndexedDistance] {
-        var row: [IndexedDistance] = []
+    func rowsFromYLevel(y: Int, z: Int) -> [SDFVoxelData] {
+        var row: [SDFVoxelData] = []
         for x in bounds.min.x ... bounds.max.x {
             let index = VoxelIndex(x, y, z)
             if let singleVoxeldata = voxelData[index] {
-                row.append(IndexedDistance(id: index, value: "\(singleVoxeldata.distanceAboveSurface())"))
+                row.append(SDFVoxelData(id: index, rawValue: singleVoxeldata.distanceAboveSurface()))
             } else {
-                row.append(IndexedDistance(id: index, value: "?"))
+                row.append(SDFVoxelData(id: index))
             }
         }
         return row
@@ -64,8 +59,8 @@ struct VoxelDataView: View {
                     GridRow {
                         ForEach(rowsFromYLevel(y: yLevel, z: zValue)) { indexedCellData in
                             VStack {
-                                Text("\(indexedCellData.id)").font(.caption)
-                                Text(indexedCellData.value)
+                                VoxelIndexView(vIndex: indexedCellData.id)
+                                Text(indexedCellData.attrString)
                             }
                         }
                     }
