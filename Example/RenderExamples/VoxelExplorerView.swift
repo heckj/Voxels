@@ -5,7 +5,7 @@ import Voxels
 
 struct VoxelExplorerView: View {
     @State private var arcballState: ArcBallState
-    @State private var voxelData: VoxelHash<Float> = Voxels.SampleMeshData.SDFBrick()
+    let data: ObservableVoxelData
 
     let renderer = SurfaceNetRenderer()
 
@@ -17,10 +17,10 @@ struct VoxelExplorerView: View {
             fatalError("Error creating default metal device.")
         }
 
-        let geometryModifier = CustomMaterial.GeometryModifier(named: "wireframeMaterialGeometryModifier", in: library)
+//        let geometryModifier = CustomMaterial.GeometryModifier(named: "wireframeMaterialGeometryModifier", in: library)
 
         // Load a surface shader function named mySurfaceShader.
-        let surfaceShader = CustomMaterial.SurfaceShader(named: "wireframeMaterialSurfaceShader", in: library)
+//        let surfaceShader = CustomMaterial.SurfaceShader(named: "wireframeMaterialSurfaceShader", in: library)
         do {
             #if os(macOS)
                 let baseMaterial = SimpleMaterial(color: .lightGray, isMetallic: false)
@@ -46,13 +46,14 @@ struct VoxelExplorerView: View {
         }
     }
 
-    init() {
+    init(_ data: ObservableVoxelData) {
         arcballState = ArcBallState(arcballTarget: SIMD3<Float>(0, 0, 0),
                                     radius: 15.0,
                                     inclinationAngle: -Float.pi / 6.0, // around X, slightly "up"
                                     rotationAngle: Float.pi / 8.0, // around Y, slightly to the "right"
                                     inclinationConstraint: -Float.pi / 2 ... 0, // 0 ... 90° 'up'
                                     radiusConstraint: 0.1 ... 150.0)
+        self.data = data
     }
 
     var body: some View {
@@ -65,18 +66,18 @@ struct VoxelExplorerView: View {
                 // Debug view helpers
                 content.add(DebugModels.gizmo(edge_length: 10))
 
-                content.add(entityRender(voxelData))
+                content.add(entityRender(data.wrappedVoxelData))
             }
-            .frame(width: 300, height: 300)
+            .frame(width: 400, height: 400)
             .border(.blue)
             .padding()
             Spacer()
-            VoxelDataView(voxelData: voxelData, bounds: voxelData.bounds.expand(2))
+            VoxelDataEditorView(data: data)
         }
         .padding()
     }
 }
 
 #Preview {
-    VoxelExplorerView()
+    VoxelExplorerView(ObservableVoxelData(SampleMeshData.SDFBrick()))
 }

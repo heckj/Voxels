@@ -29,6 +29,12 @@ struct VoxelDataView: View {
         return row
     }
 
+    init(voxelData: any VoxelAccessible) {
+        self.voxelData = voxelData
+        bounds = voxelData.bounds.expand(2)
+        yLevel = bounds.min.y
+    }
+
     var body: some View {
         VStack {
             Text("\(voxelData.count) stored voxels, \(numSurface()) surface")
@@ -70,12 +76,10 @@ struct VoxelDataView: View {
             .border(.black)
         }
         .padding()
-        .onAppear(perform: {
-            yLevel = bounds.min.y
-        })
     }
 }
 
 #Preview {
-    VoxelDataView(voxelData: SampleMeshData.manhattanNeighbor1(), bounds: SampleMeshData.manhattanNeighbor1().bounds.expand(2)).frame(width: 400, height: 400)
+    VoxelDataView(voxelData: SampleMeshData.manhattanNeighbor1())
+        .frame(width: 400, height: 400)
 }

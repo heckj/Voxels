@@ -624,7 +624,7 @@ import RealityKit
             }
             switch motionMode {
             case .arcball, .arcball_direct:
-                let multiplier = Float(event.magnification) // magnify_end
+                let multiplier = -Float(event.magnification) // magnify_end
                 arcball_state.radius = arcball_state.radius * (multiplier + 1)
                 updateCamera(arcball_state)
             case .firstperson:

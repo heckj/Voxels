@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Voxels
 
 @main
 struct RenderExamplesApp: App {
@@ -13,7 +14,8 @@ struct RenderExamplesApp: App {
         WindowGroup {
             // ContentView()
             // QuickCheckView()
-            VoxelExplorerView()
+            VoxelExplorerView(ObservableVoxelData(SampleMeshData.SDFBrick()))
+            // VoxelDataEditorView(data: ObservableVoxelData(SampleMeshData.SDFBrick()))
         }
     }
 }
