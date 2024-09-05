@@ -10,6 +10,9 @@
 		1A1744122C8A376100AB874F /* SDFVoxelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1744112C8A376100AB874F /* SDFVoxelData.swift */; };
 		1A1744142C8A389000AB874F /* FormatExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1744132C8A389000AB874F /* FormatExampleTests.swift */; };
 		1A1744162C8A3F8400AB874F /* VoxelIndexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1744152C8A3F8400AB874F /* VoxelIndexView.swift */; };
+		1A1744182C8A491200AB874F /* VoxelEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1744172C8A491200AB874F /* VoxelEditorView.swift */; };
+		1A17441A2C8A4B6D00AB874F /* ObservableVoxelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1744192C8A4B6D00AB874F /* ObservableVoxelData.swift */; };
+		1A17441C2C8A52F700AB874F /* IndividualVoxelEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A17441B2C8A52F700AB874F /* IndividualVoxelEditor.swift */; };
 		1A88422B2C8505F300F7EADD /* RealityGeometries in Frameworks */ = {isa = PBXBuildFile; productRef = 1A88422A2C8505F300F7EADD /* RealityGeometries */; };
 		1A88422E2C85062E00F7EADD /* DebugModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88422D2C85062E00F7EADD /* DebugModels.swift */; };
 		1A88422F2C85062E00F7EADD /* DebugModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88422D2C85062E00F7EADD /* DebugModels.swift */; };
@@ -66,6 +69,9 @@
 		1A1744112C8A376100AB874F /* SDFVoxelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDFVoxelData.swift; sourceTree = "<group>"; };
 		1A1744132C8A389000AB874F /* FormatExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatExampleTests.swift; sourceTree = "<group>"; };
 		1A1744152C8A3F8400AB874F /* VoxelIndexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoxelIndexView.swift; sourceTree = "<group>"; };
+		1A1744172C8A491200AB874F /* VoxelEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoxelEditorView.swift; sourceTree = "<group>"; };
+		1A1744192C8A4B6D00AB874F /* ObservableVoxelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableVoxelData.swift; sourceTree = "<group>"; };
+		1A17441B2C8A52F700AB874F /* IndividualVoxelEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualVoxelEditor.swift; sourceTree = "<group>"; };
 		1A88422D2C85062E00F7EADD /* DebugModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugModels.swift; sourceTree = "<group>"; };
 		1A8842302C85092600F7EADD /* QuickCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickCheckView.swift; sourceTree = "<group>"; };
 		1AA3032B2C890B4B004B0660 /* wireframeMaterial.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = wireframeMaterial.metal; sourceTree = "<group>"; };
@@ -174,6 +180,9 @@
 				1A8842302C85092600F7EADD /* QuickCheckView.swift */,
 				1AD4AF682C88EC8300FF4C1C /* VoxelExplorerView.swift */,
 				1AD4AF6A2C88F00900FF4C1C /* VoxelDataView.swift */,
+				1A1744172C8A491200AB874F /* VoxelEditorView.swift */,
+				1A1744192C8A4B6D00AB874F /* ObservableVoxelData.swift */,
+				1A17441B2C8A52F700AB874F /* IndividualVoxelEditor.swift */,
 				1A1744152C8A3F8400AB874F /* VoxelIndexView.swift */,
 				1A1744112C8A376100AB874F /* SDFVoxelData.swift */,
 				1AEC432A2C7E28EE004809B3 /* EntityExample.swift */,
@@ -316,7 +325,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A1744162C8A3F8400AB874F /* VoxelIndexView.swift in Sources */,
+				1A17441A2C8A4B6D00AB874F /* ObservableVoxelData.swift in Sources */,
 				1AEC432C2C7E28EE004809B3 /* EntityExample.swift in Sources */,
+				1A17441C2C8A52F700AB874F /* IndividualVoxelEditor.swift in Sources */,
 				1AA3032C2C890B4B004B0660 /* wireframeMaterial.metal in Sources */,
 				1A8842312C85092600F7EADD /* QuickCheckView.swift in Sources */,
 				1AEC432D2C7E28EE004809B3 /* ContentView.swift in Sources */,
@@ -331,6 +342,7 @@
 				1AEC43202C7E285E004809B3 /* ARViewContainer.swift in Sources */,
 				1A88422E2C85062E00F7EADD /* DebugModels.swift in Sources */,
 				1AEC43212C7E285E004809B3 /* CameraControlledARView.swift in Sources */,
+				1A1744182C8A491200AB874F /* VoxelEditorView.swift in Sources */,
 				1AD4AF692C88EC8300FF4C1C /* VoxelExplorerView.swift in Sources */,
 				1AEC43222C7E285E004809B3 /* Comparable+clamped.swift in Sources */,
 				1AEC43232C7E285E004809B3 /* TopDownVectorImage.swift in Sources */,
