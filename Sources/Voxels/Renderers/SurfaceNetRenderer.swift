@@ -70,10 +70,6 @@ public class SurfaceNetRenderer {
     func assembleMeshBufferFromCache() -> MeshBuffer {
         var meshbuffer = MeshBuffer()
 
-        // double checking my assumptions here...
-        precondition(surface_voxel_indices.count == positionsCache.keys.count)
-        precondition(surface_voxel_indices.count == normalsCache.keys.count)
-
         let vertexPositions = positionsCache.keys.sorted()
         var voxelIndexToVertexIndexLookup: [VoxelIndex: Int] = [:]
         for (index, voxelindex) in vertexPositions.enumerated() {
@@ -184,44 +180,35 @@ public class SurfaceNetRenderer {
         for voxel in positionsCache.keys {
             // Do edges parallel with the X axis
             if voxel.y != bounds.min.y, voxel.z != bounds.min.z, voxel.x != bounds.max.x - 1 {
-                let quadSet = maybeMakeQuad(
+                maybeMakeQuad(
                     voxelData: voxelData,
                     p1: voxel,
                     p2: voxel.adding(xyz_strides[0]),
                     axis_b_stride: xyz_strides[1],
                     axis_c_stride: xyz_strides[2]
                 )
-                if !quadSet.isEmpty {
-                    indicesCache.insert(quadSet)
-                }
                 maybe_make_quad_call_count += 1
             }
             // Do edges parallel with the Y axis
             if voxel.x != bounds.min.x, voxel.z != bounds.min.z, voxel.y != bounds.max.y - 1 {
-                let quadSet = maybeMakeQuad(
+                maybeMakeQuad(
                     voxelData: voxelData,
                     p1: voxel,
                     p2: voxel.adding(xyz_strides[1]),
                     axis_b_stride: xyz_strides[2],
                     axis_c_stride: xyz_strides[0]
                 )
-                if !quadSet.isEmpty {
-                    indicesCache.insert(quadSet)
-                }
                 maybe_make_quad_call_count += 1
             }
             // Do edges parallel with the Z axis
             if voxel.x != bounds.min.x, voxel.y != bounds.min.y, voxel.z != bounds.max.z - 1 {
-                let quadSet = maybeMakeQuad(
+                maybeMakeQuad(
                     voxelData: voxelData,
                     p1: voxel,
                     p2: voxel.adding(xyz_strides[2]),
                     axis_b_stride: xyz_strides[0],
                     axis_c_stride: xyz_strides[1]
                 )
-                if !quadSet.isEmpty {
-                    indicesCache.insert(quadSet)
-                }
                 maybe_make_quad_call_count += 1
             }
         }
@@ -255,6 +242,7 @@ public class SurfaceNetRenderer {
     //
     // then we must find the other 3 quad corners by moving along the other two axes (those orthogonal to A) in the negative
     // directions; these are axis B and axis C.
+    @discardableResult
     func maybeMakeQuad(
         voxelData: some VoxelAccessible,
         p1: VoxelIndex,
@@ -314,6 +302,7 @@ public class SurfaceNetRenderer {
         } else {
             [v2, v4, v3, v2, v3, v1]
         }
+        indicesCache.insert(quad)
         maybe_make_was_yes += 1
         return quad
     }
