@@ -1,9 +1,6 @@
 // Derived from MIT licensed code https://github.com/bonsairobo/fast-surface-nets-rs/blob/main/src/lib.rs
 
 public class SurfaceNetRenderer {
-    /// Stride of every voxel that intersects the isosurface. Can be used for efficient post-processing.
-    var surface_voxel_indices: [VoxelIndex]
-
     // MARK: MeshBuffer cache components
 
     /// The triangle mesh positions.
@@ -20,7 +17,6 @@ public class SurfaceNetRenderer {
     var maybe_make_was_yes: Int = 0
 
     public init() {
-        surface_voxel_indices = []
         // cache bits
         positionsCache = [:]
         normalsCache = [:]
@@ -78,8 +74,9 @@ public class SurfaceNetRenderer {
         precondition(surface_voxel_indices.count == positionsCache.keys.count)
         precondition(surface_voxel_indices.count == normalsCache.keys.count)
 
+        let vertexPositions = positionsCache.keys.sorted()
         var voxelIndexToVertexIndexLookup: [VoxelIndex: Int] = [:]
-        for (index, voxelindex) in surface_voxel_indices.enumerated() {
+        for (index, voxelindex) in vertexPositions.enumerated() {
             voxelIndexToVertexIndexLookup[voxelindex] = index
             guard let position = positionsCache[voxelindex] else {
                 fatalError("missing position cache data for \(voxelindex)")
@@ -119,13 +116,8 @@ public class SurfaceNetRenderer {
         for z in bounds.min.z ... bounds.max.z {
             for y in bounds.min.y ... bounds.max.y {
                 for x in bounds.min.x ... bounds.max.x {
-                    // let stride = try voxelData.bounds.linearize(VoxelIndex(x, y, z))
-                    // TODO: use a VoxelScale to map this position...
-                    // let position = SIMD3<Float>(Float(x), Float(y), Float(z))
                     let thisVoxel = VoxelIndex(x, y, z)
-                    if try estimateSurfaceForCube(voxelData: voxelData, scale: scale, cornerIndex: thisVoxel) {
-                        surface_voxel_indices.append(thisVoxel)
-                    }
+                    _ = try estimateSurfaceForCube(voxelData: voxelData, scale: scale, cornerIndex: thisVoxel)
                 }
             }
         }
@@ -171,9 +163,6 @@ public class SurfaceNetRenderer {
         positionsCache[cornerIndex] = position + (centroid * scale.cubeSize)
         normalsCache[cornerIndex] = VoxelMeshRenderer.sdfGradient(dists: corner_dists, s: centroid)
 
-        // meshbuffer.positions.append(position + (centroid * scale.cubeSize))
-        // meshbuffer.normals.append(VoxelMeshRenderer.sdf_gradient(dists: corner_dists, s: centroid))
-
         return true
     }
 
@@ -192,7 +181,7 @@ public class SurfaceNetRenderer {
             VoxelIndex(0, 0, 1),
         ]
 
-        for voxel in surface_voxel_indices {
+        for voxel in positionsCache.keys {
             // Do edges parallel with the X axis
             if voxel.y != bounds.min.y, voxel.z != bounds.min.z, voxel.x != bounds.max.x - 1 {
                 let quadSet = maybeMakeQuad(
@@ -291,7 +280,6 @@ public class SurfaceNetRenderer {
         } else {
             true
         }
-        // if ((d1 < 0) == false) && ((d2 < 0) == true) { negative_face = true }
 
         // The triangle points, viewed face-front, look like this:
         // v1 v3
