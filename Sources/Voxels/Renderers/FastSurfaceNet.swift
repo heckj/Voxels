@@ -26,6 +26,7 @@ extension VoxelMeshRenderer {
     ///
     /// Note that the scheme illustrated above implies that chunks must be padded with a 1-voxel border copied from neighboring
     /// voxels in order to connect seamlessly.
+    @available(*, deprecated, renamed: "SurfaceNetRenderer.render", message: "original port, please use SurfaceNetRenderer instance instead")
     public static func surfaceNetMesh(
         sdf: VoxelArray<Float>,
         within bounds: VoxelBounds
@@ -113,10 +114,10 @@ extension VoxelMeshRenderer {
         }
 
         // if there is an intersection, compute the centroid and gradients
-        let centroid: SIMD3<Float> = centroid_of_edge_intersections(dists: corner_dists)
+        let centroid: SIMD3<Float> = centroidOfEdgeIntersections(dists: corner_dists)
 
         output.meshbuffer.positions.append(position + centroid)
-        output.meshbuffer.normals.append(sdf_gradient(dists: corner_dists, s: centroid))
+        output.meshbuffer.normals.append(sdfGradient(dists: corner_dists, s: centroid))
 
         return true
     }
