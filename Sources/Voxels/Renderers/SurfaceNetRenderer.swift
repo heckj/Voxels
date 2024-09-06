@@ -13,14 +13,18 @@ public class SurfaceNetRenderer {
     var normalsCache: [VoxelIndex: SIMD3<Float>]
 
     /// The triangle mesh indices.
-    var indicesCache: [VoxelIndex: [VoxelIndex]]
+    var indicesCache: Set<[VoxelIndex]>
+
+    // debugging and testing bits
+    var maybe_make_quad_call_count: Int = 0
+    var maybe_make_was_yes: Int = 0
 
     public init() {
         surface_voxel_indices = []
         // cache bits
         positionsCache = [:]
         normalsCache = [:]
-        indicesCache = [:]
+        indicesCache = []
     }
 
     /// The Naive Surface Nets smooth voxel meshing algorithm.
@@ -64,7 +68,7 @@ public class SurfaceNetRenderer {
     func resetCache() {
         positionsCache = [:]
         normalsCache = [:]
-        indicesCache = [:]
+        indicesCache = []
     }
 
     func assembleMeshBufferFromCache() -> MeshBuffer {
@@ -73,7 +77,6 @@ public class SurfaceNetRenderer {
         // double checking my assumptions here...
         precondition(surface_voxel_indices.count == positionsCache.keys.count)
         precondition(surface_voxel_indices.count == normalsCache.keys.count)
-        precondition(indicesCache.keys.count <= surface_voxel_indices.count)
 
         var voxelIndexToVertexIndexLookup: [VoxelIndex: Int] = [:]
         for (index, voxelindex) in surface_voxel_indices.enumerated() {
@@ -88,11 +91,9 @@ public class SurfaceNetRenderer {
             meshbuffer.normals.append(normal)
         }
 
-        for voxelIndex in indicesCache.keys {
-            guard let indices = indicesCache[voxelIndex] else {
-                fatalError("missing indices cache data for \(voxelIndex)")
-            }
-            for indexInQuad: VoxelIndex in indices {
+        for indicesOfQuads in indicesCache {
+            precondition(indicesOfQuads.count == 6)
+            for indexInQuad: VoxelIndex in indicesOfQuads {
                 guard let vertexIndexPosition = voxelIndexToVertexIndexLookup[indexInQuad] else {
                     fatalError("missing vertexIndexPosition in cache lookup for \(indexInQuad)")
                 }
@@ -194,33 +195,45 @@ public class SurfaceNetRenderer {
         for voxel in surface_voxel_indices {
             // Do edges parallel with the X axis
             if voxel.y != bounds.min.y, voxel.z != bounds.min.z, voxel.x != bounds.max.x - 1 {
-                maybeMakeQuad(
+                let quadSet = maybeMakeQuad(
                     voxelData: voxelData,
                     p1: voxel,
                     p2: voxel.adding(xyz_strides[0]),
                     axis_b_stride: xyz_strides[1],
                     axis_c_stride: xyz_strides[2]
                 )
+                if !quadSet.isEmpty {
+                    indicesCache.insert(quadSet)
+                }
+                maybe_make_quad_call_count += 1
             }
             // Do edges parallel with the Y axis
             if voxel.x != bounds.min.x, voxel.z != bounds.min.z, voxel.y != bounds.max.y - 1 {
-                maybeMakeQuad(
+                let quadSet = maybeMakeQuad(
                     voxelData: voxelData,
                     p1: voxel,
                     p2: voxel.adding(xyz_strides[1]),
                     axis_b_stride: xyz_strides[2],
                     axis_c_stride: xyz_strides[0]
                 )
+                if !quadSet.isEmpty {
+                    indicesCache.insert(quadSet)
+                }
+                maybe_make_quad_call_count += 1
             }
             // Do edges parallel with the Z axis
             if voxel.x != bounds.min.x, voxel.y != bounds.min.y, voxel.z != bounds.max.z - 1 {
-                maybeMakeQuad(
+                let quadSet = maybeMakeQuad(
                     voxelData: voxelData,
                     p1: voxel,
                     p2: voxel.adding(xyz_strides[2]),
                     axis_b_stride: xyz_strides[0],
                     axis_c_stride: xyz_strides[1]
                 )
+                if !quadSet.isEmpty {
+                    indicesCache.insert(quadSet)
+                }
+                maybe_make_quad_call_count += 1
             }
         }
     }
@@ -259,7 +272,7 @@ public class SurfaceNetRenderer {
         p2: VoxelIndex,
         axis_b_stride: VoxelIndex,
         axis_c_stride: VoxelIndex
-    ) {
+    ) -> [VoxelIndex] {
         guard let voxeldata1 = voxelData[p1] else {
             fatalError("unable to read voxel data at \(p1)")
         }
@@ -270,8 +283,8 @@ public class SurfaceNetRenderer {
         let d1 = voxeldata1.distanceAboveSurface()
         let d2 = voxeldata2.distanceAboveSurface()
 
-        if (d1 < 0) == true, (d2 < 0) == true { return } // no face - return early
-        if (d1 < 0) == false, (d2 < 0) == false { return } // no face - return early
+        if (d1 < 0) == true, (d2 < 0) == true { return [] } // no face - return early
+        if (d1 < 0) == false, (d2 < 0) == false { return [] } // no face - return early
 
         let negative_face = if (d1 < 0) == true, (d2 < 0) == false {
             false
@@ -313,6 +326,7 @@ public class SurfaceNetRenderer {
         } else {
             [v2, v4, v3, v2, v3, v1]
         }
-        indicesCache[p1] = quad
+        maybe_make_was_yes += 1
+        return quad
     }
 }

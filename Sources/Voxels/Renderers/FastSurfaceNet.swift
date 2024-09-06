@@ -138,11 +138,16 @@ extension VoxelMeshRenderer {
             sdf.bounds.linearize([0, 0, 1]),
         ]
 
-        for (xyz, p_stride) in zip(
+        let bigThing = zip(
             output.surface_points, // [SIMD3<UInt32>]
-            output.surface_strides
-        ) // [UInt32]
-        {
+            output.surface_strides // [UInt32]
+        ) // this results in 1160 items  - so it's the same as iterating over the surface voxel indices
+
+//        for (xyz, p_stride) in zip(
+//            output.surface_points, // [SIMD3<UInt32>]
+//            output.surface_strides // [UInt32]
+//        )
+        for (xyz, p_stride) in bigThing {
             let p_stride = Int(p_stride)
 
             // Do edges parallel with the X axis
@@ -157,6 +162,7 @@ extension VoxelMeshRenderer {
                     axis_c_stride: xyz_strides[2],
                     indices: &output.meshbuffer.indices
                 )
+                output.maybe_make_quad_call_count += 1
             }
             // Do edges parallel with the Y axis
             if xyz.x != bounds.min.x, xyz.z != bounds.min.z, xyz.y != bounds.max.y - 1 {
@@ -170,6 +176,7 @@ extension VoxelMeshRenderer {
                     axis_c_stride: xyz_strides[0],
                     indices: &output.meshbuffer.indices
                 )
+                output.maybe_make_quad_call_count += 1
             }
             // Do edges parallel with the Z axis
             if xyz.x != bounds.min.x, xyz.y != bounds.min.y, xyz.z != bounds.max.z - 1 {
@@ -183,6 +190,7 @@ extension VoxelMeshRenderer {
                     axis_c_stride: xyz_strides[1],
                     indices: &output.meshbuffer.indices
                 )
+                output.maybe_make_quad_call_count += 1
             }
         }
     }
@@ -215,6 +223,7 @@ extension VoxelMeshRenderer {
     //
     // then we must find the other 3 quad corners by moving along the other two axes (those orthogonal to A) in the negative
     // directions; these are axis B and axis C.
+    @discardableResult
     static func maybe_make_quad(
         sdf: VoxelArray<Float>,
         stride_to_index: [UInt32],
@@ -224,12 +233,12 @@ extension VoxelMeshRenderer {
         axis_b_stride: Int,
         axis_c_stride: Int,
         indices: inout [UInt32]
-    ) {
+    ) -> [UInt32] {
         let d1 = sdf[p1] // unsafe { sdf.get_unchecked(p1) };
         let d2 = sdf[p2] // unsafe { sdf.get_unchecked(p2) };
 
-        if (d1 < 0) == true, (d2 < 0) == true { return } // no face - return early
-        if (d1 < 0) == false, (d2 < 0) == false { return } // no face - return early
+        if (d1 < 0) == true, (d2 < 0) == true { return [] } // no face - return early
+        if (d1 < 0) == false, (d2 < 0) == false { return [] } // no face - return early
 
         let negative_face = if (d1 < 0) == true, (d2 < 0) == false {
             false
@@ -265,5 +274,6 @@ extension VoxelMeshRenderer {
             [v2, v4, v3, v2, v3, v1]
         }
         indices.append(contentsOf: quad)
+        return quad
     }
 }
