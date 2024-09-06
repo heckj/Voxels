@@ -1,9 +1,6 @@
 // Derived from MIT licensed code https://github.com/bonsairobo/fast-surface-nets-rs/blob/main/src/lib.rs
 
 public class SurfaceNetRenderer {
-    /// Stride of every voxel that intersects the isosurface. Can be used for efficient post-processing.
-    var surface_voxel_indices: [VoxelIndex]
-
     // MARK: MeshBuffer cache components
 
     /// The triangle mesh positions.
@@ -20,7 +17,6 @@ public class SurfaceNetRenderer {
     var maybe_make_was_yes: Int = 0
 
     public init() {
-        surface_voxel_indices = []
         // cache bits
         positionsCache = [:]
         normalsCache = [:]
@@ -74,12 +70,9 @@ public class SurfaceNetRenderer {
     func assembleMeshBufferFromCache() -> MeshBuffer {
         var meshbuffer = MeshBuffer()
 
-        // double checking my assumptions here...
-        precondition(surface_voxel_indices.count == positionsCache.keys.count)
-        precondition(surface_voxel_indices.count == normalsCache.keys.count)
-
+        let vertexPositions = positionsCache.keys.sorted()
         var voxelIndexToVertexIndexLookup: [VoxelIndex: Int] = [:]
-        for (index, voxelindex) in surface_voxel_indices.enumerated() {
+        for (index, voxelindex) in vertexPositions.enumerated() {
             voxelIndexToVertexIndexLookup[voxelindex] = index
             guard let position = positionsCache[voxelindex] else {
                 fatalError("missing position cache data for \(voxelindex)")
@@ -119,13 +112,8 @@ public class SurfaceNetRenderer {
         for z in bounds.min.z ... bounds.max.z {
             for y in bounds.min.y ... bounds.max.y {
                 for x in bounds.min.x ... bounds.max.x {
-                    // let stride = try voxelData.bounds.linearize(VoxelIndex(x, y, z))
-                    // TODO: use a VoxelScale to map this position...
-                    // let position = SIMD3<Float>(Float(x), Float(y), Float(z))
                     let thisVoxel = VoxelIndex(x, y, z)
-                    if try estimateSurfaceForCube(voxelData: voxelData, scale: scale, cornerIndex: thisVoxel) {
-                        surface_voxel_indices.append(thisVoxel)
-                    }
+                    _ = try estimateSurfaceForCube(voxelData: voxelData, scale: scale, cornerIndex: thisVoxel)
                 }
             }
         }
@@ -171,9 +159,6 @@ public class SurfaceNetRenderer {
         positionsCache[cornerIndex] = position + (centroid * scale.cubeSize)
         normalsCache[cornerIndex] = VoxelMeshRenderer.sdfGradient(dists: corner_dists, s: centroid)
 
-        // meshbuffer.positions.append(position + (centroid * scale.cubeSize))
-        // meshbuffer.normals.append(VoxelMeshRenderer.sdf_gradient(dists: corner_dists, s: centroid))
-
         return true
     }
 
@@ -192,47 +177,38 @@ public class SurfaceNetRenderer {
             VoxelIndex(0, 0, 1),
         ]
 
-        for voxel in surface_voxel_indices {
+        for voxel in positionsCache.keys {
             // Do edges parallel with the X axis
             if voxel.y != bounds.min.y, voxel.z != bounds.min.z, voxel.x != bounds.max.x - 1 {
-                let quadSet = maybeMakeQuad(
+                maybeMakeQuad(
                     voxelData: voxelData,
                     p1: voxel,
                     p2: voxel.adding(xyz_strides[0]),
                     axis_b_stride: xyz_strides[1],
                     axis_c_stride: xyz_strides[2]
                 )
-                if !quadSet.isEmpty {
-                    indicesCache.insert(quadSet)
-                }
                 maybe_make_quad_call_count += 1
             }
             // Do edges parallel with the Y axis
             if voxel.x != bounds.min.x, voxel.z != bounds.min.z, voxel.y != bounds.max.y - 1 {
-                let quadSet = maybeMakeQuad(
+                maybeMakeQuad(
                     voxelData: voxelData,
                     p1: voxel,
                     p2: voxel.adding(xyz_strides[1]),
                     axis_b_stride: xyz_strides[2],
                     axis_c_stride: xyz_strides[0]
                 )
-                if !quadSet.isEmpty {
-                    indicesCache.insert(quadSet)
-                }
                 maybe_make_quad_call_count += 1
             }
             // Do edges parallel with the Z axis
             if voxel.x != bounds.min.x, voxel.y != bounds.min.y, voxel.z != bounds.max.z - 1 {
-                let quadSet = maybeMakeQuad(
+                maybeMakeQuad(
                     voxelData: voxelData,
                     p1: voxel,
                     p2: voxel.adding(xyz_strides[2]),
                     axis_b_stride: xyz_strides[0],
                     axis_c_stride: xyz_strides[1]
                 )
-                if !quadSet.isEmpty {
-                    indicesCache.insert(quadSet)
-                }
                 maybe_make_quad_call_count += 1
             }
         }
@@ -266,6 +242,7 @@ public class SurfaceNetRenderer {
     //
     // then we must find the other 3 quad corners by moving along the other two axes (those orthogonal to A) in the negative
     // directions; these are axis B and axis C.
+    @discardableResult
     func maybeMakeQuad(
         voxelData: some VoxelAccessible,
         p1: VoxelIndex,
@@ -291,7 +268,6 @@ public class SurfaceNetRenderer {
         } else {
             true
         }
-        // if ((d1 < 0) == false) && ((d2 < 0) == true) { negative_face = true }
 
         // The triangle points, viewed face-front, look like this:
         // v1 v3
@@ -326,6 +302,7 @@ public class SurfaceNetRenderer {
         } else {
             [v2, v4, v3, v2, v3, v1]
         }
+        indicesCache.insert(quad)
         maybe_make_was_yes += 1
         return quad
     }

@@ -13,7 +13,7 @@ final class SurfaceNetRendererTests: XCTestCase {
         let newThing = SurfaceNetRenderer()
         let newResultBuffer = try newThing.render(voxelData: samples, scale: .init(), within: samples.bounds.insetQuadrant())
 
-        XCTAssertEqual(newResultBuffer.positions, originalResultBuffer.positions)
+        XCTAssertEqual(Set(newResultBuffer.positions), Set(originalResultBuffer.positions))
         XCTAssertEqual(newResultBuffer.indices.count, originalResultBuffer.indices.count)
 
         XCTAssertTrue(newResultBuffer.positions.count > 1)

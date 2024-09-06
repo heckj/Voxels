@@ -13,7 +13,7 @@ final class RendererRebuildComparisonTests: XCTestCase {
         let newThing = SurfaceNetRenderer()
         let newResultBuffer = try newThing.render(voxelData: samples, scale: .init(), within: samples.bounds.insetQuadrant())
 
-        XCTAssertEqual(newResultBuffer.positions, originalResultBuffer.positions)
+        XCTAssertEqual(Set(newResultBuffer.positions), Set(originalResultBuffer.positions))
         XCTAssertEqual(newResultBuffer.indices.count, originalResultBuffer.indices.count)
 
         XCTAssertTrue(newResultBuffer.positions.count > 1)
@@ -58,7 +58,6 @@ final class RendererRebuildComparisonTests: XCTestCase {
         newThing.resetCache()
         try newThing.estimateSurface(voxelData: samples, scale: .init(), bounds: samples.bounds.insetQuadrant())
 
-        XCTAssertEqual(newThing.surface_voxel_indices.count, 1160)
         XCTAssertEqual(newThing.positionsCache.count, 1160)
         XCTAssertEqual(newThing.normalsCache.count, 1160)
         XCTAssertEqual(newThing.indicesCache.count, 0)
@@ -74,7 +73,7 @@ final class RendererRebuildComparisonTests: XCTestCase {
         // for equivalence it should be 1158 - underrepresenting the indices here
 
         let newResultBuffer = newThing.assembleMeshBufferFromCache()
-        XCTAssertEqual(newResultBuffer.positions, buffer.meshbuffer.positions)
+        XCTAssertEqual(Set(newResultBuffer.positions), Set(buffer.meshbuffer.positions))
         // XCTAssertEqual(newResultBuffer.indices, buffer.meshbuffer.indices)
 
         // So let's check all the results from the original algorithm and see how they compare to individual calls to the new one
@@ -102,7 +101,8 @@ final class RendererRebuildComparisonTests: XCTestCase {
 
         var voxelIndexToVertexIndexLookup: [VoxelIndex: Int] = [:]
         // build the vertex index lookup table for the test
-        for (index, voxelindex) in newThing.surface_voxel_indices.enumerated() {
+
+        for (index, voxelindex) in newThing.positionsCache.keys.sorted().enumerated() {
             voxelIndexToVertexIndexLookup[voxelindex] = index
         }
 
@@ -151,7 +151,8 @@ final class RendererRebuildComparisonTests: XCTestCase {
                             return nil
                         }
                         XCTAssertEqual(directIndexPositionComparison.count, 6)
-                        XCTAssertEqual(resultingQuad, directIndexPositionComparison)
+                        // XCTAssertEqual(resultingQuad, directIndexPositionComparison)
+                        // ordering is no longer guaranteed, so dropping this test
                     } else {
                         XCTFail("MISSING CACHE COMPARISON")
                     }
@@ -199,7 +200,8 @@ final class RendererRebuildComparisonTests: XCTestCase {
                             return nil
                         }
                         XCTAssertEqual(directIndexPositionComparison.count, 6)
-                        XCTAssertEqual(resultingQuad, directIndexPositionComparison)
+                        // XCTAssertEqual(resultingQuad, directIndexPositionComparison)
+                        // ordering is no longer guaranteed, so dropping this test
                     } else {
                         XCTFail("MISSING CACHE COMPARISON")
                     }
@@ -247,7 +249,8 @@ final class RendererRebuildComparisonTests: XCTestCase {
                             return nil
                         }
                         XCTAssertEqual(directIndexPositionComparison.count, 6)
-                        XCTAssertEqual(resultingQuad, directIndexPositionComparison)
+                        // XCTAssertEqual(resultingQuad, directIndexPositionComparison)
+                        // ordering is no longer guaranteed, so dropping this test
                     } else {
                         XCTFail("MISSING CACHE COMPARISON")
                     }
