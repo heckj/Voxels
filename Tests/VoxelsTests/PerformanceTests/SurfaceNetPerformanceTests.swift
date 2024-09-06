@@ -18,12 +18,12 @@ final class SurfaceNetPerformanceTests: XCTestCase {
     func testPerformanceRemadeSurfaceNetPort() throws {
         let samples = try SampleMeshData.voxelArrayFromSphere()
 
-        let thing = SurfaceNetRenderer()
         let bounds = samples.bounds.insetQuadrant()
         // 0.163, 0.165 sec - so very much on par with the original
 
-        // battery only: 0.337
+        // battery only: 0.305
         measure {
+            let thing = SurfaceNetRenderer()
             _ = try! thing.render(voxelData: samples, scale: .init(), within: bounds)
         }
     }

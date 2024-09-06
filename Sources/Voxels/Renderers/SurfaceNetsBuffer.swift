@@ -13,8 +13,10 @@ public struct SurfaceNetsBuffer {
     /// Used to map back from voxel stride to vertex index.
     var stride_to_index: [UInt32]
 
+    var maybe_make_quad_call_count: Int
     /// Clears all of the buffers, but keeps the memory allocated for reuse.
     mutating func reset(arraySize: UInt) {
+        maybe_make_quad_call_count = 0
         meshbuffer.reset()
         surface_points = []
         surface_strides = []
@@ -27,6 +29,7 @@ public struct SurfaceNetsBuffer {
         self.surface_points = surface_points
         self.surface_strides = surface_strides
         self.stride_to_index = stride_to_index
+        maybe_make_quad_call_count = 0
     }
 
     init(arraySize: UInt) {
@@ -34,5 +37,6 @@ public struct SurfaceNetsBuffer {
         surface_points = []
         surface_strides = []
         stride_to_index = Array(repeating: VoxelMeshRenderer.NULL_VERTEX, count: Int(arraySize))
+        maybe_make_quad_call_count = 0
     }
 }

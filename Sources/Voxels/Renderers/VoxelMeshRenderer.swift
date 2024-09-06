@@ -4,7 +4,7 @@ public class VoxelMeshRenderer {
 }
 
 extension VoxelMeshRenderer {
-    static func centroid_of_edge_intersections(dists: [Float]) -> SIMD3<Float> {
+    static func centroidOfEdgeIntersections(dists: [Float]) -> SIMD3<Float> {
         var count = 0
         var sum = SIMD3<Float>.zero
         for corners in CUBE_EDGES {
@@ -14,7 +14,7 @@ extension VoxelMeshRenderer {
             let d2 = dists[Int(corner2)]
             if (d1 < 0.0) != (d2 < 0.0) {
                 count += 1
-                sum += estimate_surface_edge_intersection(corner1: corner1, corner2: corner2, value1: d1, value2: d2)
+                sum += estimateSurfaceEdgeIntersection(corner1: corner1, corner2: corner2, value1: d1, value2: d2)
             }
         }
 
@@ -23,7 +23,7 @@ extension VoxelMeshRenderer {
     }
 
     // Given two cube corners, find the point between them where the SDF is zero. (This might not exist).
-    static func estimate_surface_edge_intersection(
+    static func estimateSurfaceEdgeIntersection(
         corner1: UInt32, // cube_corner_index
         corner2: UInt32, // cube_corner_index
         value1: Float, // SDF value at that corner
@@ -41,7 +41,7 @@ extension VoxelMeshRenderer {
     ///
     /// For each dimension, there are 4 cube edges along that axis. This will do bilinear interpolation between the differences
     /// along those edges based on the position of the surface (s).
-    static func sdf_gradient(dists: [Float32], s: SIMD3<Float>) -> SIMD3<Float> {
+    static func sdfGradient(dists: [Float32], s: SIMD3<Float>) -> SIMD3<Float> {
         let p00 = SIMD3<Float>([dists[0b001], dists[0b010], dists[0b100]])
         let n00 = SIMD3<Float>([dists[0b000], dists[0b000], dists[0b000]])
 
