@@ -13,9 +13,6 @@ public class SurfaceNetRenderer {
     var indicesCache: Set<[VoxelIndex]>
 
     // debugging and testing bits
-    var maybe_make_quad_call_count: Int = 0
-    var maybe_make_was_yes: Int = 0
-
     public init() {
         // cache bits
         positionsCache = [:]
@@ -56,7 +53,7 @@ public class SurfaceNetRenderer {
         // set the position and normal into the meshbuffer if the relevant voxel index is a surface voxel
         try estimateSurface(voxelData: voxelData, scale: scale, bounds: bounds)
 
-        try makeAllQuads(voxelData: voxelData, bounds: bounds)
+        makeAllQuads(voxelData: voxelData, bounds: bounds)
 
         return assembleMeshBufferFromCache()
     }
@@ -124,6 +121,10 @@ public class SurfaceNetRenderer {
     //
     // This is done by estimating, for each cube edge, where the isosurface crosses the edge (if it does at all). Then the estimated
     // surface point is the average of these edge crossings.
+    //
+    // The return value indicates if a surface voxel was identified at the point provided, but is only returned
+    // for validating the algorithm, as the resulting extra work when found happens inline for performance.
+    @discardableResult
     func estimateSurfaceForCube(
         voxelData: some VoxelAccessible,
         scale: VoxelScale<Float>,
@@ -170,13 +171,19 @@ public class SurfaceNetRenderer {
     func makeAllQuads(
         voxelData: some VoxelAccessible,
         bounds: VoxelBounds
-    ) throws {
+    ) {
         let xyz_strides: [VoxelIndex] = [
             VoxelIndex(1, 0, 0),
             VoxelIndex(0, 1, 0),
             VoxelIndex(0, 0, 1),
         ]
 
+        // The maybeMakeQuad investigates the data of the voxel as a corner, and the
+        // neighbors -1 voxelIndex down in the data array to determine if a quad should be created.
+
+        // So on a re-render with only updated details, only those would technically need to be recreated.
+        // That said, because we're using a set for the indices - there's not a direct way to look things up.
+        // And DON'T use a hash by corner, as there can be more than one quad generated per corner index - up to three, in fact...
         for voxel in positionsCache.keys {
             // Do edges parallel with the X axis
             if voxel.y != bounds.min.y, voxel.z != bounds.min.z, voxel.x != bounds.max.x - 1 {
@@ -187,7 +194,6 @@ public class SurfaceNetRenderer {
                     axis_b_stride: xyz_strides[1],
                     axis_c_stride: xyz_strides[2]
                 )
-                maybe_make_quad_call_count += 1
             }
             // Do edges parallel with the Y axis
             if voxel.x != bounds.min.x, voxel.z != bounds.min.z, voxel.y != bounds.max.y - 1 {
@@ -198,7 +204,6 @@ public class SurfaceNetRenderer {
                     axis_b_stride: xyz_strides[2],
                     axis_c_stride: xyz_strides[0]
                 )
-                maybe_make_quad_call_count += 1
             }
             // Do edges parallel with the Z axis
             if voxel.x != bounds.min.x, voxel.y != bounds.min.y, voxel.z != bounds.max.z - 1 {
@@ -209,7 +214,6 @@ public class SurfaceNetRenderer {
                     axis_b_stride: xyz_strides[0],
                     axis_c_stride: xyz_strides[1]
                 )
-                maybe_make_quad_call_count += 1
             }
         }
     }
@@ -242,14 +246,13 @@ public class SurfaceNetRenderer {
     //
     // then we must find the other 3 quad corners by moving along the other two axes (those orthogonal to A) in the negative
     // directions; these are axis B and axis C.
-    @discardableResult
     func maybeMakeQuad(
         voxelData: some VoxelAccessible,
         p1: VoxelIndex,
         p2: VoxelIndex,
         axis_b_stride: VoxelIndex,
         axis_c_stride: VoxelIndex
-    ) -> [VoxelIndex] {
+    ) {
         guard let voxeldata1 = voxelData[p1] else {
             fatalError("unable to read voxel data at \(p1)")
         }
@@ -260,8 +263,8 @@ public class SurfaceNetRenderer {
         let d1 = voxeldata1.distanceAboveSurface()
         let d2 = voxeldata2.distanceAboveSurface()
 
-        if (d1 < 0) == true, (d2 < 0) == true { return [] } // no face - return early
-        if (d1 < 0) == false, (d2 < 0) == false { return [] } // no face - return early
+        if (d1 < 0) == true, (d2 < 0) == true { return } // no face - return early
+        if (d1 < 0) == false, (d2 < 0) == false { return } // no face - return early
 
         let negative_face = if (d1 < 0) == true, (d2 < 0) == false {
             false
@@ -303,7 +306,5 @@ public class SurfaceNetRenderer {
             [v2, v4, v3, v2, v3, v1]
         }
         indicesCache.insert(quad)
-        maybe_make_was_yes += 1
-        return quad
     }
 }
