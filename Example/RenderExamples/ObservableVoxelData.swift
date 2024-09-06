@@ -9,17 +9,26 @@ class ObservableVoxelData {
     let renderer: SurfaceNetRenderer
     let voxelEntity: ModelEntity
     let blockEntity: ModelEntity
+
+    @ObservationIgnored
+    public var enableBlockMesh: Bool {
+        didSet {
+            enableBlockMesh ? addBlockMesh() : removeBlockMesh()
+        }
+    }
+
     #if os(macOS)
         let baseMaterial = SimpleMaterial(color: .lightGray, isMetallic: false)
-        let alphaMaterial = SimpleMaterial(color: NSColor(red: 50, green: 50, blue: 250, alpha: 0.75), isMetallic: false)
+        let alphaMaterial = SimpleMaterial(color: NSColor(red: 50, green: 50, blue: 250, alpha: 0.95), isMetallic: false)
     #else
         let baseMaterial = SimpleMaterial(color: .lightGray, isMetallic: false)
-        let alphaMaterial = SimpleMaterial(color: UIColor(red: 50, green: 50, blue: 250, alpha: 0.75), roughness: 0.7, isMetallic: false)
+        let alphaMaterial = SimpleMaterial(color: UIColor(red: 50, green: 50, blue: 250, alpha: 0.95), roughness: 0.7, isMetallic: false)
     #endif
 
     let clock = ContinuousClock()
 
     init(_ data: VoxelHash<Float>) {
+        enableBlockMesh = false
         renderer = SurfaceNetRenderer()
         wrappedVoxelData = data
         let generatedMeshBuffer = try! renderer.render(voxelData: data,
@@ -39,7 +48,14 @@ class ObservableVoxelData {
 
         blockEntity = ModelEntity(mesh: blockMesh, materials: [alphaMaterial])
         blockEntity.name = "BlockMesh"
+    }
+
+    func addBlockMesh() {
         voxelEntity.addChild(blockEntity)
+    }
+
+    func removeBlockMesh() {
+        voxelEntity.removeChild(blockEntity)
     }
 
     func binding(_ index: VoxelIndex) -> Binding<String> {

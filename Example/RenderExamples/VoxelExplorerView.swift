@@ -5,6 +5,7 @@ import Voxels
 
 struct VoxelExplorerView: View {
     let data: ObservableVoxelData
+    @State var visibleBlockMesh = false
 
     init(_ data: ObservableVoxelData) {
         self.data = data
@@ -12,7 +13,16 @@ struct VoxelExplorerView: View {
 
     var body: some View {
         HStack {
-            ThreeDView(entityToDisplay: data.voxelEntity)
+            VStack {
+                Toggle(isOn: $visibleBlockMesh) {
+                    Text("overlay the 'opaque' voxels")
+                }
+                .onChange(of: visibleBlockMesh) { _, newValue in
+                    data.enableBlockMesh = newValue
+                }
+
+                ThreeDView(entityToDisplay: data.voxelEntity)
+            }
             Spacer()
             VoxelDataEditorView(data: data)
         }
