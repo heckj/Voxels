@@ -4,7 +4,7 @@ public protocol VoxelSampleable {
     func valueAt(_ combined: SIMD3<VoxelDataType>) -> VoxelDataType
 }
 
-/// Signed distance function
+/// wrapper for a signed distance function
 public struct SDFSampleable<T: SIMDScalar>: Sendable, VoxelSampleable {
     public let _function: @Sendable (SIMD3<T>) -> T
 

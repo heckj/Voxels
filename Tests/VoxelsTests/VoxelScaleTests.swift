@@ -50,4 +50,29 @@ class VoxelScaleTests: XCTestCase {
         XCTAssertEqual(scale.index(for: SIMD3<Float>(1.1, 1.1, 1.1)), VoxelIndex(1, 1, 1))
         XCTAssertEqual(scale.index(for: SIMD3<Float>(1.9, 1.9, 1.9)), VoxelIndex(1, 1, 1))
     }
+
+    func testMappingFloatIntoVoxelIndex() throws {
+        let scale = VoxelScale<Float>()
+        XCTAssertEqual(scale.cubeSize, 1)
+        XCTAssertEqual(scale.origin, SIMD3<Float>(0, 0, 0))
+
+        let sphereSDF = SDF.sphere(radius: 5)
+
+        let voxels = VoxelHash.sample(sphereSDF, using: scale, from: SIMD3<Float>(0, 0, 0), to: SIMD3<Float>(6, 6, 6))
+        XCTAssertEqual(voxels.bounds, VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(6, 6, 6)))
+        XCTAssertEqual(voxels.count, 343)
+
+        XCTAssertEqual(voxels[VoxelIndex(0, 0, 0)], -5.0)
+        XCTAssertEqual(voxels[VoxelIndex(3, 4, 0)], 0)
+        XCTAssertEqual(voxels[VoxelIndex(6, 0, 0)], 1.0)
+    }
+
+    func testMappingScaling() throws {
+        let sphereSDF = SDF.sphere(radius: 5)
+        let voxels = VoxelHash.sample(sphereSDF, using: .init(), from: SIMD3<Float>(0, 0, 0), to: SIMD3<Float>(6, 6, 6))
+        XCTAssertEqual(voxels.bounds, VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(6, 6, 6)))
+
+        let finerGrainedVoxels = VoxelHash.sample(sphereSDF, using: VoxelScale(cubeSize: 0.5), from: SIMD3<Float>(0, 0, 0), to: SIMD3<Float>(6, 6, 6))
+        XCTAssertEqual(finerGrainedVoxels.bounds, VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(12, 12, 12)))
+    }
 }

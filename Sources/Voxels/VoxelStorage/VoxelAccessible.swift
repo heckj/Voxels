@@ -9,7 +9,7 @@ public protocol VoxelAccessible<Element>: Collection where Element: VoxelRendera
 }
 
 public protocol VoxelWritable<Element>: VoxelAccessible {
-    mutating func set(_: VoxelIndex, newValue: Element) throws -> Void
+    mutating func set(_: VoxelIndex, newValue: Element) throws
 }
 
 public extension VoxelAccessible {
