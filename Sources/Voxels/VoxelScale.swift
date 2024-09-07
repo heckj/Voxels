@@ -55,6 +55,11 @@ public extension VoxelScale where T == Float {
         origin = SIMD3<Float>(0, 0, 0)
         cubeSize = 1.0
     }
+
+    init(origin: SIMD3<Float>? = nil, cubeSize: Float? = nil) {
+        self.origin = origin ?? SIMD3<Float>(0, 0, 0)
+        self.cubeSize = cubeSize ?? 1.0
+    }
 }
 
 public extension VoxelScale where T == Int {
