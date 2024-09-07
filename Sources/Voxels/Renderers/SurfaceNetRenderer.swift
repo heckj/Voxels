@@ -10,14 +10,24 @@ public class SurfaceNetRenderer {
     var normalsCache: [VoxelIndex: SIMD3<Float>]
 
     /// The triangle mesh indices.
-    var indicesCache: Set<[VoxelIndex]>
+    var indexCacheX: [VoxelIndex: [VoxelIndex]]
+    var indexCacheY: [VoxelIndex: [VoxelIndex]]
+    var indexCacheZ: [VoxelIndex: [VoxelIndex]]
+
+    enum IndexAxis: UInt8 {
+        case x
+        case y
+        case z
+    }
 
     // debugging and testing bits
     public init() {
         // cache bits
         positionsCache = [:]
         normalsCache = [:]
-        indicesCache = []
+        indexCacheX = [:]
+        indexCacheY = [:]
+        indexCacheZ = [:]
     }
 
     /// The Naive Surface Nets smooth voxel meshing algorithm.
@@ -61,7 +71,9 @@ public class SurfaceNetRenderer {
     func resetCache() {
         positionsCache = [:]
         normalsCache = [:]
-        indicesCache = []
+        indexCacheX = [:]
+        indexCacheY = [:]
+        indexCacheZ = [:]
     }
 
     func assembleMeshBufferFromCache() -> MeshBuffer {
@@ -81,7 +93,7 @@ public class SurfaceNetRenderer {
             meshbuffer.normals.append(normal)
         }
 
-        for indicesOfQuads in indicesCache {
+        for indicesOfQuads in indexCacheX.values {
             precondition(indicesOfQuads.count == 6)
             for indexInQuad: VoxelIndex in indicesOfQuads {
                 guard let vertexIndexPosition = voxelIndexToVertexIndexLookup[indexInQuad] else {
@@ -90,6 +102,25 @@ public class SurfaceNetRenderer {
                 meshbuffer.indices.append(UInt32(vertexIndexPosition))
             }
         }
+        for indicesOfQuads in indexCacheY.values {
+            precondition(indicesOfQuads.count == 6)
+            for indexInQuad: VoxelIndex in indicesOfQuads {
+                guard let vertexIndexPosition = voxelIndexToVertexIndexLookup[indexInQuad] else {
+                    fatalError("missing vertexIndexPosition in cache lookup for \(indexInQuad)")
+                }
+                meshbuffer.indices.append(UInt32(vertexIndexPosition))
+            }
+        }
+        for indicesOfQuads in indexCacheZ.values {
+            precondition(indicesOfQuads.count == 6)
+            for indexInQuad: VoxelIndex in indicesOfQuads {
+                guard let vertexIndexPosition = voxelIndexToVertexIndexLookup[indexInQuad] else {
+                    fatalError("missing vertexIndexPosition in cache lookup for \(indexInQuad)")
+                }
+                meshbuffer.indices.append(UInt32(vertexIndexPosition))
+            }
+        }
+
         return meshbuffer
     }
 
@@ -192,7 +223,8 @@ public class SurfaceNetRenderer {
                     p1: voxel,
                     p2: voxel.adding(xyz_strides[0]),
                     axis_b_stride: xyz_strides[1],
-                    axis_c_stride: xyz_strides[2]
+                    axis_c_stride: xyz_strides[2],
+                    forAxis: .x
                 )
             }
             // Do edges parallel with the Y axis
@@ -202,7 +234,8 @@ public class SurfaceNetRenderer {
                     p1: voxel,
                     p2: voxel.adding(xyz_strides[1]),
                     axis_b_stride: xyz_strides[2],
-                    axis_c_stride: xyz_strides[0]
+                    axis_c_stride: xyz_strides[0],
+                    forAxis: .y
                 )
             }
             // Do edges parallel with the Z axis
@@ -212,7 +245,8 @@ public class SurfaceNetRenderer {
                     p1: voxel,
                     p2: voxel.adding(xyz_strides[2]),
                     axis_b_stride: xyz_strides[0],
-                    axis_c_stride: xyz_strides[1]
+                    axis_c_stride: xyz_strides[1],
+                    forAxis: .z
                 )
             }
         }
@@ -251,7 +285,8 @@ public class SurfaceNetRenderer {
         p1: VoxelIndex,
         p2: VoxelIndex,
         axis_b_stride: VoxelIndex,
-        axis_c_stride: VoxelIndex
+        axis_c_stride: VoxelIndex,
+        forAxis: IndexAxis
     ) {
         guard let voxeldata1 = voxelData[p1] else {
             fatalError("unable to read voxel data at \(p1)")
@@ -305,6 +340,13 @@ public class SurfaceNetRenderer {
         } else {
             [v2, v4, v3, v2, v3, v1]
         }
-        indicesCache.insert(quad)
+        switch forAxis {
+        case .x:
+            indexCacheX[p1] = quad
+        case .y:
+            indexCacheY[p1] = quad
+        case .z:
+            indexCacheZ[p1] = quad
+        }
     }
 }
