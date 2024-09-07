@@ -1,3 +1,5 @@
+import simd
+
 public protocol VoxelSampleable {
     associatedtype VoxelDataType where VoxelDataType: SIMDScalar
     func valueAt(x: VoxelDataType, y: VoxelDataType, z: VoxelDataType) -> VoxelDataType
@@ -31,6 +33,25 @@ public enum SDF {
     public static func sphere(radius: Float = 0.5) -> SDFSampleable<Float> {
         SDFSampleable<Float>() { p in
             p.length - radius
+        }
+    }
+
+    public static func box(_ b: SIMD3<Float>) -> SDFSampleable<Float> {
+        SDFSampleable<Float>() { p in
+            let q = abs(p) - b
+            return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0)
+        }
+    }
+
+    public static func framedBox(_ b: SIMD3<Float>, e: Float) -> SDFSampleable<Float> {
+        SDFSampleable<Float>() { pExternal in
+            let p = abs(pExternal) - b
+            let q = abs(p + e) - e
+            return min(min(
+                length(max(SIMD3<Float>(p.x, q.y, q.z), 0.0)) + min(max(p.x, max(q.y, q.z)), 0.0),
+                length(max(SIMD3<Float>(q.x, p.y, q.z), 0.0)) + min(max(q.x, max(p.y, q.z)), 0.0)
+            ),
+            length(max(SIMD3<Float>(q.x, q.y, p.z), 0.0)) + min(max(q.x, max(q.y, p.z)), 0.0))
         }
     }
 }
