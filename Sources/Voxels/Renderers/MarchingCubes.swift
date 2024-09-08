@@ -1,15 +1,15 @@
 // PORT
 import Foundation
 
-let voxel_vertex_offsets = [
-    (0, 0, 0),
-    (1, 0, 0),
-    (1, 1, 0),
-    (0, 1, 0),
-    (0, 0, 1),
-    (1, 0, 1),
-    (1, 1, 1),
-    (0, 1, 1),
+let voxel_vertex_offsets: [VoxelIndex] = [
+    [0, 0, 0],
+    [1, 0, 0],
+    [1, 1, 0],
+    [0, 1, 0],
+    [0, 0, 1],
+    [1, 0, 1],
+    [1, 1, 1],
+    [0, 1, 1],
 ]
 
 let voxel_edges = [
@@ -289,23 +289,13 @@ let cases = [[],
              [[3, 0, 8]],
              []]
 
-public func marching_cubes(data: IsoSurfaceDataSource,
-                           xRange: ClosedRange<Double> = -3 ... 3,
-                           yRange: ClosedRange<Double> = -3 ... 3,
-                           zRange: ClosedRange<Double> = -3 ... 3,
-                           resolution: Double = 1,
-                           threshold: Double = 1.0,
-                           material: Polygon.Material, adaptive: Bool = false) -> Mesh
+public func marching_cubes(data: some VoxelAccessible,
+                           scale: VoxelScale<Float>,
+                           adaptive: Bool = false) -> MeshBuffer
 {
-    var combined_mesh = Mesh([])
-    for x in stride(from: xRange.lowerBound, through: xRange.upperBound, by: resolution) {
-        for y in stride(from: yRange.lowerBound, through: yRange.upperBound, by: resolution) {
-            for z in stride(from: zRange.lowerBound, through: zRange.upperBound, by: resolution) {
-                let cell_mesh = marching_cubes_single_cell(data: data, x: x, y: y, z: z, material: material, threshold: threshold, adaptive: adaptive)
-//                print("cell at \(x),\(y),\(z) : \(cell_mesh.summary)")
-                combined_mesh = combined_mesh.merge(cell_mesh)
-            }
-        }
+    var combined_mesh = MeshBuffer()
+    for i in data.indices {
+        marching_cubes_single_cell(data: data, scale: VoxelScale<Float>, index: i, adaptive: adaptive, buffer: &combined_mesh)
     }
     return combined_mesh
 }
@@ -321,36 +311,40 @@ public func marching_cubes(data: IsoSurfaceDataSource,
 ///   - adaptive: If true, uses linear interpolation to determine vertex locations closer to the threshold level; otherwise, is chooses a point between the two edges of the voxel cube.
 ///   - homeworkMode: If true, enables detailed print statements showing the calculations and logic for the choice of locations for the polygon(s).
 /// - Returns: A mesh made up of the polygons for this voxel cell
-func marching_cubes_single_cell(data: IsoSurfaceDataSource, x: Double, y: Double, z: Double, material: Polygon.Material, threshold: Double = 1.0, adaptive: Bool = false, homeworkMode: Bool = false) -> Mesh {
+func marching_cubes_single_cell(data: some VoxelAccessible, 
+                                scale: VoxelScale<Float>,
+                                index: VoxelIndex,
+                                adaptive: Bool = false,
+                                homeworkMode: Bool = false,
+                                buffer: inout MeshBuffer) {
     // iterate through the corners of the voxel, and get the data value from each of those locations.
-    let valuesAtCorners = voxel_vertex_offsets.map { (x_offset: Int, y_offset: Int, z_offset: Int) in
-        data.isovalue(x: x + Double(x_offset),
-                      y: y + Double(y_offset),
-                      z: z + Double(z_offset))
+    
+    let valuesAtCorners: [Float] = voxel_vertex_offsets.map { voxelIndexOffset in
+        data[index.adding(voxelIndexOffset)]?.distanceAboveSurface() ?? 1.0
     }
     if homeworkMode {
         // values at the corners of the voxel
         print(valuesAtCorners)
         // threshold evaluation at the corners of the voxel cube
         print(valuesAtCorners.map { val in
-            check(val > threshold)
+            val <= 0.0
         })
     }
 
-    // If the value at each corner is greater than the threshold value, then its considered inside
-    // the surface we're creating.
+    // If the value at each corner is equal to or less than 0, then its considered inside the surface.
+    //
     // Build an index to our lookup table of the face combinations that we'll use to represent this voxel.
     // Each corner is assigned a value to the power of 2, and a combined index is built from the corners
     // that match to being "inside" the surface.
     var cubeindex = 0
-    if valuesAtCorners[0] > threshold { cubeindex |= 1 }
-    if valuesAtCorners[1] > threshold { cubeindex |= 2 }
-    if valuesAtCorners[2] > threshold { cubeindex |= 4 }
-    if valuesAtCorners[3] > threshold { cubeindex |= 8 }
-    if valuesAtCorners[4] > threshold { cubeindex |= 16 }
-    if valuesAtCorners[5] > threshold { cubeindex |= 32 }
-    if valuesAtCorners[6] > threshold { cubeindex |= 64 }
-    if valuesAtCorners[7] > threshold { cubeindex |= 128 }
+    if valuesAtCorners[0] <= 0.0 { cubeindex |= 1 }
+    if valuesAtCorners[1] <= 0.0 { cubeindex |= 2 }
+    if valuesAtCorners[2] <= 0.0 { cubeindex |= 4 }
+    if valuesAtCorners[3] <= 0.0 { cubeindex |= 8 }
+    if valuesAtCorners[4] <= 0.0 { cubeindex |= 16 }
+    if valuesAtCorners[5] <= 0.0 { cubeindex |= 32 }
+    if valuesAtCorners[6] <= 0.0 { cubeindex |= 64 }
+    if valuesAtCorners[7] <= 0.0 { cubeindex |= 128 }
 
     let faces = cases[cubeindex]
     if homeworkMode {
