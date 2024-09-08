@@ -9,7 +9,7 @@ public class MarchingCubesRenderer {
         [1, 1, 1],
         [0, 1, 1],
     ]
-    
+
     let voxel_edges = [
         (0, 1),
         (1, 2),
@@ -24,10 +24,11 @@ public class MarchingCubesRenderer {
         (2, 6),
         (3, 7),
     ]
-    
+
     // # Table driven approach to the 256 combinations. Pro-tip, don't write this by hand, copy mine!
-    // # See marching_cubes_gen.py for how I generated these.
-    
+    // # See https://github.com/BorisTheBrave/mc-dc/blob/master/marching_cubes_3d.py for how Boris generated them.
+    // License CC0 (https://creativecommons.org/share-your-work/public-domain/cc0/)
+
     // # Each value is a list of triples indicating what edges are used for that triangle
     // # (Recall each edge of the cell may become a vertex in the output boundary)
     let cases = [[],
@@ -286,7 +287,7 @@ public class MarchingCubesRenderer {
                  [[9, 0, 1]],
                  [[3, 0, 8]],
                  []]
-    
+
     public func marching_cubes(data: some VoxelAccessible,
                                scale: VoxelScale<Float>,
                                adaptive: Bool = false) -> MeshBuffer
@@ -297,7 +298,7 @@ public class MarchingCubesRenderer {
         }
         return combined_mesh
     }
-    
+
     /// Generates the data for a 3D mesh representation for a single voxel.
     /// - Parameters:
     ///   - data: The data source that provides the density value at a given 3D location.
@@ -310,13 +311,14 @@ public class MarchingCubesRenderer {
     ///   - homeworkMode: If true, enables detailed print statements showing the calculations and logic for the choice of locations for the polygon(s).
     /// - Returns: A mesh made up of the polygons for this voxel cell
     func marching_cubes_single_cell(data: some VoxelAccessible,
-                                    scale: VoxelScale<Float>,
+                                    scale _: VoxelScale<Float>,
                                     index: VoxelIndex,
                                     adaptive: Bool = false,
                                     homeworkMode: Bool = false,
-                                    buffer: inout MeshBuffer) {
+                                    buffer _: inout MeshBuffer)
+    {
         // iterate through the corners of the voxel, and get the data value from each of those locations.
-        
+
         let valuesAtCorners: [Float] = voxel_vertex_offsets.map { voxelIndexOffset in
             data[index.adding(voxelIndexOffset)]?.distanceAboveSurface() ?? 1.0
         }
@@ -328,7 +330,7 @@ public class MarchingCubesRenderer {
                 val <= 0.0
             })
         }
-        
+
         // If the value at each corner is equal to or less than 0, then its considered inside the surface.
         //
         // Build an index to our lookup table of the face combinations that we'll use to represent this voxel.
@@ -343,12 +345,12 @@ public class MarchingCubesRenderer {
         if valuesAtCorners[5] <= 0.0 { cubeindex |= 32 }
         if valuesAtCorners[6] <= 0.0 { cubeindex |= 64 }
         if valuesAtCorners[7] <= 0.0 { cubeindex |= 128 }
-        
+
         let faces = cases[cubeindex]
         if homeworkMode {
             print("faces: \(faces)")
         }
-        //var output_tris: [Polygon] = []
+        // var output_tris: [Polygon] = []
         for face in faces {
             // For each face, find the vertices of that face and output it.
             // There's no effort in this algorithm to re-use vertices between the faces.
@@ -356,7 +358,7 @@ public class MarchingCubesRenderer {
             let verts: [Vector] = edges.map { edgeIndex in
                 edge_to_boundary_vertex(edge: edgeIndex, cornerValues: valuesAtCorners, index: index, adaptive: adaptive, homeworkMode: homeworkMode)
             }
-            print("verts identified by this face: \(verts.map({ $0 }))")
+            print("verts identified by this face: \(verts.map { $0 })")
             //        if let poly = Polygon(verts, material: material) {
             //            if homeworkMode {
             //                print("polygon \(poly.summary)")
@@ -364,9 +366,8 @@ public class MarchingCubesRenderer {
             //            output_tris.append(poly)
             //        }
         }
-        
     }
-    
+
     /// Returns a vertex in the middle of the specified edge of a voxel cube.
     /// - Parameter edge: The index of the edge of the voxel.
     /// - Parameter cornerValues: An array of the evaluated values at each of the corners of the voxel cube.
@@ -382,7 +383,7 @@ public class MarchingCubesRenderer {
         // ex. edge 10 matches to (2, 6) - so v0 -> corner 2, v1 -> corner 6.
         // v0 and v1 are identifying the corner indexes of the edge
         // that we're trying to interpolate.
-        
+
         // If 'adaptive' is true, interpolate a vertex position on the edge provided that most closely matches the isovalue's threshold.
         // Otherwise, we pick a quick-n-dirty point that's exactly halfway between the vertex positions.
         // In either case, t0 and t1 are the unit-measure offsets for the vertex positions.
@@ -416,7 +417,7 @@ public class MarchingCubesRenderer {
             }
             t0 = 0.5
         }
-        
+
         // Using the unit-offset between the two corners, we choose
         // the location of the vertex between those two corners.
         let vert0_offsets: VoxelIndex = voxel_vertex_offsets[v0] // tuple of the corner - ex: corner 2 -> (1,1,0)
@@ -426,7 +427,7 @@ public class MarchingCubesRenderer {
             print("The offsets for the first corner are \(vert0_offsets)")
             print("The offsets for the second corner are \(vert1_offsets)")
         }
-        let finalX: Float = Float(index.x) + Float(vert0_offsets.x) + t0 * Float(vert1_offsets.x - vert0_offsets.x)
+        let finalX = Float(index.x) + Float(vert0_offsets.x) + t0 * Float(vert1_offsets.x - vert0_offsets.x)
         if homeworkMode {
             print("The X coordinate to interpolate between: \(Float(index.x) + Float(vert0_offsets.x)) (corner #\(v0)) to \(Float(index.x) + Float(vert1_offsets.x)) (corner #\(v1)).")
             print("calc: \(index.x) + \(Float(vert0_offsets.x)) + \(t0) * (\(vert1_offsets.x)-\(vert0_offsets.x)")
@@ -434,8 +435,8 @@ public class MarchingCubesRenderer {
             print(" ->   \(index.x) + \(Float(vert0_offsets.x)) +  \(t0 * Float(vert1_offsets.x - vert0_offsets.x))")
             print("The chosen X position: \(finalX)")
         }
-        
-        let finalY: Float = Float(index.y) + Float(vert0_offsets.y) + t0 * Float(vert1_offsets.y - vert0_offsets.y)
+
+        let finalY = Float(index.y) + Float(vert0_offsets.y) + t0 * Float(vert1_offsets.y - vert0_offsets.y)
         if homeworkMode {
             print("The Y coordinate to interpolate between: \(Float(index.y) + Float(vert0_offsets.y)) (corner #\(v0)) to \(Float(index.y) + Float(vert1_offsets.y)) (corner #\(v1)).")
             print("calc: \(index.y) + \(Float(vert0_offsets.y)) + \(t0) * (\(vert1_offsets.y)-\(vert0_offsets.y)")
@@ -443,8 +444,8 @@ public class MarchingCubesRenderer {
             print(" ->   \(index.y) + \(Float(vert0_offsets.y)) + \(t0 * Float(vert1_offsets.y - vert0_offsets.y))")
             print("The chosen Y position: \(finalY)")
         }
-        
-        let finalZ: Float = Float(index.z) + Float(vert0_offsets.z) + t0 * Float(vert1_offsets.z - vert0_offsets.z)
+
+        let finalZ = Float(index.z) + Float(vert0_offsets.z) + t0 * Float(vert1_offsets.z - vert0_offsets.z)
         if homeworkMode {
             print("The Z coordinate to interpolate between: \(Float(index.z) + Float(vert0_offsets.z)) (corner #\(v0)) to \(Float(index.z) + Float(vert1_offsets.z)) (corner #\(v1)).")
             print("calc: \(index.z) + \(Float(vert0_offsets.z)) + \(t0) * (\(vert1_offsets.z)-\(vert0_offsets.z)")
@@ -452,7 +453,7 @@ public class MarchingCubesRenderer {
             print(" ->   \(index.z) + \(Float(vert0_offsets.z)) + \(t0 * Float(vert1_offsets.z - vert0_offsets.z))")
             print("The chosen Z position: \(finalZ)")
         }
-        
+
         return Vector(finalX, finalY, finalZ)
     }
 }
