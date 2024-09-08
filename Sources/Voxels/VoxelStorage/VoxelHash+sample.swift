@@ -53,13 +53,6 @@ public extension VoxelHash {
         return returns
     }
 
-//    static func clampedSurroundingIndexValues(_ value: Int, min: Int, max: Int) -> [Int] {
-//        let initialValues: [Int] = [value - 1, value, value + 1]
-//        return initialValues.filter { i in
-//            i >= min && i <= max
-//        }
-//    }
-
     static func pointdistancetoline(p: SIMD3<Float>, x1: SIMD3<Float>, x2: SIMD3<Float>) -> Float {
         // https://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
         //  | (p - x1) X (x0 - x2) |
@@ -121,6 +114,8 @@ public extension VoxelHash {
                     if y > yIndex {
                         voxels[VoxelIndex(xIndex, y, zIndex)] = minDistanceMappedBack
                     } else {
+                        // if y == yIndex ...
+                        // TODO(heckj): This may not be correct sign
                         voxels[VoxelIndex(xIndex, y, zIndex)] = -minDistanceMappedBack
                     }
                 }
