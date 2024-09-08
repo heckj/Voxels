@@ -9,7 +9,13 @@ extension VoxelHash where T == Float {
                 for x in bounds.min.x ... bounds.max.x {
                     let index = VoxelIndex(x, y, z)
                     if let value = self[index] {
-                        let valueString = value.formatted(.number.precision(.integerAndFractionLength(integerLimits: 1 ... 100, fractionLimits: 0 ... 2)))
+                        #if os(Linux)
+                            let valueString = "\(value)"
+                        // .formatted doesn't appear to be available on Linux through Foundation, but
+                        // I might be holding it wrong...
+                        #else
+                            let valueString = value.formatted(.number.precision(.integerAndFractionLength(integerLimits: 1 ... 100, fractionLimits: 0 ... 2)))
+                        #endif
                         line += " \(index) : \(valueString) "
                     } else {
                         line += " \(index) :  - "
