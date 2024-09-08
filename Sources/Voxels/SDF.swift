@@ -1,4 +1,6 @@
-import simd
+#if canImport(simd)
+    import simd
+#endif
 
 public protocol VoxelSampleable {
     associatedtype VoxelDataType where VoxelDataType: SIMDScalar
@@ -36,6 +38,7 @@ public enum SDF {
         }
     }
 
+#if canImport(simd)
     public static func box(_ b: SIMD3<Float>) -> SDFSampleable<Float> {
         SDFSampleable<Float>() { p in
             let q = abs(p) - b
@@ -54,4 +57,6 @@ public enum SDF {
             length(max(SIMD3<Float>(q.x, q.y, p.z), 0.0)) + min(max(q.x, max(q.y, p.z)), 0.0))
         }
     }
+#endif
+
 }
