@@ -70,4 +70,12 @@ final class HeightmapConversionTests: XCTestCase {
         let neighborsSide = VoxelHash<Float>.twoDIndexNeighborsFrom(x: 1, y: 0, widthCount: 3, heightCount: 3)
         XCTAssertEqual(neighborsSide.count, 6)
     }
+
+    func testPointDistanceToLine() throws {
+        let p = SIMD3<Float>(0, 0, 0)
+        let distance = VoxelHash<Float>.pointdistancetoline(p: p, x1: SIMD3<Float>(1, 1, 0), x2: SIMD3<Float>(1, -1, 0))
+        XCTAssertEqual(distance, 1)
+
+        XCTAssertEqual(VoxelHash<Float>.pointdistancetoline(p: p, x1: SIMD3<Float>(2, 0, 0), x2: SIMD3<Float>(0, 2, 0)), sqrt(2.0), accuracy: 0.01)
+    }
 }
