@@ -295,7 +295,7 @@ public func marching_cubes(data: some VoxelAccessible,
 {
     var combined_mesh = MeshBuffer()
     for i in data.indices {
-        marching_cubes_single_cell(data: data, scale: VoxelScale<Float>, index: i, adaptive: adaptive, buffer: &combined_mesh)
+        marching_cubes_single_cell(data: data, scale: scale, index: i, adaptive: adaptive, buffer: &combined_mesh)
     }
     return combined_mesh
 }
@@ -350,36 +350,33 @@ func marching_cubes_single_cell(data: some VoxelAccessible,
     if homeworkMode {
         print("faces: \(faces)")
     }
-    var output_tris: [Polygon] = []
+    //var output_tris: [Polygon] = []
     for face in faces {
         // For each face, find the vertices of that face and output it.
         // There's no effort in this algorithm to re-use vertices between the faces.
         let edges = face // ex: [10, 6, 5]
         let verts = edges.map { edgeIndex in
-            edge_to_boundary_vertex(edge: edgeIndex, cornerValues: valuesAtCorners, x: x, y: y, z: z, threshold: threshold, adaptive: adaptive, homeworkMode: homeworkMode)
+            edge_to_boundary_vertex(edge: edgeIndex, cornerValues: valuesAtCorners, index, adaptive: adaptive, homeworkMode: homeworkMode)
         }
-        //        print("verts identified by this face: \(verts.map({ $0.summary }))")
-        if let poly = Polygon(verts, material: material) {
-            if homeworkMode {
-                print("polygon \(poly.summary)")
-            }
-            output_tris.append(poly)
-        }
+        print("verts identified by this face: \(verts.map({ $0.summary }))")
+//        if let poly = Polygon(verts, material: material) {
+//            if homeworkMode {
+//                print("polygon \(poly.summary)")
+//            }
+//            output_tris.append(poly)
+//        }
     }
-    return Mesh(output_tris)
+    
 }
 
 /// Returns a vertex in the middle of the specified edge of a voxel cube.
 /// - Parameter edge: The index of the edge of the voxel.
 /// - Parameter cornerValues: An array of the evaluated values at each of the corners of the voxel cube.
-/// - Parameter x: The x coordinate location of the voxel being evaluated.
-/// - Parameter y: The y coordinate location of the voxel being evaluated.
-/// - Parameter z: The z coordinate location of the voxel being evaluated.
-/// - Parameter threshold: The thresold value of the isofield that's being matched
+/// - Parameter index: The voxel index of the voxel being evaluated.
 /// - Parameter adaptive: If true, chooses a vertex location based on interpolation of the isofield values on the relevant edges.
 /// - Parameter homeworkMode: If true, enables detailed print statements showing the calculations and logic for the choice of locations for the polygon(s).
 /// - Returns: a vector location interpolated between the corners for the face of the polygon
-public func edge_to_boundary_vertex(edge: Int, cornerValues: [Double], x: Double, y: Double, z: Double, threshold: Double, adaptive: Bool = false, homeworkMode: Bool = false) -> Vector {
+public func edge_to_boundary_vertex(edge: Int, cornerValues: [Float], index: VoxelIndex, adaptive: Bool = false, homeworkMode: Bool = false) -> Vector {
     // Find the two vertices specified by this edge, and interpolate
     // between them to determine a vertex location.
     let v0 = voxel_edges[edge].0
@@ -391,21 +388,21 @@ public func edge_to_boundary_vertex(edge: Int, cornerValues: [Double], x: Double
     // If 'adaptive' is true, interpolate a vertex position on the edge provided that most closely matches the isovalue's threshold.
     // Otherwise, we pick a quick-n-dirty point that's exactly halfway between the vertex positions.
     // In either case, t0 and t1 are the unit-measure offsets for the vertex positions.
-    let t0: Double
+    let t0: Float
     if adaptive {
         if homeworkMode {
             print("Adaptive mode enabled: calculating interpolation")
         }
         // Get the values of the field at each of the two corner
         // locations.
-        let f0 = cornerValues[v0] - threshold
-        let f1 = cornerValues[v1] - threshold
+        let f0 = cornerValues[v0]
+        let f1 = cornerValues[v1]
         // With subtracting the threshold value that was
         // applied to determine the edge case, these two values
         // are expected to be on opposite sides of '0' - one positive,
         // one negative.
         let verifiedOppositeSigns = (f0 > 0) != (f1 > 0)
-        precondition(verifiedOppositeSigns, "The isovalues being interpolated (\(f0), and \(f1) aren't opposite signs. The original values from the field are \(cornerValues[v0]) and \(cornerValues[v1]), and the threshold value \(threshold).")
+        precondition(verifiedOppositeSigns, "The isovalues being interpolated (\(f0), and \(f1) aren't opposite signs. The original values from the field are \(cornerValues[v0]) and \(cornerValues[v1])")
         t0 = normalizedOffset(f0, f1)
         if homeworkMode {
             print("first corner index #\(v0), second corner index #\(v1).")
@@ -427,34 +424,34 @@ public func edge_to_boundary_vertex(edge: Int, cornerValues: [Double], x: Double
     let vert0_offsets = voxel_vertex_offsets[v0] // tuple of the corner - ex: corner 2 -> (1,1,0)
     let vert1_offsets = voxel_vertex_offsets[v1]
     if homeworkMode {
-        print("The calculated position reference is \(x), \(y), \(z)")
+        print("The calculated position reference is \(index.x), \(index.y), \(index.z)")
         print("The offsets for the first corner are \(vert0_offsets)")
         print("The offsets for the second corner are \(vert1_offsets)")
     }
-    let finalX = x + Double(vert0_offsets.0) + t0 * Double(vert1_offsets.0 - vert0_offsets.0)
+    let finalX = x + Double(vert0_offsets.x) + t0 * Double(vert1_offsets.x - vert0_offsets.x)
     if homeworkMode {
-        print("The X coordinate to interpolate between: \(x + Double(vert0_offsets.0)) (corner #\(v0)) to \(x + Double(vert1_offsets.0)) (corner #\(v1)).")
-        print("calc: \(x) + \(Double(vert0_offsets.0)) + \(t0) * (\(vert1_offsets.0)-\(vert0_offsets.0)")
-        print(" ->   \(x) + \(Double(vert0_offsets.0)) +  \(t0) * \(Double(vert1_offsets.0 - vert0_offsets.0))")
-        print(" ->   \(x) + \(Double(vert0_offsets.0)) +  \(t0 * Double(vert1_offsets.0 - vert0_offsets.0))")
+        print("The X coordinate to interpolate between: \(x + Double(vert0_offsets.x)) (corner #\(v0)) to \(x + Double(vert1_offsets.x)) (corner #\(v1)).")
+        print("calc: \(x) + \(Double(vert0_offsets.x)) + \(t0) * (\(vert1_offsets.x)-\(vert0_offsets.x)")
+        print(" ->   \(x) + \(Double(vert0_offsets.x)) +  \(t0) * \(Double(vert1_offsets.x - vert0_offsets.0))")
+        print(" ->   \(x) + \(Double(vert0_offsets.x)) +  \(t0 * Double(vert1_offsets.x - vert0_offsets.0))")
         print("The chosen X position: \(finalX)")
     }
 
-    let finalY = y + Double(vert0_offsets.1) + t0 * Double(vert1_offsets.1 - vert0_offsets.1)
+    let finalY = y + Double(vert0_offsets.y) + t0 * Double(vert1_offsets.y - vert0_offsets.y)
     if homeworkMode {
-        print("The Y coordinate to interpolate between: \(y + Double(vert0_offsets.1)) (corner #\(v0)) to \(y + Double(vert1_offsets.1)) (corner #\(v1)).")
-        print("calc: \(y) + \(Double(vert0_offsets.1)) + \(t0) * (\(vert1_offsets.1)-\(vert0_offsets.1)")
-        print(" ->   \(y) + \(Double(vert0_offsets.1)) + \(t0) * \(Double(vert1_offsets.1 - vert0_offsets.1))")
-        print(" ->   \(y) + \(Double(vert0_offsets.1)) + \(t0 * Double(vert1_offsets.1 - vert0_offsets.1))")
+        print("The Y coordinate to interpolate between: \(y + Double(vert0_offsets.y)) (corner #\(v0)) to \(y + Double(vert1_offsets.y)) (corner #\(v1)).")
+        print("calc: \(y) + \(Double(vert0_offsets.y)) + \(t0) * (\(vert1_offsets.y)-\(vert0_offsets.y)")
+        print(" ->   \(y) + \(Double(vert0_offsets.y)) + \(t0) * \(Double(vert1_offsets.y - vert0_offsets.y))")
+        print(" ->   \(y) + \(Double(vert0_offsets.t)) + \(t0 * Double(vert1_offsets.y - vert0_offsets.y))")
         print("The chosen Y position: \(finalY)")
     }
 
-    let finalZ = z + Double(vert0_offsets.2) + t0 * Double(vert1_offsets.2 - vert0_offsets.2)
+    let finalZ = z + Double(vert0_offsets.z) + t0 * Double(vert1_offsets.z - vert0_offsets.z)
     if homeworkMode {
-        print("The Z coordinate to interpolate between: \(z + Double(vert0_offsets.2)) (corner #\(v0)) to \(z + Double(vert1_offsets.2)) (corner #\(v1)).")
-        print("calc: \(z) + \(Double(vert0_offsets.2)) + \(t0) * (\(vert1_offsets.2)-\(vert0_offsets.2)")
-        print(" ->   \(z) + \(Double(vert0_offsets.2)) + \(t0) * \(Double(vert1_offsets.2 - vert0_offsets.2))")
-        print(" ->   \(z) + \(Double(vert0_offsets.2)) + \(t0 * Double(vert1_offsets.2 - vert0_offsets.2))")
+        print("The Z coordinate to interpolate between: \(z + Double(vert0_offsets.z)) (corner #\(v0)) to \(z + Double(vert1_offsets.z)) (corner #\(v1)).")
+        print("calc: \(z) + \(Double(vert0_offsets.z)) + \(t0) * (\(vert1_offsets.z)-\(vert0_offsets.z)")
+        print(" ->   \(z) + \(Double(vert0_offsets.z)) + \(t0) * \(Double(vert1_offsets.z - vert0_offsets.z))")
+        print(" ->   \(z) + \(Double(vert0_offsets.z)) + \(t0 * Double(vert1_offsets.z - vert0_offsets.z))")
         print("The chosen Z position: \(finalZ)")
     }
 
