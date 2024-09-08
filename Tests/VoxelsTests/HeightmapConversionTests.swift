@@ -1,4 +1,4 @@
-import Voxels
+@testable import Voxels
 import XCTest
 
 final class HeightmapConversionTests: XCTestCase {
@@ -69,6 +69,9 @@ final class HeightmapConversionTests: XCTestCase {
 
         let neighborsSide = VoxelHash<Float>.twoDIndexNeighborsFrom(x: 1, y: 0, widthCount: 3, heightCount: 3)
         XCTAssertEqual(neighborsSide.count, 6)
+        
+        let neighborsFarCorner = VoxelHash<Float>.twoDIndexNeighborsFrom(x: 3, y: 2, widthCount: 4, heightCount: 3)
+        XCTAssertEqual(neighborsCorner.count, 4)
     }
 
     func testPointDistanceToLine() throws {
@@ -77,5 +80,21 @@ final class HeightmapConversionTests: XCTestCase {
         XCTAssertEqual(distance, 1)
 
         XCTAssertEqual(VoxelHash<Float>.pointdistancetoline(p: p, x1: SIMD3<Float>(2, 0, 0), x2: SIMD3<Float>(0, 2, 0)), sqrt(2.0), accuracy: 0.01)
+    }
+    
+    func testHeightMapToVoxel() throws {
+        let unitFloatValues: [[Float]] = [
+            [0.1, 0.2, 0.3, 0.4],
+            [0.2, 0.3, 0.4, 0.5],
+            [0.3, 0.4, 0.5, 0.6],
+            [0.4, 0.3, 0.4, 0.2],
+        ]
+        let voxels = VoxelHash<Float>.sample(unitFloatValues, maxVoxelHeight: 10, scale: .init())
+        XCTAssertEqual(voxels.count, 97)
+        for voxelValue in voxels {
+            XCTAssertTrue(!voxelValue.isNaN)
+        }
+        
+        voxels.dump()
     }
 }
