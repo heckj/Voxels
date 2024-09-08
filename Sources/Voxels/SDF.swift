@@ -58,4 +58,10 @@ public enum SDF {
             }
         }
     #endif
+    
+    public static func ripple() -> SDFSampleable<Float> {
+        SDFSampleable { _ in
+            2.5 - sqrt(x * x + y * y + z * z)
+        }
+    }
 }
