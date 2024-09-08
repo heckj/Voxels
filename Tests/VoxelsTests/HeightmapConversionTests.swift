@@ -95,7 +95,7 @@ final class HeightmapConversionTests: XCTestCase {
             XCTAssertTrue(!voxelValue.isNaN)
         }
 
-        voxels.dump()
+        // voxels.dump()
     }
 
     func testSmallHeightMapToVoxel() throws {
@@ -109,6 +109,6 @@ final class HeightmapConversionTests: XCTestCase {
             XCTAssertTrue(!voxelValue.isNaN)
         }
 
-        voxels.dump()
+        // voxels.dump()
     }
 }
