@@ -41,12 +41,15 @@ public extension VoxelHash {
         return (height: height, width: width)
     }
 
-    static func twoDIndexNeighborsFrom(x: Int, y: Int, widthCount: Int, heightCount: Int) -> [(x: Int, y: Int)] {
-        var returns: [(x: Int, y: Int)] = []
+    static func twoDIndexNeighborsFrom(x: Int, z: Int, widthCount: Int, heightCount: Int) -> [(x: Int, z: Int)] {
+        var returns: [(x: Int, z: Int)] = []
         for possibleX in x - 1 ... x + 1 {
-            for possibleY in y - 1 ... y + 1 {
-                if possibleX >= 0, possibleX < widthCount, possibleY >= 0, possibleY < heightCount {
-                    returns.append((x: possibleX, y: possibleY))
+            for possibleZ in z - 1 ... z + 1 {
+                if possibleX >= 0, possibleX < widthCount, // bounding possible neighbors by width
+                   possibleZ >= 0, possibleZ < heightCount, // bounding possible neighbors by depth
+                   !(x == possibleX && z == possibleZ) // don't include the originating position in neighbor list
+                {
+                    returns.append((x: possibleX, z: possibleZ))
                 }
             }
         }
@@ -72,11 +75,11 @@ public extension VoxelHash {
         var voxels = VoxelHash<Float>()
         for (xIndex, row) in heightmap.enumerated() {
             for (zIndex, _) in row.enumerated() {
-                let surroundingNeighbors: [(x: Int, y: Int)] = twoDIndexNeighborsFrom(x: xIndex, y: zIndex, widthCount: heightmapSize.width, heightCount: heightmapSize.height)
+                let surroundingNeighbors: [(x: Int, z: Int)] = twoDIndexNeighborsFrom(x: xIndex, z: zIndex, widthCount: heightmapSize.width, heightCount: heightmapSize.height)
 
                 let neighborsSurfaceVoxelIndex: [VoxelIndex] = surroundingNeighbors.map { xy in
-                    let yIndexForNeighbor = unitSurfaceIndexValue(x: xy.x, y: xy.y, heightmap: heightmap, maxHeight: maxVoxelHeight)
-                    return VoxelIndex(xy.x, yIndexForNeighbor, xy.y)
+                    let yIndexForNeighbor = unitSurfaceIndexValue(x: xy.x, y: xy.z, heightmap: heightmap, maxHeight: maxVoxelHeight)
+                    return VoxelIndex(xy.x, yIndexForNeighbor, xy.z)
                 }
 
                 let yIndex = unitSurfaceIndexValue(x: xIndex, y: zIndex, heightmap: heightmap, maxHeight: maxVoxelHeight)

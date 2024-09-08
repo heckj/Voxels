@@ -61,17 +61,17 @@ final class HeightmapConversionTests: XCTestCase {
     }
 
     func testTwoDIndexNeighborsFrom() throws {
-        let neighborsCorner = VoxelHash<Float>.twoDIndexNeighborsFrom(x: 0, y: 0, widthCount: 3, heightCount: 3)
-        XCTAssertEqual(neighborsCorner.count, 4)
+        let neighborsCorner = VoxelHash<Float>.twoDIndexNeighborsFrom(x: 0, z: 0, widthCount: 3, heightCount: 3)
+        XCTAssertEqual(neighborsCorner.count, 3)
 
-        let neighborsMid = VoxelHash<Float>.twoDIndexNeighborsFrom(x: 1, y: 1, widthCount: 3, heightCount: 3)
-        XCTAssertEqual(neighborsMid.count, 9)
+        let neighborsMid = VoxelHash<Float>.twoDIndexNeighborsFrom(x: 1, z: 1, widthCount: 3, heightCount: 3)
+        XCTAssertEqual(neighborsMid.count, 8)
 
-        let neighborsSide = VoxelHash<Float>.twoDIndexNeighborsFrom(x: 1, y: 0, widthCount: 3, heightCount: 3)
-        XCTAssertEqual(neighborsSide.count, 6)
+        let neighborsSide = VoxelHash<Float>.twoDIndexNeighborsFrom(x: 1, z: 0, widthCount: 3, heightCount: 3)
+        XCTAssertEqual(neighborsSide.count, 5)
 
-        let neighborsFarCorner = VoxelHash<Float>.twoDIndexNeighborsFrom(x: 3, y: 2, widthCount: 4, heightCount: 3)
-        XCTAssertEqual(neighborsCorner.count, 4)
+        let neighborsFarCorner = VoxelHash<Float>.twoDIndexNeighborsFrom(x: 3, z: 2, widthCount: 4, heightCount: 3)
+        XCTAssertEqual(neighborsFarCorner.count, 3)
     }
 
     func testPointDistanceToLine() throws {
