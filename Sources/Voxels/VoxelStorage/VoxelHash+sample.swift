@@ -72,7 +72,7 @@ public extension VoxelHash {
         var voxels = VoxelHash<Float>()
         for (xIndex, row) in heightmap.enumerated() {
             for (zIndex, _) in row.enumerated() {
-                let surroundingNeighbors: [(x: Int, y: Int)] = twoDIndexNeighborsFrom(x: xIndex, y: zIndex, widthCount: heightmapSize.width, heightCount: maxVoxelHeight)
+                let surroundingNeighbors: [(x: Int, y: Int)] = twoDIndexNeighborsFrom(x: xIndex, y: zIndex, widthCount: heightmapSize.width, heightCount: heightmapSize.height)
 
                 let neighborsSurfaceVoxelIndex: [VoxelIndex] = surroundingNeighbors.map { xy in
                     let yIndexForNeighbor = unitSurfaceIndexValue(x: xy.x, y: xy.y, heightmap: heightmap, maxHeight: maxVoxelHeight)
