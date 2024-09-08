@@ -53,11 +53,21 @@ public extension VoxelHash {
         return returns
     }
 
-    static func clampedSurroundingIndexValues(_ value: Int, min: Int, max: Int) -> [Int] {
-        let initialValues: [Int] = [value - 1, value, value + 1]
-        return initialValues.filter { i in
-            i >= min && i <= max
-        }
+//    static func clampedSurroundingIndexValues(_ value: Int, min: Int, max: Int) -> [Int] {
+//        let initialValues: [Int] = [value - 1, value, value + 1]
+//        return initialValues.filter { i in
+//            i >= min && i <= max
+//        }
+//    }
+
+    static func pointdistancetoline(p: SIMD3<Float>, x1: SIMD3<Float>, x2: SIMD3<Float>) -> Float {
+        // https://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
+        //  | (p - x1) X (x0 - x2) |
+        // --------------------------
+        //       | (x2 - x1) |
+        let top = (p - x1).cross(p - x2)
+        let bottom = x2 - x1
+        return top.length / bottom.length
     }
 
     // heightmap 0...1 - unit-values
@@ -68,19 +78,54 @@ public extension VoxelHash {
         let heightmapSize = sizeOfHeightmap(heightmap)
         var voxels = VoxelHash<Float>()
         for (xIndex, row) in heightmap.enumerated() {
-            for (zIndex, value) in row.enumerated() {
+            for (zIndex, _) in row.enumerated() {
+                let surroundingNeighbors: [(x: Int, y: Int)] = twoDIndexNeighborsFrom(x: xIndex, y: zIndex, widthCount: heightmapSize.width, heightCount: maxVoxelHeight)
+
+                let neighborsSurfaceVoxelIndex: [VoxelIndex] = surroundingNeighbors.map { xy in
+                    let yIndexForNeighbor = unitSurfaceIndexValue(x: xy.x, y: xy.y, heightmap: heightmap, maxHeight: maxVoxelHeight)
+                    return VoxelIndex(xy.x, yIndexForNeighbor, xy.y)
+                }
+
                 let yIndex = unitSurfaceIndexValue(x: xIndex, y: zIndex, heightmap: heightmap, maxHeight: 12)
 
-                for y in clampedSurroundingIndexValues(yIndex, min: 0, max: maxVoxelHeight) {
-                    voxels[VoxelIndex(xIndex, y, zIndex)] = unitCentroidValue(y, max: maxVoxelHeight) - value
+                var minYIndex: Int = neighborsSurfaceVoxelIndex.reduce(yIndex) { partialResult, vIndex in
+                    Swift.min(partialResult, vIndex.y)
                 }
-                // this might be better interpolating to the voxel index positions +/- 1 to each of the neighbors
-                // for each voxel in a surfaceNet, we'd ideally want the value to the surface... which I guess
-                // is most easily approximated by the smallest distance to the surface values in each
-                // of the neighboring voxels.
+                var maxYIndex: Int = neighborsSurfaceVoxelIndex.reduce(yIndex) { partialResult, vIndex in
+                    Swift.max(partialResult, vIndex.y)
+                }
+                // expand up and down, within the constraints of the voxel hash bounds set by maxVoxelHeight
+                // maxVoxelHeight of 6 means indices 0, 1, 2, 3, 4, and 5 are vald, but not -1 or 6
+                if minYIndex > 0 { minYIndex -= 1 }
+                if maxYIndex < (maxVoxelHeight - 1) { maxYIndex += 1 }
+
+                // now we calculate the distance-to-surface values for the column extending from minYIndex to maxYIndex
+                // To do so, we use the approximation of the distance to the line between the existing point (x,y,z) and the surface index point for each neighbor - taking the minimum value.
+                // this distance value is in "unit voxel index" though, so we multiply by the voxel cube
+                // height to get it normalized - 1/maxVoxelHeight
+
+                for y in minYIndex ... maxYIndex {
+                    let distances: [Float] = neighborsSurfaceVoxelIndex.map { vi in
+                        pointdistancetoline(p: SIMD3<Float>(Float(xIndex), Float(y), Float(zIndex)),
+                                            // line from the the surface index point of this column
+                                            x1: SIMD3<Float>(Float(xIndex), Float(yIndex), Float(zIndex)),
+                                            // to the surface index point of the neighbor
+                                            x2: SIMD3<Float>(Float(vi.x), Float(vi.y), Float(vi.z)))
+                    }
+                    let minDistance = distances.min() ?? 0
+                    let minDistanceMappedBack = minDistance / Float(maxVoxelHeight)
+                    // damn, this isn't given me the signed distance - I don't know if I'm inside or outside
+                    // of that line!
+
+                    // I *think* I can determine a sign by if I'm over or under the current surface index
+                    if y > yIndex {
+                        voxels[VoxelIndex(xIndex, y, zIndex)] = minDistanceMappedBack
+                    } else {
+                        voxels[VoxelIndex(xIndex, y, zIndex)] = -minDistanceMappedBack
+                    }
+                }
             }
         }
-        // TODO: If there's large vertical changes between values, this won't properly fill in the gaps.
         return voxels
     }
 }
