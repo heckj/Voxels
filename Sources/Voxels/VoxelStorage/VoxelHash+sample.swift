@@ -79,7 +79,7 @@ public extension VoxelHash {
                     return VoxelIndex(xy.x, yIndexForNeighbor, xy.y)
                 }
 
-                let yIndex = unitSurfaceIndexValue(x: xIndex, y: zIndex, heightmap: heightmap, maxHeight: 12)
+                let yIndex = unitSurfaceIndexValue(x: xIndex, y: zIndex, heightmap: heightmap, maxHeight: maxVoxelHeight)
 
                 var minYIndex: Int = neighborsSurfaceVoxelIndex.reduce(yIndex) { partialResult, vIndex in
                     Swift.min(partialResult, vIndex.y)
@@ -90,7 +90,7 @@ public extension VoxelHash {
                 // expand up and down, within the constraints of the voxel hash bounds set by maxVoxelHeight
                 // maxVoxelHeight of 6 means indices 0, 1, 2, 3, 4, and 5 are vald, but not -1 or 6
                 if minYIndex > 0 { minYIndex -= 1 }
-                if maxYIndex < (maxVoxelHeight - 1) { maxYIndex += 1 }
+                if maxYIndex < (maxVoxelHeight - 2) { maxYIndex += 1 }
 
                 // now we calculate the distance-to-surface values for the column extending from minYIndex to maxYIndex
                 // To do so, we use the approximation of the distance to the line between the existing point (x,y,z) and the surface index point for each neighbor - taking the minimum value.
