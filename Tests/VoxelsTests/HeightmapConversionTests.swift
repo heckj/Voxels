@@ -47,6 +47,8 @@ final class HeightmapConversionTests: XCTestCase {
         let result = VoxelHash<Float>.sizeOfHeightmap(unitFloatValues)
         XCTAssertEqual(result.height, 4)
         XCTAssertEqual(result.width, 4)
+
+        XCTAssertThrowsError(try VoxelHash<Float>.flattenAndCheck(unitFloatValues))
     }
 
     func testSizeOfHeightmap() throws {
@@ -58,6 +60,10 @@ final class HeightmapConversionTests: XCTestCase {
         let result = VoxelHash<Float>.sizeOfHeightmap(unitFloatValues)
         XCTAssertEqual(result.height, 3)
         XCTAssertEqual(result.width, 4)
+
+        let flattened = try VoxelHash<Float>.flattenAndCheck(unitFloatValues)
+        XCTAssertEqual(flattened.1, 4)
+        XCTAssertEqual(flattened.0.count, 12)
     }
 
     func testTwoDIndexNeighborsFrom() throws {
@@ -89,8 +95,22 @@ final class HeightmapConversionTests: XCTestCase {
             [0.3, 0.4, 0.5, 0.6],
             [0.4, 0.3, 0.4, 0.2],
         ]
-        let voxels = VoxelHash<Float>.sample(unitFloatValues, maxVoxelHeight: 10, scale: .init())
+        let voxels = VoxelHash<Float>.heightmap(unitFloatValues, maxVoxelHeight: 10, scale: .init())
         XCTAssertEqual(voxels.count, 96)
+        for voxelValue in voxels {
+            XCTAssertTrue(!voxelValue.isNaN)
+        }
+
+        // voxels.dump()
+    }
+
+    func testTinyHeightMapToVoxel() throws {
+        let unitFloatValues: [[Float]] = [
+            [0.1, 0.1],
+            [0.1, 0.5],
+        ]
+        let voxels = VoxelHash<Float>.heightmap(unitFloatValues, maxVoxelHeight: 5, scale: .init())
+        XCTAssertEqual(voxels.count, 16)
         for voxelValue in voxels {
             XCTAssertTrue(!voxelValue.isNaN)
         }
@@ -100,15 +120,45 @@ final class HeightmapConversionTests: XCTestCase {
 
     func testSmallHeightMapToVoxel() throws {
         let unitFloatValues: [[Float]] = [
-            [0.1, 0.1],
-            [0.1, 0.5],
+            [0.4, 0.4, 0.4, 0.4, 0.4],
+            [0.4, 0.4, 0.4, 0.4, 0.4],
+            [0.4, 0.4, 0.5, 0.4, 0.4],
+            [0.4, 0.4, 0.4, 0.4, 0.4],
+            [0.4, 0.4, 0.4, 0.4, 0.0],
         ]
-        let voxels = VoxelHash<Float>.sample(unitFloatValues, maxVoxelHeight: 5, scale: .init())
-        XCTAssertEqual(voxels.count, 16)
+        let voxels = VoxelHash<Float>.heightmap(unitFloatValues, maxVoxelHeight: 5, scale: .init())
+        XCTAssertEqual(voxels.count, 79)
         for voxelValue in voxels {
             XCTAssertTrue(!voxelValue.isNaN)
         }
 
         // voxels.dump()
+    }
+
+    func test2DstrideToXY() throws {
+        var result = VoxelHash<Float>.strideToXZ(5, width: 4)
+        XCTAssertEqual(result.x, 1)
+        XCTAssertEqual(result.z, 1)
+
+        result = VoxelHash<Float>.strideToXZ(4, width: 4)
+        XCTAssertEqual(result.x, 0)
+        XCTAssertEqual(result.z, 1)
+
+        result = VoxelHash<Float>.strideToXZ(3, width: 4)
+        XCTAssertEqual(result.x, 3)
+        XCTAssertEqual(result.z, 0)
+
+        result = VoxelHash<Float>.strideToXZ(0, width: 4)
+        XCTAssertEqual(result.x, 0)
+        XCTAssertEqual(result.z, 0)
+    }
+
+    func test2DXYToStride() throws {
+        XCTAssertEqual(VoxelHash<Float>.XZtoStride(x: 0, z: 0, width: 4), 0)
+        XCTAssertEqual(VoxelHash<Float>.XZtoStride(x: 1, z: 0, width: 4), 1)
+        XCTAssertEqual(VoxelHash<Float>.XZtoStride(x: 2, z: 0, width: 4), 2)
+        XCTAssertEqual(VoxelHash<Float>.XZtoStride(x: 3, z: 0, width: 4), 3)
+        XCTAssertEqual(VoxelHash<Float>.XZtoStride(x: 0, z: 1, width: 4), 4)
+        XCTAssertEqual(VoxelHash<Float>.XZtoStride(x: 1, z: 1, width: 4), 5)
     }
 }

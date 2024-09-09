@@ -31,5 +31,5 @@ struct VoxelExplorerView: View {
 }
 
 #Preview {
-    VoxelExplorerView(ObservableVoxelData(SampleMeshData.SDFBrick()))
+    VoxelExplorerView(ObservableVoxelData(SampleMeshData.HeightmapSurface()))
 }
