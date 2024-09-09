@@ -81,4 +81,16 @@ public enum SampleMeshData {
         }
         return voxels
     }
+
+    public static func HeightmapSurface() -> VoxelHash<Float> {
+        let unitFloatValues: [[Float]] = [
+            [0.4, 0.4, 0.4, 0.4, 0.4],
+            [0.4, 0.4, 0.4, 0.4, 0.4],
+            [0.4, 0.4, 0.5, 0.4, 0.4],
+            [0.4, 0.4, 0.4, 0.4, 0.4],
+            [0.4, 0.4, 0.4, 0.4, 0.0],
+        ]
+        let voxels = VoxelHash<Float>.heightmap(unitFloatValues, maxVoxelHeight: 5, scale: .init())
+        return VoxelHash<Float>(voxels, defaultVoxel: 1)
+    }
 }

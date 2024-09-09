@@ -19,6 +19,12 @@ public struct VoxelHash<T: VoxelRenderable>: VoxelWritable {
         self.defaultVoxel = defaultVoxel
     }
 
+    public init(_ otherVoxels: VoxelHash<T>, defaultVoxel: T) {
+        _contents = otherVoxels._contents
+        bounds = otherVoxels.bounds
+        self.defaultVoxel = defaultVoxel
+    }
+
     public var count: Int {
         _contents.count
     }
