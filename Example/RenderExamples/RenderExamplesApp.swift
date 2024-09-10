@@ -15,7 +15,8 @@ struct RenderExamplesApp: App {
             // ContentView()
             // QuickCheckView()
             // VoxelExplorerView(ObservableVoxelData(SampleMeshData.SDFBrick()))
-            VoxelExplorerView(ObservableVoxelData(SampleMeshData.HeightmapSurface()))
+            // VoxelExplorerView(ObservableVoxelData(SampleMeshData.HeightmapSurface()))
+            VoxelExplorerView(ObservableVoxelData(SampleMeshData.SDFSphereQuadrant()))
             // VoxelDataEditorView(data: ObservableVoxelData(SampleMeshData.SDFBrick()))
         }
     }

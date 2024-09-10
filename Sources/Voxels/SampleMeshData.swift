@@ -40,6 +40,14 @@ public enum SampleMeshData {
         return flatVoxelBlock
     }
 
+    public static func SDFSphereQuadrant() -> VoxelHash<Float> {
+        let sphere = SDF.sphere(radius: 2)
+        let voxels = VoxelHash.sample(sphere,
+                                      using: VoxelScale(cubeSize: 0.25),
+                                      from: SIMD3<Float>(0, 0, 0), to: SIMD3<Float>(3, 3, 3))
+        return VoxelHash(voxels, defaultVoxel: 1.0)
+    }
+
     public static func SDFBrick() -> VoxelHash<Float> {
         var voxels = VoxelHash(defaultVoxel: Float(10.0))
         // < 0 : inside surface (distance to)
