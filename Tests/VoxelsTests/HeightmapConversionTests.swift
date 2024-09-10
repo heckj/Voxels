@@ -101,7 +101,10 @@ final class HeightmapConversionTests: XCTestCase {
             XCTAssertTrue(!voxelValue.isNaN)
         }
 
+        XCTAssertEqual(voxels.bounds.max.y, 10)
         // voxels.dump()
+        let dumpedHeights = voxels.heightmap()
+        XCTAssertEqual([0.1, 0.2, 0.3, 0.4, 0.2, 0.3, 0.4, 0.5, 0.3, 0.4, 0.5, 0.6, 0.4, 0.3, 0.4, 0.2], dumpedHeights)
     }
 
     func testTinyHeightMapToVoxel() throws {
@@ -111,11 +114,13 @@ final class HeightmapConversionTests: XCTestCase {
         ]
         let voxels = VoxelHash<Float>.heightmap(unitFloatValues, maxVoxelHeight: 5)
         XCTAssertEqual(voxels.count, 16)
+        XCTAssertEqual(voxels.bounds.max.y, 5)
         for voxelValue in voxels {
             XCTAssertTrue(!voxelValue.isNaN)
         }
 
-        // voxels.dump()
+        let dumpedHeights = voxels.heightmap()
+        XCTAssertEqual([0.1, 0.1, 0.1, 0.5], dumpedHeights)
     }
 
     func testSmallHeightMapToVoxel() throws {

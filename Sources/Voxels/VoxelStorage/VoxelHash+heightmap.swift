@@ -122,6 +122,31 @@ public extension VoxelHash {
         return Self.heightmap(flattened.0, width: flattened.1, maxVoxelHeight: maxVoxelHeight)
     }
 
+    func heightmap() -> [Float] where T == Float {
+        let width = (bounds.max.x - bounds.min.x) + 1
+        let heightmapSize = width * (bounds.max.z - bounds.min.z + 1)
+
+        var unitHeightMap: [Float] = []
+        let voxelUnitHeight: Float = 1.0 / Float(bounds.max.y - bounds.min.y)
+
+        for linearIndexStep in 0 ..< heightmapSize {
+            let xz: XZIndex = Self.strideToXZ(linearIndexStep, width: width)
+            let yIndicesToCheckInOrder: [Int] = (bounds.min.y ... bounds.max.y).reversed()
+            let highestNegativeSDFYIndex: Int? = yIndicesToCheckInOrder.first(where: { yToCheck in
+                if let value = self[VoxelIndex(xz.x, yToCheck, xz.z)] {
+                    return value <= 0
+                }
+                return false
+            })
+            if let highestNegativeSDFYIndex {
+                unitHeightMap.append(voxelUnitHeight * Float(highestNegativeSDFYIndex) + voxelUnitHeight / 2.0)
+            } else {
+                unitHeightMap.append(0.0)
+            }
+        }
+        return unitHeightMap
+    }
+
     static func heightmap(_ heightmap: [Float],
                           width: Int,
                           maxVoxelHeight: Int) -> VoxelHash<Float> where T == Float
@@ -183,6 +208,7 @@ public extension VoxelHash {
                 }
             }
         }
+        voxels.bounds = voxels.bounds.adding(VoxelIndex(x: 0, y: maxVoxelHeight, z: 0))
         return voxels
     }
 }

@@ -58,14 +58,4 @@ public enum SDF {
             }
         }
     #endif
-
-    public static func ripple() -> SDFSampleable<Float> {
-        SDFSampleable { p in
-            #if canImport(simd)
-                2.5 - sqrt(p.x * p.x + p.y * p.y + p.z * p.z)
-            #else
-                2.5 - (p.x * p.x + p.y * p.y + p.z * p.z).squareRoot()
-            #endif
-        }
-    }
 }
