@@ -1,3 +1,4 @@
+import Heightmap
 import RealityKit
 import Voxels
 
@@ -46,13 +47,8 @@ public enum EntityExample {
     public static var surfaceNetSphere: ModelEntity {
         let samples = sampledSDFSphere()
         do {
-            let buffer = try VoxelMeshRenderer.surfaceNetMesh(
-                sdf: samples,
-                within: VoxelBounds(
-                    min: VoxelIndex(0, 0, 0),
-                    max: VoxelIndex(32, 32, 32)
-                )
-            )
+            let renderer = SurfaceNetRenderer()
+            let buffer = try! renderer.render(voxelData: samples, scale: .init(), within: samples.bounds.insetQuadrant())
 
             if let descriptor = buffer.meshDescriptor() {
                 let mesh = try MeshResource.generate(from: [descriptor])
@@ -109,5 +105,35 @@ public enum EntityExample {
         let entity = ModelEntity(mesh: mesh, materials: [material])
         entity.name = "flatYBlock"
         return entity
+    }
+
+    public static var marchingCubesHeightmap: ModelEntity {
+        let heightmap = Heightmap(width: 100, height: 100, seed: 437_347_632)
+        let voxels = VoxelHash<Float>.heightmap(heightmap.contents,
+                                                width: heightmap.width,
+                                                maxVoxelHeight: 20)
+        let buffer = MarchingCubesRenderer().marching_cubes(data: voxels, scale: .init())
+        guard let descriptor = buffer.meshDescriptor() else {
+            fatalError()
+        }
+        let mesh = try! MeshResource.generate(from: [descriptor])
+        let material = SimpleMaterial(color: .brown, isMetallic: false)
+        return ModelEntity(mesh: mesh, materials: [material])
+    }
+
+    public static var surfaceNetHeightmap: ModelEntity {
+        let heightmap = Heightmap(width: 100, height: 100, seed: 437_347_632)
+        let voxels = VoxelHash<Float>.heightmap(heightmap.contents,
+                                                width: heightmap.width,
+                                                maxVoxelHeight: 20)
+        let buffer = try! SurfaceNetRenderer().render(voxelData: voxels,
+                                                      scale: .init(),
+                                                      within: voxels.bounds)
+        guard let descriptor = buffer.meshDescriptor() else {
+            fatalError()
+        }
+        let mesh = try! MeshResource.generate(from: [descriptor])
+        let material = SimpleMaterial(color: .brown, isMetallic: false)
+        return ModelEntity(mesh: mesh, materials: [material])
     }
 }
