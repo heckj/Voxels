@@ -6,14 +6,14 @@ import SwiftUI
 import Voxels
 import XCTest
 
-final class BlockMeshRenderSnapshotTests: XCTestCase {
+final class MarchingCubesRenderSnapshotTests: XCTestCase {
     #if os(macOS)
         @MainActor
-        func testBlockMeshSphereRender() throws {
+        func testMarchingCubesSphereRender() throws {
             // CAN NOT do a snapshot if the frame is .zero...
             let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
 
-            addEntity(EntityExample.fastSurfaceBlockMeshSphere, to: arView)
+            addEntity(marchingCubesEntity(EntityExample.sampledSDFSphere()), to: arView)
             establishCamera(arView, at: Point3D(x: 30, y: 30, z: 50), lookingAt: Point3D(x: 0, y: 0, z: 0))
 
             // print("Generating Snapshot!!!")
@@ -36,7 +36,7 @@ final class BlockMeshRenderSnapshotTests: XCTestCase {
             // CAN NOT do a snapshot if the frame is .zero...
             let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
 
-            let entity = blockMeshEntity(EntityExample.oneByOne())
+            let entity = marchingCubesEntity(EntityExample.oneByOne())
             addEntity(entity, to: arView)
             establishCamera(arView, at: Point3D(x: 6, y: 6, z: 10), lookingAt: Point3D(x: 0, y: 0, z: 0))
 
@@ -60,7 +60,7 @@ final class BlockMeshRenderSnapshotTests: XCTestCase {
             // CAN NOT do a snapshot if the frame is .zero...
             let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
 
-            let entity = blockMeshEntity(EntityExample.threeByThree())
+            let entity = marchingCubesEntity(EntityExample.threeByThree())
             addEntity(entity, to: arView)
             establishCamera(arView, at: Point3D(x: 6, y: 6, z: 10), lookingAt: Point3D(x: 0, y: 0, z: 0))
 
@@ -84,7 +84,7 @@ final class BlockMeshRenderSnapshotTests: XCTestCase {
             // CAN NOT do a snapshot if the frame is .zero...
             let arView = ARView(frame: NSRect(x: 0, y: 0, width: 300, height: 300))
 
-            let entity = blockMeshEntity(SampleMeshData.manhattanNeighbor1())
+            let entity = marchingCubesEntity(SampleMeshData.manhattanNeighbor1())
             addEntity(entity, to: arView)
             establishCamera(arView, at: Point3D(x: 6, y: 6, z: 10), lookingAt: Point3D(x: 0, y: 0, z: 0))
 
@@ -110,7 +110,7 @@ final class BlockMeshRenderSnapshotTests: XCTestCase {
 
             let voxels = SampleMeshData.flatYBlock()
             XCTAssertEqual(voxels.count, 200)
-            let entity = blockMeshEntity(voxels)
+            let entity = marchingCubesEntity(voxels)
             addEntity(entity, to: arView)
             establishCamera(arView, at: Point3D(x: 15, y: 6, z: 7), lookingAt: Point3D(x: 5, y: 0, z: 5))
 

@@ -22,6 +22,10 @@
 		1AA3032C2C890B4B004B0660 /* wireframeMaterial.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1AA3032B2C890B4B004B0660 /* wireframeMaterial.metal */; };
 		1AD4AF692C88EC8300FF4C1C /* VoxelExplorerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4AF682C88EC8300FF4C1C /* VoxelExplorerView.swift */; };
 		1AD4AF6B2C88F00900FF4C1C /* VoxelDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4AF6A2C88F00900FF4C1C /* VoxelDataView.swift */; };
+		1ADE93A62C8FC94C007413E9 /* MeshSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE93A52C8FC94C007413E9 /* MeshSnapshot.swift */; };
+		1ADE93A82C8FCA2D007413E9 /* BaselineSnapshotTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE93A72C8FCA2D007413E9 /* BaselineSnapshotTest.swift */; };
+		1ADE93AA2C8FCA6E007413E9 /* SurfaceNetRenderSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE93A92C8FCA6E007413E9 /* SurfaceNetRenderSnapshotTests.swift */; };
+		1ADE93AC2C8FCAAE007413E9 /* MarchingCubesRenderSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE93AB2C8FCAAE007413E9 /* MarchingCubesRenderSnapshotTests.swift */; };
 		1AEC43102C7E285E004809B3 /* Transforms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430E2C7E285E004809B3 /* Transforms.swift */; };
 		1AEC43112C7E285E004809B3 /* RealityKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430C2C7E285E004809B3 /* RealityKitView.swift */; };
 		1AEC43122C7E285E004809B3 /* ArcBallState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43052C7E285E004809B3 /* ArcBallState.swift */; };
@@ -80,6 +84,10 @@
 		1AA4B6DA2C7E9AB300C9796B /* RenderExamplesCI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RenderExamplesCI.xctestplan; sourceTree = "<group>"; };
 		1AD4AF682C88EC8300FF4C1C /* VoxelExplorerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoxelExplorerView.swift; sourceTree = "<group>"; };
 		1AD4AF6A2C88F00900FF4C1C /* VoxelDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoxelDataView.swift; sourceTree = "<group>"; };
+		1ADE93A52C8FC94C007413E9 /* MeshSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshSnapshot.swift; sourceTree = "<group>"; };
+		1ADE93A72C8FCA2D007413E9 /* BaselineSnapshotTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselineSnapshotTest.swift; sourceTree = "<group>"; };
+		1ADE93A92C8FCA6E007413E9 /* SurfaceNetRenderSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurfaceNetRenderSnapshotTests.swift; sourceTree = "<group>"; };
+		1ADE93AB2C8FCAAE007413E9 /* MarchingCubesRenderSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarchingCubesRenderSnapshotTests.swift; sourceTree = "<group>"; };
 		1AEC43052C7E285E004809B3 /* ArcBallState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcBallState.swift; sourceTree = "<group>"; };
 		1AEC43062C7E285E004809B3 /* ARViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewContainer.swift; sourceTree = "<group>"; };
 		1AEC43072C7E285E004809B3 /* BirdsEyeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdsEyeState.swift; sourceTree = "<group>"; };
@@ -211,6 +219,10 @@
 			isa = PBXGroup;
 			children = (
 				1AEC43242C7E2877004809B3 /* BlockMeshRenderSnapshotTests.swift */,
+				1ADE93AB2C8FCAAE007413E9 /* MarchingCubesRenderSnapshotTests.swift */,
+				1ADE93A92C8FCA6E007413E9 /* SurfaceNetRenderSnapshotTests.swift */,
+				1ADE93A72C8FCA2D007413E9 /* BaselineSnapshotTest.swift */,
+				1ADE93A52C8FC94C007413E9 /* MeshSnapshot.swift */,
 				1AEC43252C7E2877004809B3 /* CameraControlARViewTests.swift */,
 				1A1744132C8A389000AB874F /* FormatExampleTests.swift */,
 			);
@@ -365,13 +377,17 @@
 				1AEC43262C7E2877004809B3 /* CameraControlARViewTests.swift in Sources */,
 				1AEC43272C7E2877004809B3 /* BlockMeshRenderSnapshotTests.swift in Sources */,
 				1AEC43132C7E285E004809B3 /* ExternalRealityKitView.swift in Sources */,
+				1ADE93AA2C8FCA6E007413E9 /* SurfaceNetRenderSnapshotTests.swift in Sources */,
 				1AEC43142C7E285E004809B3 /* MotionMode.swift in Sources */,
 				1AEC43152C7E285E004809B3 /* BirdsEyeState.swift in Sources */,
 				1A1744142C8A389000AB874F /* FormatExampleTests.swift in Sources */,
+				1ADE93A62C8FC94C007413E9 /* MeshSnapshot.swift in Sources */,
+				1ADE93A82C8FCA2D007413E9 /* BaselineSnapshotTest.swift in Sources */,
 				1AEC43162C7E285E004809B3 /* ARViewContainer.swift in Sources */,
 				1AEC43172C7E285E004809B3 /* CameraControlledARView.swift in Sources */,
 				1A88422F2C85062E00F7EADD /* DebugModels.swift in Sources */,
 				1AEC43182C7E285E004809B3 /* Comparable+clamped.swift in Sources */,
+				1ADE93AC2C8FCAAE007413E9 /* MarchingCubesRenderSnapshotTests.swift in Sources */,
 				1AEC43192C7E285E004809B3 /* TopDownVectorImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
