@@ -288,15 +288,47 @@ public class MarchingCubesRenderer {
                  [[3, 0, 8]],
                  []]
 
+    /// The triangle mesh positions.
+    var positionsCache: [VoxelIndex: SIMD3<Float>]
+
+    /// The triangle mesh normals.
+    var normalsCache: [VoxelIndex: SIMD3<Float>]
+
+    /// The triangle mesh indices.
+    var indexCacheX: [VoxelIndex: [VoxelIndex]]
+    var indexCacheY: [VoxelIndex: [VoxelIndex]]
+    var indexCacheZ: [VoxelIndex: [VoxelIndex]]
+
+    var buffer: MeshBuffer
+
+    public init() {
+        positionsCache = [:]
+        normalsCache = [:]
+        indexCacheX = [:]
+        indexCacheY = [:]
+        indexCacheZ = [:]
+        buffer = MeshBuffer()
+    }
+
+    func reset() {
+        positionsCache = [:]
+        normalsCache = [:]
+        indexCacheX = [:]
+        indexCacheY = [:]
+        indexCacheZ = [:]
+        buffer = MeshBuffer()
+    }
+
     public func marching_cubes(data: some VoxelAccessible,
                                scale: VoxelScale<Float>,
                                adaptive: Bool = false) -> MeshBuffer
     {
-        var combined_mesh = MeshBuffer()
-        for i in data.indices {
-            marching_cubes_single_cell(data: data, scale: scale, index: i, adaptive: adaptive, buffer: &combined_mesh)
+        reset()
+        let expandedBounds = data.bounds.expand(1)
+        for i in expandedBounds.indices {
+            marching_cubes_single_cell(data: data, scale: scale, index: i, adaptive: adaptive)
         }
-        return combined_mesh
+        return buffer
     }
 
     /// Generates the data for a 3D mesh representation for a single voxel.
@@ -314,8 +346,7 @@ public class MarchingCubesRenderer {
                                     scale _: VoxelScale<Float>,
                                     index: VoxelIndex,
                                     adaptive: Bool = false,
-                                    homeworkMode: Bool = false,
-                                    buffer _: inout MeshBuffer)
+                                    homeworkMode: Bool = false)
     {
         // iterate through the corners of the voxel, and get the data value from each of those locations.
 
@@ -358,13 +389,13 @@ public class MarchingCubesRenderer {
             let verts: [Vector] = edges.map { edgeIndex in
                 edge_to_boundary_vertex(edge: edgeIndex, cornerValues: valuesAtCorners, index: index, adaptive: adaptive, homeworkMode: homeworkMode)
             }
-            print("verts identified by this face: \(verts.map { $0 })")
-            //        if let poly = Polygon(verts, material: material) {
-            //            if homeworkMode {
-            //                print("polygon \(poly.summary)")
-            //            }
-            //            output_tris.append(poly)
-            //        }
+            // print("verts identified by this face: \(verts.map { $0 })")
+            // [SIMD3<Float>(2.0, 1.5, 2.0), SIMD3<Float>(1.5, 2.0, 2.0), SIMD3<Float>(2.0, 2.0, 1.5)]
+            let normalCalc: Vector = (verts[1] - verts[0]).cross(verts[2] - verts[1])
+            buffer.positions.append(contentsOf: verts)
+            buffer.normals.append(contentsOf: [normalCalc, normalCalc, normalCalc])
+            let currentCount = buffer.indices.count
+            buffer.indices.append(contentsOf: [UInt32(currentCount), UInt32(currentCount + 1), UInt32(currentCount + 2)])
         }
     }
 
