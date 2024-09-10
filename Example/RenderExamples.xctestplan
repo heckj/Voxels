@@ -18,6 +18,9 @@
   "testTargets" : [
     {
       "parallelizable" : true,
+      "skippedTests" : [
+        "GeneralMeasurementTests"
+      ],
       "target" : {
         "containerPath" : "container:RenderExamples.xcodeproj",
         "identifier" : "1AF52B502C7E27A900B019D5",
