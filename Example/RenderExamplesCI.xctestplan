@@ -16,6 +16,7 @@
       "skippedTests" : [
         "BaselineSnapshotTests",
         "BlockMeshRenderSnapshotTests",
+        "GeneralMeasurementTests",
         "MarchingCubesRenderSnapshotTests",
         "SurfaceNetRenderSnapshotTests"
       ],
