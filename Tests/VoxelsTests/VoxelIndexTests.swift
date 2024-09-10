@@ -80,4 +80,8 @@ class VoxelIndexTests: XCTestCase {
     func testDescription() throws {
         XCTAssertEqual("\(VoxelIndex.one)", "[1, 1, 1]")
     }
+
+    func testIdentifiable() throws {
+        XCTAssertEqual("\(VoxelIndex.one.id)", "[1, 1, 1]")
+    }
 }

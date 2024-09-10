@@ -1,6 +1,15 @@
 {
-  "originHash" : "cb6cc3da6fe42d3c088e1b3f7d67785f6d16fad54bca4bfed5d3ae6a9179dc47",
+  "originHash" : "609ffd4c9c4a265a0623595b4b98430ded5b389353114dda22a07731e326ca3d",
   "pins" : [
+    {
+      "identity" : "heightmap",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/heckj/Heightmap",
+      "state" : {
+        "revision" : "a384b246dabb3879f8a0e8208f3770c56c74f6ad",
+        "version" : "0.5.0"
+      }
+    },
     {
       "identity" : "realitygeometries",
       "kind" : "remoteSourceControl",
@@ -26,6 +35,33 @@
       "state" : {
         "revision" : "e8b88af0d678eacd65da84e99ccc1f0f402e9a97",
         "version" : "0.0.3"
+      }
+    },
+    {
+      "identity" : "swift-hash",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tayloraswift/swift-hash",
+      "state" : {
+        "revision" : "4d70a941b7039358f2ec8565f6c3b53c05f6c6ef",
+        "version" : "0.6.3"
+      }
+    },
+    {
+      "identity" : "swift-noise",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tayloraswift/swift-noise",
+      "state" : {
+        "revision" : "8e35a914d28e4123a749955de19e275488343751",
+        "version" : "1.1.0"
+      }
+    },
+    {
+      "identity" : "swift-png",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tayloraswift/swift-png",
+      "state" : {
+        "revision" : "aff420495467463b43d42c58b4dbb29ab74f4ccb",
+        "version" : "4.4.5"
       }
     },
     {

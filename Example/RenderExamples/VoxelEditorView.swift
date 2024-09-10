@@ -1,12 +1,6 @@
 import SwiftUI
 import Voxels
 
-extension VoxelIndex: Identifiable {
-    public var id: String {
-        description
-    }
-}
-
 @MainActor
 struct VoxelDataEditorView: View {
     let data: ObservableVoxelData

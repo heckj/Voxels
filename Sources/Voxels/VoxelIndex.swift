@@ -72,3 +72,9 @@ extension VoxelIndex: CustomStringConvertible {
         "[\(x), \(y), \(z)]"
     }
 }
+
+extension VoxelIndex: Identifiable {
+    public var id: String {
+        description
+    }
+}

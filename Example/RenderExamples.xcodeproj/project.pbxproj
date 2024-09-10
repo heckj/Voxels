@@ -20,6 +20,7 @@
 		1A8842322C85092600F7EADD /* QuickCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8842302C85092600F7EADD /* QuickCheckView.swift */; };
 		1A95073D2C8A653F00DCB6C6 /* ThreeDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A95073C2C8A653F00DCB6C6 /* ThreeDView.swift */; };
 		1AA3032C2C890B4B004B0660 /* wireframeMaterial.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1AA3032B2C890B4B004B0660 /* wireframeMaterial.metal */; };
+		1AB60B402C90B50D00CF0C6E /* Heightmap in Frameworks */ = {isa = PBXBuildFile; productRef = 1AB60B3F2C90B50D00CF0C6E /* Heightmap */; };
 		1AD4AF692C88EC8300FF4C1C /* VoxelExplorerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4AF682C88EC8300FF4C1C /* VoxelExplorerView.swift */; };
 		1AD4AF6B2C88F00900FF4C1C /* VoxelDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4AF6A2C88F00900FF4C1C /* VoxelDataView.swift */; };
 		1ADE93A62C8FC94C007413E9 /* MeshSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE93A52C8FC94C007413E9 /* MeshSnapshot.swift */; };
@@ -118,6 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AB60B402C90B50D00CF0C6E /* Heightmap in Frameworks */,
 				1AEC43322C7E2968004809B3 /* Voxels in Frameworks */,
 				1A88422B2C8505F300F7EADD /* RealityGeometries in Frameworks */,
 			);
@@ -247,6 +249,7 @@
 			name = RenderExamples;
 			packageProductDependencies = (
 				1A88422A2C8505F300F7EADD /* RealityGeometries */,
+				1AB60B3F2C90B50D00CF0C6E /* Heightmap */,
 			);
 			productName = RenderExamples;
 			productReference = 1AF52B3B2C7E274B00B019D5 /* RenderExamples.app */;
@@ -302,6 +305,7 @@
 				1AEC43302C7E2968004809B3 /* XCLocalSwiftPackageReference "../../Voxels" */,
 				1AEC43332C7E29FD004809B3 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 				1A8842292C8505F300F7EADD /* XCRemoteSwiftPackageReference "RealityGeometries" */,
+				1AB60B3E2C90B50D00CF0C6E /* XCRemoteSwiftPackageReference "Heightmap" */,
 			);
 			productRefGroup = 1AF52B3C2C7E274B00B019D5 /* Products */;
 			projectDirPath = "";
@@ -679,6 +683,14 @@
 				minimumVersion = 1.1.2;
 			};
 		};
+		1AB60B3E2C90B50D00CF0C6E /* XCRemoteSwiftPackageReference "Heightmap" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/heckj/Heightmap";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.0;
+			};
+		};
 		1AEC43332C7E29FD004809B3 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
@@ -694,6 +706,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1A8842292C8505F300F7EADD /* XCRemoteSwiftPackageReference "RealityGeometries" */;
 			productName = RealityGeometries;
+		};
+		1AB60B3F2C90B50D00CF0C6E /* Heightmap */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1AB60B3E2C90B50D00CF0C6E /* XCRemoteSwiftPackageReference "Heightmap" */;
+			productName = Heightmap;
 		};
 		1AEC43312C7E2968004809B3 /* Voxels */ = {
 			isa = XCSwiftPackageProductDependency;
