@@ -95,7 +95,7 @@ final class HeightmapConversionTests: XCTestCase {
             [0.3, 0.4, 0.5, 0.6],
             [0.4, 0.3, 0.4, 0.2],
         ]
-        let voxels = VoxelHash<Float>.heightmap(unitFloatValues, maxVoxelHeight: 10, scale: .init())
+        let voxels = VoxelHash<Float>.heightmap(unitFloatValues, maxVoxelHeight: 10)
         XCTAssertEqual(voxels.count, 96)
         for voxelValue in voxels {
             XCTAssertTrue(!voxelValue.isNaN)
@@ -109,7 +109,7 @@ final class HeightmapConversionTests: XCTestCase {
             [0.1, 0.1],
             [0.1, 0.5],
         ]
-        let voxels = VoxelHash<Float>.heightmap(unitFloatValues, maxVoxelHeight: 5, scale: .init())
+        let voxels = VoxelHash<Float>.heightmap(unitFloatValues, maxVoxelHeight: 5)
         XCTAssertEqual(voxels.count, 16)
         for voxelValue in voxels {
             XCTAssertTrue(!voxelValue.isNaN)
@@ -126,7 +126,7 @@ final class HeightmapConversionTests: XCTestCase {
             [0.4, 0.4, 0.4, 0.4, 0.4],
             [0.4, 0.4, 0.4, 0.4, 0.0],
         ]
-        let voxels = VoxelHash<Float>.heightmap(unitFloatValues, maxVoxelHeight: 5, scale: .init())
+        let voxels = VoxelHash<Float>.heightmap(unitFloatValues, maxVoxelHeight: 5)
         XCTAssertEqual(voxels.count, 79)
         for voxelValue in voxels {
             XCTAssertTrue(!voxelValue.isNaN)

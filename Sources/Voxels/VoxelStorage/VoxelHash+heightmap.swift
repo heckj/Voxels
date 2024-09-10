@@ -116,23 +116,21 @@ public extension VoxelHash {
 
     // heightmap 0...1 - unit-values
     static func heightmap(_ heightmap: [[Float]],
-                          maxVoxelHeight: Int,
-                          scale: VoxelScale<Float>) -> VoxelHash<Float> where T == Float
+                          maxVoxelHeight: Int) -> VoxelHash<Float> where T == Float
     {
         let flattened = try! flattenAndCheck(heightmap)
-        return Self.heightmap(flattened.0, width: flattened.1, maxVoxelHeight: maxVoxelHeight, scale: scale)
+        return Self.heightmap(flattened.0, width: flattened.1, maxVoxelHeight: maxVoxelHeight)
     }
 
     static func heightmap(_ heightmap: [Float],
                           width: Int,
-                          maxVoxelHeight: Int,
-                          scale _: VoxelScale<Float>) -> VoxelHash<Float> where T == Float
+                          maxVoxelHeight: Int) -> VoxelHash<Float> where T == Float
     {
         precondition(width > 0)
         precondition(heightmap.count % width == 0, "heightmap array of \(heightmap.count) is not directly divisible by \(width)")
 
         let heightmapSize: (height: Int, width: Int) = (heightmap.count / width, width)
-        var voxels = VoxelHash<Float>()
+        var voxels = VoxelHash<Float>(defaultVoxel: 1.0)
         for (stride, value) in heightmap.enumerated() {
             let xzPosition: XZIndex = strideToXZ(stride, width: width)
 
