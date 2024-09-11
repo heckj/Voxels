@@ -60,4 +60,11 @@ final class GeneralMeasurementTests: XCTestCase {
             let _ = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(voxels, scale: .init(), within: voxels.bounds)
         }
     }
+
+    func testNoiseHeightmapInitSpeed() throws {
+        // ~ 2.3 sec
+        measure {
+            let _ = Heightmap(width: 1000, height: 1000, seed: 23623)
+        }
+    }
 }
