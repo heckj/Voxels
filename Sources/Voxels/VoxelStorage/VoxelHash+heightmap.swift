@@ -105,7 +105,7 @@ public extension VoxelHash {
         let voxelUnitHeight: Float = 1.0 / Float(bounds.max.y - bounds.min.y)
 
         for linearIndexStep in 0 ..< heightmapSize {
-            let xz: XZIndex = Self.strideToXZ(linearIndexStep, width: width)
+            let xz = XZIndex.strideToXZ(linearIndexStep, width: width)
             let yIndicesToCheckInOrder: [Int] = (bounds.min.y ... bounds.max.y).reversed()
             let highestNegativeSDFYIndex: Int? = yIndicesToCheckInOrder.first(where: { yToCheck in
                 if let value = self[VoxelIndex(xz.x, yToCheck, xz.z)] {

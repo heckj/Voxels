@@ -17,16 +17,14 @@ final class GeneralMeasurementTests: XCTestCase {
 
         // ~ 12.2 seconds
         measure {
-            let _ = VoxelHash<Float>.heightmap(heightmap.contents,
-                                               width: heightmap.width,
+            let _ = VoxelHash<Float>.heightmap(heightmap,
                                                maxVoxelHeight: 200)
         }
     }
 
     func testSurfaceNetRenderVoxelizedHeightmap() throws {
         let heightmap = Heightmap(width: 100, height: 100, seed: 437_347_632)
-        let voxels = VoxelHash<Float>.heightmap(heightmap.contents,
-                                                width: heightmap.width,
+        let voxels = VoxelHash<Float>.heightmap(heightmap,
                                                 maxVoxelHeight: 200)
 
         // ~ 11.8 seconds
@@ -39,8 +37,7 @@ final class GeneralMeasurementTests: XCTestCase {
 
     func testMarchingCubesRenderVoxelizedHeightmap() throws {
         let heightmap = Heightmap(width: 100, height: 100, seed: 437_347_632)
-        let voxels = VoxelHash<Float>.heightmap(heightmap.contents,
-                                                width: heightmap.width,
+        let voxels = VoxelHash<Float>.heightmap(heightmap,
                                                 maxVoxelHeight: 200)
 
         // ~ 8.47 seconds
@@ -51,8 +48,7 @@ final class GeneralMeasurementTests: XCTestCase {
 
     func testBlockMeshRenderVoxelizedHeightmap() throws {
         let heightmap = Heightmap(width: 100, height: 100, seed: 437_347_632)
-        let voxels = VoxelHash<Float>.heightmap(heightmap.contents,
-                                                width: heightmap.width,
+        let voxels = VoxelHash<Float>.heightmap(heightmap,
                                                 maxVoxelHeight: 200)
 
         // ~ 1.87 seconds

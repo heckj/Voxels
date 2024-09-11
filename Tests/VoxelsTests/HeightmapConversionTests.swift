@@ -1,3 +1,4 @@
+import Heightmap
 @testable import Voxels
 import XCTest
 
@@ -62,8 +63,8 @@ final class HeightmapConversionTests: XCTestCase {
         XCTAssertEqual(result.width, 4)
 
         let flattened = try VoxelHash<Float>.flattenAndCheck(unitFloatValues)
-        XCTAssertEqual(flattened.1, 4)
-        XCTAssertEqual(flattened.0.count, 12)
+        XCTAssertEqual(flattened.width, 4)
+        XCTAssertEqual(flattened.contents.count, 12)
     }
 
     func testTwoDIndexNeighborsFrom() throws {
@@ -143,29 +144,29 @@ final class HeightmapConversionTests: XCTestCase {
     }
 
     func test2DstrideToXY() throws {
-        var result = VoxelHash<Float>.strideToXZ(5, width: 4)
+        var result = XZIndex.strideToXZ(5, width: 4)
         XCTAssertEqual(result.x, 1)
         XCTAssertEqual(result.z, 1)
 
-        result = VoxelHash<Float>.strideToXZ(4, width: 4)
+        result = XZIndex.strideToXZ(4, width: 4)
         XCTAssertEqual(result.x, 0)
         XCTAssertEqual(result.z, 1)
 
-        result = VoxelHash<Float>.strideToXZ(3, width: 4)
+        result = XZIndex.strideToXZ(3, width: 4)
         XCTAssertEqual(result.x, 3)
         XCTAssertEqual(result.z, 0)
 
-        result = VoxelHash<Float>.strideToXZ(0, width: 4)
+        result = XZIndex.strideToXZ(0, width: 4)
         XCTAssertEqual(result.x, 0)
         XCTAssertEqual(result.z, 0)
     }
 
     func test2DXYToStride() throws {
-        XCTAssertEqual(VoxelHash<Float>.XZtoStride(x: 0, z: 0, width: 4), 0)
-        XCTAssertEqual(VoxelHash<Float>.XZtoStride(x: 1, z: 0, width: 4), 1)
-        XCTAssertEqual(VoxelHash<Float>.XZtoStride(x: 2, z: 0, width: 4), 2)
-        XCTAssertEqual(VoxelHash<Float>.XZtoStride(x: 3, z: 0, width: 4), 3)
-        XCTAssertEqual(VoxelHash<Float>.XZtoStride(x: 0, z: 1, width: 4), 4)
-        XCTAssertEqual(VoxelHash<Float>.XZtoStride(x: 1, z: 1, width: 4), 5)
+        XCTAssertEqual(XZIndex.XZtoStride(x: 0, z: 0, width: 4), 0)
+        XCTAssertEqual(XZIndex.XZtoStride(x: 1, z: 0, width: 4), 1)
+        XCTAssertEqual(XZIndex.XZtoStride(x: 2, z: 0, width: 4), 2)
+        XCTAssertEqual(XZIndex.XZtoStride(x: 3, z: 0, width: 4), 3)
+        XCTAssertEqual(XZIndex.XZtoStride(x: 0, z: 1, width: 4), 4)
+        XCTAssertEqual(XZIndex.XZtoStride(x: 1, z: 1, width: 4), 5)
     }
 }
