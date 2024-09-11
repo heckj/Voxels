@@ -183,13 +183,13 @@ public class SurfaceNetRenderer {
         }
 
         // if there is an intersection, compute the centroid and gradients
-        let centroid: SIMD3<Float> = VoxelMeshRenderer.centroidOfEdgeIntersections(dists: corner_dists)
+        let centroid: SIMD3<Float> = SurfaceNetRenderer.centroidOfEdgeIntersections(dists: corner_dists)
 
         // calculate scaled voxelIndex to floating point position
         let position = scale.cornerPosition(cornerIndex)
         // add the centroid position, scaled and adjusted by the normal corner index
         positionsCache[cornerIndex] = position + (centroid * scale.cubeSize)
-        normalsCache[cornerIndex] = VoxelMeshRenderer.sdfGradient(dists: corner_dists, s: centroid)
+        normalsCache[cornerIndex] = SurfaceNetRenderer.sdfGradient(dists: corner_dists, s: centroid)
 
         return true
     }

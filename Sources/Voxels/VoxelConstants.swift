@@ -1,4 +1,29 @@
 /// The collection of voxel index offsets for the corners of a voxel.
+///
+/// The relative offset by index for the corners:
+///
+///         ^ +Y
+///         |
+///     (2) +-----------------+ (3)
+///         |\                 \
+///         | \                 \
+///         |  \                 \
+///         |   \                 \
+///         |    +-----------------+ (7)
+///         |    |(6)              |
+///         |    |                 |
+///     (0) +    |            +    |-------> +X
+///          \   |           (1)   |
+///           \  |                 |
+///            \ |                 |
+///             \|                 |
+///              +-----------------+
+///           (4) \               (5)
+///                \
+///                _\/
+///                  +Z
+/// ```
+
 public let CUBE_CORNERS: [VoxelIndex] = [
     [0, 0, 0], // back, bottom, left
     [1, 0, 0], // back, bottom, right
@@ -21,7 +46,7 @@ let CUBE_CORNER_VECTORS: [SIMD3<Float>] = [
     [1.0, 1.0, 1.0],
 ]
 
-let CUBE_EDGES: [SIMD2<UInt32>] = [
+let CUBE_EDGES: [SIMD2<Int>] = [
     [0b000, 0b001], // 0, 1 - referencing cube corner index positions
     [0b000, 0b010], // 0, 2
     [0b000, 0b100], // 0, 4

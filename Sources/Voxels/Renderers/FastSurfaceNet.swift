@@ -114,10 +114,10 @@ extension VoxelMeshRenderer {
         }
 
         // if there is an intersection, compute the centroid and gradients
-        let centroid: SIMD3<Float> = centroidOfEdgeIntersections(dists: corner_dists)
+        let centroid: SIMD3<Float> = SurfaceNetRenderer.centroidOfEdgeIntersections(dists: corner_dists)
 
         output.meshbuffer.positions.append(position + centroid)
-        output.meshbuffer.normals.append(sdfGradient(dists: corner_dists, s: centroid))
+        output.meshbuffer.normals.append(SurfaceNetRenderer.sdfGradient(dists: corner_dists, s: centroid))
 
         return true
     }
@@ -143,10 +143,6 @@ extension VoxelMeshRenderer {
             output.surface_strides // [UInt32]
         ) // this results in 1160 items  - so it's the same as iterating over the surface voxel indices
 
-//        for (xyz, p_stride) in zip(
-//            output.surface_points, // [SIMD3<UInt32>]
-//            output.surface_strides // [UInt32]
-//        )
         for (xyz, p_stride) in bigThing {
             let p_stride = Int(p_stride)
 
