@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A15D2272C92289000CDDCF4 /* NoiseHeightmap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A15D2262C92289000CDDCF4 /* NoiseHeightmap.swift */; };
+		1A15D22A2C9228CA00CDDCF4 /* Noise in Frameworks */ = {isa = PBXBuildFile; productRef = 1A15D2292C9228CA00CDDCF4 /* Noise */; };
+		1A15D22D2C9228DA00CDDCF4 /* Noise in Frameworks */ = {isa = PBXBuildFile; productRef = 1A15D22C2C9228DA00CDDCF4 /* Noise */; };
+		1A15D22F2C9228DF00CDDCF4 /* Heightmap in Frameworks */ = {isa = PBXBuildFile; productRef = 1A15D22E2C9228DF00CDDCF4 /* Heightmap */; };
+		1A15D2312C922A2A00CDDCF4 /* NoiseHeightmapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A15D2302C922A2A00CDDCF4 /* NoiseHeightmapTests.swift */; };
 		1A1744122C8A376100AB874F /* SDFVoxelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1744112C8A376100AB874F /* SDFVoxelData.swift */; };
 		1A1744142C8A389000AB874F /* FormatExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1744132C8A389000AB874F /* FormatExampleTests.swift */; };
 		1A1744162C8A3F8400AB874F /* VoxelIndexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1744152C8A3F8400AB874F /* VoxelIndexView.swift */; };
@@ -71,6 +76,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A15D2262C92289000CDDCF4 /* NoiseHeightmap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseHeightmap.swift; sourceTree = "<group>"; };
+		1A15D2302C922A2A00CDDCF4 /* NoiseHeightmapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseHeightmapTests.swift; sourceTree = "<group>"; };
 		1A1744112C8A376100AB874F /* SDFVoxelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDFVoxelData.swift; sourceTree = "<group>"; };
 		1A1744132C8A389000AB874F /* FormatExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatExampleTests.swift; sourceTree = "<group>"; };
 		1A1744152C8A3F8400AB874F /* VoxelIndexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoxelIndexView.swift; sourceTree = "<group>"; };
@@ -120,6 +127,7 @@
 				1AB60B402C90B50D00CF0C6E /* Heightmap in Frameworks */,
 				1AEC43322C7E2968004809B3 /* Voxels in Frameworks */,
 				1A88422B2C8505F300F7EADD /* RealityGeometries in Frameworks */,
+				1A15D22A2C9228CA00CDDCF4 /* Noise in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +135,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A15D22F2C9228DF00CDDCF4 /* Heightmap in Frameworks */,
+				1A15D22D2C9228DA00CDDCF4 /* Noise in Frameworks */,
 				1AEC43352C7E29FD004809B3 /* InlineSnapshotTesting in Frameworks */,
 				1AEC43372C7E29FD004809B3 /* SnapshotTesting in Frameworks */,
 			);
@@ -135,6 +145,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A15D22B2C9228DA00CDDCF4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		1A88422C2C85060000F7EADD /* DebugMeshResources */ = {
 			isa = PBXGroup;
 			children = (
@@ -170,6 +187,7 @@
 				1AF52B3D2C7E274B00B019D5 /* RenderExamples */,
 				1AF52B522C7E27A900B019D5 /* RenderExamplesTests */,
 				1AF52B3C2C7E274B00B019D5 /* Products */,
+				1A15D22B2C9228DA00CDDCF4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -196,6 +214,7 @@
 				1A1744152C8A3F8400AB874F /* VoxelIndexView.swift */,
 				1A1744112C8A376100AB874F /* SDFVoxelData.swift */,
 				1AEC432A2C7E28EE004809B3 /* EntityExample.swift */,
+				1A15D2262C92289000CDDCF4 /* NoiseHeightmap.swift */,
 				1AF52B3E2C7E274B00B019D5 /* RenderExamplesApp.swift */,
 				1AF52B422C7E274C00B019D5 /* Assets.xcassets */,
 				1AF52B442C7E274C00B019D5 /* RenderExamples.entitlements */,
@@ -224,6 +243,7 @@
 				1A9DA72F2C90C2AD007BD5DC /* MeasurementTests.swift */,
 				1AEC43252C7E2877004809B3 /* CameraControlARViewTests.swift */,
 				1A1744132C8A389000AB874F /* FormatExampleTests.swift */,
+				1A15D2302C922A2A00CDDCF4 /* NoiseHeightmapTests.swift */,
 			);
 			path = RenderExamplesTests;
 			sourceTree = "<group>";
@@ -247,6 +267,7 @@
 			packageProductDependencies = (
 				1A88422A2C8505F300F7EADD /* RealityGeometries */,
 				1AB60B3F2C90B50D00CF0C6E /* Heightmap */,
+				1A15D2292C9228CA00CDDCF4 /* Noise */,
 			);
 			productName = RenderExamples;
 			productReference = 1AF52B3B2C7E274B00B019D5 /* RenderExamples.app */;
@@ -266,6 +287,10 @@
 				1AF52B562C7E27A900B019D5 /* PBXTargetDependency */,
 			);
 			name = RenderExamplesTests;
+			packageProductDependencies = (
+				1A15D22C2C9228DA00CDDCF4 /* Noise */,
+				1A15D22E2C9228DF00CDDCF4 /* Heightmap */,
+			);
 			productName = RenderExamplesTests;
 			productReference = 1AF52B512C7E27A900B019D5 /* RenderExamplesTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -303,6 +328,7 @@
 				1AEC43332C7E29FD004809B3 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 				1A8842292C8505F300F7EADD /* XCRemoteSwiftPackageReference "RealityGeometries" */,
 				1AB60B3E2C90B50D00CF0C6E /* XCRemoteSwiftPackageReference "Heightmap" */,
+				1A15D2282C9228CA00CDDCF4 /* XCRemoteSwiftPackageReference "swift-noise" */,
 			);
 			productRefGroup = 1AF52B3C2C7E274B00B019D5 /* Products */;
 			projectDirPath = "";
@@ -354,6 +380,7 @@
 				1AEC431F2C7E285E004809B3 /* BirdsEyeState.swift in Sources */,
 				1AD4AF6B2C88F00900FF4C1C /* VoxelDataView.swift in Sources */,
 				1AEC43202C7E285E004809B3 /* ARViewContainer.swift in Sources */,
+				1A15D2272C92289000CDDCF4 /* NoiseHeightmap.swift in Sources */,
 				1A88422E2C85062E00F7EADD /* DebugModels.swift in Sources */,
 				1AEC43212C7E285E004809B3 /* CameraControlledARView.swift in Sources */,
 				1A95073D2C8A653F00DCB6C6 /* ThreeDView.swift in Sources */,
@@ -385,6 +412,7 @@
 				1ADE93A82C8FCA2D007413E9 /* BaselineSnapshotTest.swift in Sources */,
 				1AEC43162C7E285E004809B3 /* ARViewContainer.swift in Sources */,
 				1AEC43172C7E285E004809B3 /* CameraControlledARView.swift in Sources */,
+				1A15D2312C922A2A00CDDCF4 /* NoiseHeightmapTests.swift in Sources */,
 				1A88422F2C85062E00F7EADD /* DebugModels.swift in Sources */,
 				1AEC43182C7E285E004809B3 /* Comparable+clamped.swift in Sources */,
 				1ADE93AC2C8FCAAE007413E9 /* MarchingCubesRenderSnapshotTests.swift in Sources */,
@@ -671,6 +699,14 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1A15D2282C9228CA00CDDCF4 /* XCRemoteSwiftPackageReference "swift-noise" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tayloraswift/swift-noise";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
 		1A8842292C8505F300F7EADD /* XCRemoteSwiftPackageReference "RealityGeometries" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/maxxfrazer/RealityGeometries";
@@ -698,6 +734,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1A15D2292C9228CA00CDDCF4 /* Noise */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A15D2282C9228CA00CDDCF4 /* XCRemoteSwiftPackageReference "swift-noise" */;
+			productName = Noise;
+		};
+		1A15D22C2C9228DA00CDDCF4 /* Noise */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A15D2282C9228CA00CDDCF4 /* XCRemoteSwiftPackageReference "swift-noise" */;
+			productName = Noise;
+		};
+		1A15D22E2C9228DF00CDDCF4 /* Heightmap */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1AB60B3E2C90B50D00CF0C6E /* XCRemoteSwiftPackageReference "Heightmap" */;
+			productName = Heightmap;
+		};
 		1A88422A2C8505F300F7EADD /* RealityGeometries */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1A8842292C8505F300F7EADD /* XCRemoteSwiftPackageReference "RealityGeometries" */;

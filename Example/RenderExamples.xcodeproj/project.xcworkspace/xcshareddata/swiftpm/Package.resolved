@@ -1,13 +1,13 @@
 {
-  "originHash" : "609ffd4c9c4a265a0623595b4b98430ded5b389353114dda22a07731e326ca3d",
+  "originHash" : "4533065bf5a3d713fa2786cb57f269e94a536d6485b9ccabc75f357416704a13",
   "pins" : [
     {
       "identity" : "heightmap",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/heckj/Heightmap",
       "state" : {
-        "revision" : "a384b246dabb3879f8a0e8208f3770c56c74f6ad",
-        "version" : "0.5.0"
+        "revision" : "1c6af9e2efdb9789d3f5051bcb10cdaf6463890d",
+        "version" : "0.6.1"
       }
     },
     {
@@ -79,7 +79,7 @@
       "location" : "https://github.com/swiftlang/swift-syntax",
       "state" : {
         "revision" : "515f79b522918f83483068d99c68daeb5116342d",
-        "version" : "600.0.0-prerelease-2024-08-20"
+        "version" : "600.0.0-prerelease-2024-09-04"
       }
     },
     {
