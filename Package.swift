@@ -27,18 +27,24 @@ let package = Package(
         .executable(name: "voxel-benchmarks", targets: ["voxel-benchmarks"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/heckj/Heightmap", from: "0.6.0"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
         .package(url: "https://github.com/apple/swift-collections-benchmark", from: "0.0.1"),
     ],
     targets: [
         .target(
             name: "Voxels",
-            dependencies: [],
+            dependencies: [
+                .product(name: "Heightmap", package: "Heightmap"),
+            ],
             swiftSettings: globalSwiftSettings
         ),
         .testTarget(
             name: "VoxelsTests",
-            dependencies: ["Voxels"]
+            dependencies: [
+                "Voxels",
+                .product(name: "Heightmap", package: "Heightmap"),
+            ]
         ),
         .executableTarget(
             name: "voxel-benchmarks",
