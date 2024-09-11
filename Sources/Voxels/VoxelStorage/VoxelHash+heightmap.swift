@@ -1,3 +1,5 @@
+import Heightmap
+
 public extension VoxelHash {
     static func sample(_ samples: SDFSampleable<Float>,
                        using scale: VoxelScale<Float>,
@@ -33,9 +35,8 @@ public extension VoxelHash {
         return yIndex
     }
 
-    static func lookupUnitSurfaceIndexValue(x: Int, z: Int, heightmap: [Float], width: Int, maxHeight: Int) -> Int {
-        let stride = XZtoStride(x: x, z: z, width: width)
-        let value = heightmap[stride]
+    static func lookupUnitSurfaceIndexValue(x: Int, z: Int, heightmap: Heightmap, maxHeight: Int) -> Int {
+        let value = heightmap[x, z]
         let mappedUnitHeightValue = value * Float(maxHeight)
         // convert 0...1 -> 0...maxVoxelHeight
 
@@ -78,40 +79,14 @@ public extension VoxelHash {
         return top.length / bottom.length
     }
 
-    static func flattenAndCheck(_ heightmap: [[Float]]) throws -> ([Float], Int, Int) {
+    static func flattenAndCheck(_ heightmap: [[Float]]) throws -> Heightmap {
         let heightmapSize = sizeOfHeightmap(heightmap)
         let flattened = Array(heightmap.joined())
         // check
         if heightmapSize.height * heightmapSize.width != flattened.count {
             throw HeightmapError.invalid("provided 2D array is irregular - \(heightmapSize.height) * \(heightmapSize.width) != \(flattened.count)")
         }
-        return (flattened, heightmapSize.width, heightmapSize.height)
-    }
-
-    struct XZIndex: Sendable, Hashable {
-        let x: Int
-        let z: Int
-
-        public init(x: Int, z: Int) {
-            self.x = x
-            self.z = z
-        }
-    }
-
-    @inlinable
-    static func strideToXZ(_ stride: Int, width: Int) -> XZIndex {
-        var z = 0
-        if stride > (width - 1) {
-            z = stride / width
-        }
-        let remaining = stride - (z * width)
-        return XZIndex(x: remaining, z: z)
-    }
-
-    @inlinable
-    static func XZtoStride(x: Int, z: Int, width: Int) -> Int {
-        let minorOffset = z * width
-        return minorOffset + x
+        return Heightmap(flattened, width: heightmapSize.width)
     }
 
     // heightmap 0...1 - unit-values
@@ -119,7 +94,7 @@ public extension VoxelHash {
                           maxVoxelHeight: Int) -> VoxelHash<Float> where T == Float
     {
         let flattened = try! flattenAndCheck(heightmap)
-        return Self.heightmap(flattened.0, width: flattened.1, maxVoxelHeight: maxVoxelHeight)
+        return Self.heightmap(flattened, maxVoxelHeight: maxVoxelHeight)
     }
 
     func heightmap() -> [Float] where T == Float {
@@ -147,22 +122,23 @@ public extension VoxelHash {
         return unitHeightMap
     }
 
-    static func heightmap(_ heightmap: [Float],
-                          width: Int,
+    /// Creates a collection of Voxels from a height map
+    /// - Parameters:
+    ///   - heightmap: The Heightmap that represents the relative height at each x and z voxel index.
+    ///   - maxVoxelHeight: The maximum height of voxels.
+    static func heightmap(_ heightmap: Heightmap,
                           maxVoxelHeight: Int) -> VoxelHash<Float> where T == Float
     {
-        precondition(width > 0)
-        precondition(heightmap.count % width == 0, "heightmap array of \(heightmap.count) is not directly divisible by \(width)")
+        precondition(heightmap.width > 0)
 
-        let heightmapSize: (height: Int, width: Int) = (heightmap.count / width, width)
         var voxels = VoxelHash<Float>(defaultVoxel: 1.0)
         for (stride, value) in heightmap.enumerated() {
-            let xzPosition: XZIndex = strideToXZ(stride, width: width)
+            let xzPosition = XZIndex.strideToXZ(stride, width: heightmap.width)
 
-            let surroundingNeighbors: [(x: Int, z: Int)] = twoDIndexNeighborsFrom(x: xzPosition.x, z: xzPosition.z, widthCount: heightmapSize.width, heightCount: heightmapSize.height)
+            let surroundingNeighbors: [(x: Int, z: Int)] = twoDIndexNeighborsFrom(x: xzPosition.x, z: xzPosition.z, widthCount: heightmap.width, heightCount: heightmap.height)
 
             let neighborsSurfaceVoxelIndex: [VoxelIndex] = surroundingNeighbors.map { xy in
-                let yIndexForNeighbor = lookupUnitSurfaceIndexValue(x: xy.x, z: xy.z, heightmap: heightmap, width: width, maxHeight: maxVoxelHeight)
+                let yIndexForNeighbor = lookupUnitSurfaceIndexValue(x: xy.x, z: xy.z, heightmap: heightmap, maxHeight: maxVoxelHeight)
                 return VoxelIndex(xy.x, yIndexForNeighbor, xy.z)
             }
 
