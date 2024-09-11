@@ -1,4 +1,4 @@
-import Voxels
+@testable import Voxels
 import XCTest
 
 class VoxelMeshRendererTests: XCTestCase {

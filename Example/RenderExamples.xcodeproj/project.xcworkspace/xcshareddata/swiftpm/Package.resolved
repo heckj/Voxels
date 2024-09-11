@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/heckj/Heightmap",
       "state" : {
-        "revision" : "1c6af9e2efdb9789d3f5051bcb10cdaf6463890d",
-        "version" : "0.6.1"
+        "revision" : "b3e32343bcb9d78f31f3fa45084dda4be6062aa1",
+        "version" : "0.6.2"
       }
     },
     {
