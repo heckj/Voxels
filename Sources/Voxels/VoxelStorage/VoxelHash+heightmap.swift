@@ -1,24 +1,6 @@
 import Heightmap
 
-public extension VoxelHash {
-    static func sample(_ samples: SDFSampleable<Float>,
-                       using scale: VoxelScale<Float>,
-                       from min: SIMD3<Float>,
-                       to max: SIMD3<Float>) -> VoxelHash<Float> where T == Float
-    {
-        var voxels = VoxelHash<Float>()
-        for x in stride(from: min.x, through: max.x, by: scale.cubeSize) {
-            for y in stride(from: min.y, through: max.y, by: scale.cubeSize) {
-                for z in stride(from: min.z, through: max.z, by: scale.cubeSize) {
-                    let position = SIMD3<Float>(Float(x), Float(y), Float(z))
-                    let voxelIndex = scale.index(for: position)
-                    voxels[voxelIndex] = samples.valueAt(position)
-                }
-            }
-        }
-        return voxels
-    }
-
+public enum HeightmapConverter {
     /// Returns the unit value of the center of the voxel at the height index you provide.
     ///
     /// For example, for a set of voxels with a maximum height of 5:
@@ -115,18 +97,18 @@ public extension VoxelHash {
     ///
     /// If a coordinate location has no voxels, the height map value is returned as 0.
     /// - Returns: A height map of the highest surface represented in the voxels SDF values.
-    func heightmap() -> Heightmap where T == Float {
-        let width = (bounds.max.x - bounds.min.x) + 1
-        let heightmapSize = width * (bounds.max.z - bounds.min.z + 1)
+    public static func heightmap(from v: VoxelHash<Float>) -> Heightmap {
+        let width = (v.bounds.max.x - v.bounds.min.x) + 1
+        let heightmapSize = width * (v.bounds.max.z - v.bounds.min.z + 1)
 
         var unitHeightMap: [Float] = []
-        let voxelUnitHeight: Float = 1.0 / Float(bounds.max.y - bounds.min.y)
+        let voxelUnitHeight: Float = 1.0 / Float(v.bounds.max.y - v.bounds.min.y)
 
         for linearIndexStep in 0 ..< heightmapSize {
             let xz = XZIndex.strideToXZ(linearIndexStep, width: width)
-            let yIndicesToCheckInOrder: [Int] = (bounds.min.y ... bounds.max.y).reversed()
+            let yIndicesToCheckInOrder: [Int] = (v.bounds.min.y ... v.bounds.max.y).reversed()
             let highestNegativeSDFYIndex: Int? = yIndicesToCheckInOrder.first(where: { yToCheck in
-                if let value = self[VoxelIndex(xz.x, yToCheck, xz.z)] {
+                if let value = v[VoxelIndex(xz.x, yToCheck, xz.z)] {
                     return value <= 0
                 }
                 return false
@@ -144,8 +126,8 @@ public extension VoxelHash {
     /// - Parameters:
     ///   - heightmap: The Heightmap that represents the relative height at each x and z voxel index.
     ///   - maxVoxelHeight: The maximum height of voxels.
-    static func heightmap(_ heightmap: Heightmap,
-                          maxVoxelHeight: Int) -> VoxelHash<Float> where T == Float
+    public static func heightmap(_ heightmap: Heightmap,
+                                 maxVoxelHeight: Int) -> VoxelHash<Float>
     {
         precondition(heightmap.width > 0)
 
