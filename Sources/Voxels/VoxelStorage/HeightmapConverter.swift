@@ -83,6 +83,7 @@ public enum HeightmapConverter {
     ///   - x1: A first point that defines the line.
     ///   - x2: The second point that defines the line.
     /// - Returns: The minimum distance between the point and the line.
+    @inlinable
     static func distanceFromPointToLine(p: SIMD3<Float>, x1: SIMD3<Float>, x2: SIMD3<Float>) -> Float {
         // https://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
         //  | (p - x1) X (x0 - x2) |
