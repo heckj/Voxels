@@ -19,15 +19,53 @@ public extension VoxelHash {
         return voxels
     }
 
-    static func unitCentroidValue(_ index: Int, max: Int) -> Float {
-        let step = 1.0 / Float(max)
-        return (Float(index) * step) + (step / 2.0)
+    /// Returns the unit value of the center of the voxel at the height index you provide.
+    ///
+    /// For example, for a set of voxels with a maximum height of 5:
+    ///
+    /// ```
+    ///    +---
+    ///  4 | .  --> 1.00
+    ///    +---
+    ///  3 | .  --> 0.75
+    ///    +---
+    ///  2 | .  --> 0.50
+    ///    +---
+    ///  1 | .  --> 0.25
+    ///    +---
+    ///  0 | .  --> 0.00
+    ///    +---
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - heightIndex: The voxel index value of the height of the voxel.
+    ///   - maxHeight: The maximum number of vertical voxels.
+    @inlinable
+    static func unitCentroidValue(_ heightIndex: Int, maxHeight: Int) -> Float {
+        Float(heightIndex) / Float(maxHeight - 1)
     }
 
-    static func unitSurfaceIndexValue(x: Int, y: Int, heightmap: [[Float]], maxHeight: Int) -> Int {
-        let value = heightmap[y][x]
-        let mappedUnitHeightValue = value * Float(maxHeight)
-        // convert 0...1 -> 0...maxVoxelHeight
+    /// Returns the vertical SDF value for the voxel at the height index you provide.
+    /// - Parameters:
+    ///   - unitValue: The unit value of relative height.
+    ///   - y: The y index of the voxel.
+    ///   - maxHeight: The maximum number of voxels.
+    ///   - voxelSize: The height of a single voxel.
+    @inlinable
+    static func unitFloatToSDF(_: Float, at _: Int, maxHeight _: Int, voxelSize _: Float) -> Float {
+        0.0
+    }
+
+    /// Returns the Y index value that maps to the surface value location from the height map.
+    /// - Parameters:
+    ///   - x: The x index of the voxel pillar
+    ///   - z: The z index of the voxel pillar
+    ///   - heightmap: The height
+    ///   - maxHeight: The maximum number of vertical voxels.
+    @inlinable
+    static func unitSurfaceIndexValue(_ p: XZIndex, heightmap: Heightmap, maxHeight: Int) -> Int {
+        let mappedUnitHeightValue = heightmap[p] * Float(maxHeight - 1)
+        // convert 0...1 -> 0...(maxVoxelHeight - 1)
 
         let yIndex = Int(mappedUnitHeightValue.rounded(.towardZero))
         // loosely equiv to floor() - gets the lower index position for the voxel Index
@@ -35,41 +73,35 @@ public extension VoxelHash {
         return yIndex
     }
 
-    static func lookupUnitSurfaceIndexValue(x: Int, z: Int, heightmap: Heightmap, maxHeight: Int) -> Int {
-        let value = heightmap[x, z]
-        let mappedUnitHeightValue = value * Float(maxHeight)
-        // convert 0...1 -> 0...maxVoxelHeight
-
-        let yIndex = Int(mappedUnitHeightValue.rounded(.towardZero))
-        // loosely equiv to floor() - gets the lower index position for the voxel Index
-
-        return yIndex
-    }
-
-    static func sizeOfHeightmap(_ map: [[Float]]) -> (height: Int, width: Int) {
-        let height = map.count
-        let width = map.reduce(into: 0) { partialResult, row in
-            partialResult = Swift.max(partialResult, row.count)
-        }
-        return (height: height, width: width)
-    }
-
-    static func twoDIndexNeighborsFrom(x: Int, z: Int, widthCount: Int, heightCount: Int) -> [(x: Int, z: Int)] {
-        var returns: [(x: Int, z: Int)] = []
-        for possibleX in x - 1 ... x + 1 {
-            for possibleZ in z - 1 ... z + 1 {
+    /// Returns a collection of XZIndex locations around the point you provide that reside within the voxel bounds you specify.
+    /// - Parameters:
+    ///   - x: The x index location.
+    ///   - z: The z index location.
+    ///   - widthCount: The maximum number of voxels wide.
+    ///   - depthCount: The maximum number of voxels deep.
+    @inlinable
+    static func twoDIndexNeighborsFrom(position: XZIndex, widthCount: Int, depthCount: Int) -> [XZIndex] {
+        var neighbors: [XZIndex] = []
+        for possibleX in position.x - 1 ... position.x + 1 {
+            for possibleZ in position.z - 1 ... position.z + 1 {
                 if possibleX >= 0, possibleX < widthCount, // bounding possible neighbors by width
-                   possibleZ >= 0, possibleZ < heightCount, // bounding possible neighbors by depth
-                   !(x == possibleX && z == possibleZ) // don't include the originating position in neighbor list
+                   possibleZ >= 0, possibleZ < depthCount, // bounding possible neighbors by depth
+                   !(position.x == possibleX && position.z == possibleZ) // don't include the originating position in neighbor list
                 {
-                    returns.append((x: possibleX, z: possibleZ))
+                    neighbors.append(XZIndex(x: possibleX, z: possibleZ))
                 }
             }
         }
-        return returns
+        return neighbors
     }
 
-    static func pointdistancetoline(p: SIMD3<Float>, x1: SIMD3<Float>, x2: SIMD3<Float>) -> Float {
+    /// Computes the minimum distance between a point and a line in three dimensional space.
+    /// - Parameters:
+    ///   - p: The point to measure from.
+    ///   - x1: A first point that defines the line.
+    ///   - x2: The second point that defines the line.
+    /// - Returns: The minimum distance between the point and the line.
+    static func distanceFromPointToLine(p: SIMD3<Float>, x1: SIMD3<Float>, x2: SIMD3<Float>) -> Float {
         // https://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
         //  | (p - x1) X (x0 - x2) |
         // --------------------------
@@ -79,25 +111,11 @@ public extension VoxelHash {
         return top.length / bottom.length
     }
 
-    static func flattenAndCheck(_ heightmap: [[Float]]) throws -> Heightmap {
-        let heightmapSize = sizeOfHeightmap(heightmap)
-        let flattened = Array(heightmap.joined())
-        // check
-        if heightmapSize.height * heightmapSize.width != flattened.count {
-            throw HeightmapError.invalid("provided 2D array is irregular - \(heightmapSize.height) * \(heightmapSize.width) != \(flattened.count)")
-        }
-        return Heightmap(flattened, width: heightmapSize.width)
-    }
-
-    // heightmap 0...1 - unit-values
-    static func heightmap(_ heightmap: [[Float]],
-                          maxVoxelHeight: Int) -> VoxelHash<Float> where T == Float
-    {
-        let flattened = try! flattenAndCheck(heightmap)
-        return Self.heightmap(flattened, maxVoxelHeight: maxVoxelHeight)
-    }
-
-    func heightmap() -> [Float] where T == Float {
+    /// Computes a height map from the collection of voxels.
+    ///
+    /// If a coordinate location has no voxels, the height map value is returned as 0.
+    /// - Returns: A height map of the highest surface represented in the voxels SDF values.
+    func heightmap() -> Heightmap where T == Float {
         let width = (bounds.max.x - bounds.min.x) + 1
         let heightmapSize = width * (bounds.max.z - bounds.min.z + 1)
 
@@ -119,7 +137,7 @@ public extension VoxelHash {
                 unitHeightMap.append(0.0)
             }
         }
-        return unitHeightMap
+        return Heightmap(unitHeightMap, width: width)
     }
 
     /// Creates a collection of Voxels from a height map
@@ -135,11 +153,11 @@ public extension VoxelHash {
         for (stride, value) in heightmap.enumerated() {
             let xzPosition = XZIndex.strideToXZ(stride, width: heightmap.width)
 
-            let surroundingNeighbors: [(x: Int, z: Int)] = twoDIndexNeighborsFrom(x: xzPosition.x, z: xzPosition.z, widthCount: heightmap.width, heightCount: heightmap.height)
+            let surroundingNeighbors: [XZIndex] = twoDIndexNeighborsFrom(position: xzPosition, widthCount: heightmap.width, depthCount: heightmap.height)
 
-            let neighborsSurfaceVoxelIndex: [VoxelIndex] = surroundingNeighbors.map { xy in
-                let yIndexForNeighbor = lookupUnitSurfaceIndexValue(x: xy.x, z: xy.z, heightmap: heightmap, maxHeight: maxVoxelHeight)
-                return VoxelIndex(xy.x, yIndexForNeighbor, xy.z)
+            let neighborsSurfaceVoxelIndex: [VoxelIndex] = surroundingNeighbors.map { xz in
+                let yIndexForNeighbor = unitSurfaceIndexValue(xz, heightmap: heightmap, maxHeight: maxVoxelHeight)
+                return VoxelIndex(xz.x, yIndexForNeighbor, xz.z)
             }
 
             // convert value of 0...1 to index position of 0...maxVoxelHeight
@@ -163,11 +181,11 @@ public extension VoxelHash {
 
             for y in minYIndex ... maxYIndex {
                 let distances: [Float] = neighborsSurfaceVoxelIndex.map { vi in
-                    pointdistancetoline(p: SIMD3<Float>(Float(xzPosition.x), Float(y), Float(xzPosition.z)),
-                                        // line from the the surface index point of this column
-                                        x1: SIMD3<Float>(Float(xzPosition.x), Float(yIndex), Float(xzPosition.z)),
-                                        // to the surface index point of the neighbor
-                                        x2: SIMD3<Float>(Float(vi.x), Float(vi.y), Float(vi.z)))
+                    distanceFromPointToLine(p: SIMD3<Float>(Float(xzPosition.x), Float(y), Float(xzPosition.z)),
+                                            // line from the the surface index point of this column
+                                            x1: SIMD3<Float>(Float(xzPosition.x), Float(yIndex), Float(xzPosition.z)),
+                                            // to the surface index point of the neighbor
+                                            x2: SIMD3<Float>(Float(vi.x), Float(vi.y), Float(vi.z)))
                 }
                 let minDistance = distances.min() ?? 0
                 let minDistanceMappedBack = minDistance / Float(maxVoxelHeight)
