@@ -3,7 +3,7 @@ import Heightmap
 public enum HeightmapConverter {
     /// Returns the unit value of the center of the voxel at the height index you provide.
     ///
-    /// For example, for a set of voxels with a maximum height of 5:
+    /// For example, for a set of voxels with a maximum height of `5`:
     ///
     /// ```
     ///    +---
@@ -27,15 +27,38 @@ public enum HeightmapConverter {
         Float(heightIndex) / Float(maxHeight - 1)
     }
 
-    /// Returns the vertical SDF value for the voxel at the height index you provide.
+    /// Returns the vertically-computed SDF value for the Y voxel index for the unit height value you provide.
     /// - Parameters:
-    ///   - unitValue: The unit value of relative height.
+    ///   - unitValue: The unit value height.
     ///   - y: The y index of the voxel.
-    ///   - maxHeight: The maximum number of voxels.
+    ///   - maxVoxelHeight: The maximum number of voxels.
     ///   - voxelSize: The height of a single voxel.
+    ///
+    /// The function only computes the distance to the surface vertically, and does not
+    /// consider or estimate any surrounding voxels.
+    /// For example, for a set of voxels with a maximum height of `5`, and a unit-height of `0.33`:
+    /// ```       unit-value   SDF
+    ///           at center   value
+    ///    +---
+    ///  4 | .  --> 1.00 ...  0.66
+    ///    +---
+    ///  3 | .  --> 0.75 ...  0.33
+    ///    +---
+    ///  2 | .  --> 0.50 ...  0.17
+    ///    +---
+    ///  1 | .  --> 0.25 ... -0.07
+    ///    +---
+    ///  0 | .  --> 0.00 ... -0.33
+    ///    +---
+    /// ```
     @inlinable
-    static func unitFloatToSDF(_: Float, at _: Int, maxHeight _: Int, voxelSize _: Float) -> Float {
-        0.0
+    static func SDFValueAtHeight(_ unitValue: Float, at y: Int, maxVoxelHeight: Int, voxelSize: Float) -> Float {
+        // get unit centroid value of this index
+        let centroidFloatOfYIndex = unitCentroidValue(y, maxHeight: maxVoxelHeight)
+        // compute the unit difference
+        let difference = centroidFloatOfYIndex - unitValue
+        // scale the difference by the size of each voxel to get the final SDF value
+        return difference * voxelSize
     }
 
     /// Returns the Y index value that maps to the surface value location from the height map.
@@ -45,7 +68,7 @@ public enum HeightmapConverter {
     ///   - heightmap: The height
     ///   - maxHeight: The maximum number of vertical voxels.
     @inlinable
-    static func unitSurfaceIndexValue(_ p: XZIndex, heightmap: Heightmap, maxHeight: Int) -> Int {
+    static func indexOfSurface(_ p: XZIndex, heightmap: Heightmap, maxHeight: Int) -> Int {
         let mappedUnitHeightValue = heightmap[p] * Float(maxHeight - 1)
         // convert 0...1 -> 0...(maxVoxelHeight - 1)
 
@@ -139,7 +162,7 @@ public enum HeightmapConverter {
             let surroundingNeighbors: [XZIndex] = twoDIndexNeighborsFrom(position: xzPosition, widthCount: heightmap.width, depthCount: heightmap.height)
 
             let neighborsSurfaceVoxelIndex: [VoxelIndex] = surroundingNeighbors.map { xz in
-                let yIndexForNeighbor = unitSurfaceIndexValue(xz, heightmap: heightmap, maxHeight: maxVoxelHeight)
+                let yIndexForNeighbor = indexOfSurface(xz, heightmap: heightmap, maxHeight: maxVoxelHeight)
                 return VoxelIndex(xz.x, yIndexForNeighbor, xz.z)
             }
 
