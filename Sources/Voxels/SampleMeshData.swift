@@ -1,3 +1,5 @@
+import Heightmap
+
 public enum SampleMeshData {
     public static func voxelArrayFromSphere() throws -> VoxelArray<Float> {
         let sphereSDF: SDFSampleable<Float> = SDF.sphere()
@@ -98,6 +100,7 @@ public enum SampleMeshData {
             [0.4, 0.4, 0.4, 0.4, 0.4],
             [0.4, 0.4, 0.4, 0.4, 0.0],
         ]
-        return VoxelHash<Float>.heightmap(unitFloatValues, maxVoxelHeight: 5)
+        let heightmap = Heightmap(Array(unitFloatValues.joined()), width: 5)
+        return VoxelHash<Float>.heightmap(heightmap, maxVoxelHeight: 5)
     }
 }
