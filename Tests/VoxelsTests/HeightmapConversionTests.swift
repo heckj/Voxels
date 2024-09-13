@@ -8,14 +8,14 @@ final class HeightmapConversionTests: XCTestCase {
         // we need to know the 'unit height' equivalent of the centroid of a voxel.
 
         // for a maxHeight of 6 (Voxels 0...5)
-        XCTAssertEqual(HeightmapConverter.unitCentroidValue(0, maxHeight: 6), 0.0, accuracy: 0.01)
-        XCTAssertEqual(HeightmapConverter.unitCentroidValue(1, maxHeight: 6), 0.2, accuracy: 0.01)
-        XCTAssertEqual(HeightmapConverter.unitCentroidValue(2, maxHeight: 6), 0.4, accuracy: 0.01)
-        XCTAssertEqual(HeightmapConverter.unitCentroidValue(3, maxHeight: 6), 0.6, accuracy: 0.01)
-        XCTAssertEqual(HeightmapConverter.unitCentroidValue(4, maxHeight: 6), 0.8, accuracy: 0.01)
-        XCTAssertEqual(HeightmapConverter.unitCentroidValue(5, maxHeight: 6), 1.0, accuracy: 0.01)
+        XCTAssertEqual(HeightmapConverter.unitCentroidValue(0, maxVoxelIndex: 6), 0.0, accuracy: 0.01)
+        XCTAssertEqual(HeightmapConverter.unitCentroidValue(1, maxVoxelIndex: 6), 0.2, accuracy: 0.01)
+        XCTAssertEqual(HeightmapConverter.unitCentroidValue(2, maxVoxelIndex: 6), 0.4, accuracy: 0.01)
+        XCTAssertEqual(HeightmapConverter.unitCentroidValue(3, maxVoxelIndex: 6), 0.6, accuracy: 0.01)
+        XCTAssertEqual(HeightmapConverter.unitCentroidValue(4, maxVoxelIndex: 6), 0.8, accuracy: 0.01)
+        XCTAssertEqual(HeightmapConverter.unitCentroidValue(5, maxVoxelIndex: 6), 1.0, accuracy: 0.01)
         // stepping above the max height should result in > 1.0 values
-        XCTAssertEqual(HeightmapConverter.unitCentroidValue(6, maxHeight: 6), 1.2, accuracy: 0.01)
+        XCTAssertEqual(HeightmapConverter.unitCentroidValue(6, maxVoxelIndex: 6), 1.2, accuracy: 0.01)
     }
 
     func testAccessingFloors() throws {
@@ -33,12 +33,12 @@ final class HeightmapConversionTests: XCTestCase {
         XCTAssertEqual(unitFloatValues[2][3], 0.6)
         XCTAssertEqual(heightmap[3, 2], 0.6)
 
-        XCTAssertEqual(HeightmapConverter.indexOfSurface(XZIndex(x: 0, z: 0), heightmap: heightmap, maxHeight: 10), 0)
-        XCTAssertEqual(HeightmapConverter.indexOfSurface(XZIndex(x: 1, z: 0), heightmap: heightmap, maxHeight: 10), 1)
-        XCTAssertEqual(HeightmapConverter.indexOfSurface(XZIndex(x: 2, z: 0), heightmap: heightmap, maxHeight: 10), 2)
-        XCTAssertEqual(HeightmapConverter.indexOfSurface(XZIndex(x: 3, z: 0), heightmap: heightmap, maxHeight: 10), 3)
+        XCTAssertEqual(HeightmapConverter.indexOfSurface(XZIndex(x: 0, z: 0), heightmap: heightmap, maxVoxelIndex: 10), 0)
+        XCTAssertEqual(HeightmapConverter.indexOfSurface(XZIndex(x: 1, z: 0), heightmap: heightmap, maxVoxelIndex: 10), 1)
+        XCTAssertEqual(HeightmapConverter.indexOfSurface(XZIndex(x: 2, z: 0), heightmap: heightmap, maxVoxelIndex: 10), 2)
+        XCTAssertEqual(HeightmapConverter.indexOfSurface(XZIndex(x: 3, z: 0), heightmap: heightmap, maxVoxelIndex: 10), 3)
         // highest value in the map
-        XCTAssertEqual(HeightmapConverter.indexOfSurface(XZIndex(x: 3, z: 2), heightmap: heightmap, maxHeight: 10), 5)
+        XCTAssertEqual(HeightmapConverter.indexOfSurface(XZIndex(x: 3, z: 2), heightmap: heightmap, maxVoxelIndex: 10), 5)
     }
 
     func testTwoDIndexNeighborsFrom() throws {
@@ -76,11 +76,11 @@ final class HeightmapConversionTests: XCTestCase {
         //    +---
         //  0 | .  --> 0.00
         //    +---
-        XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.33, at: 0, maxVoxelHeight: 5, voxelSize: 1.0), -0.33, accuracy: 0.1)
-        XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.33, at: 1, maxVoxelHeight: 5, voxelSize: 1.0), -0.07, accuracy: 0.1)
-        XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.33, at: 2, maxVoxelHeight: 5, voxelSize: 1.0), 0.17, accuracy: 0.1)
-        XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.33, at: 3, maxVoxelHeight: 5, voxelSize: 1.0), 0.33, accuracy: 0.1)
-        XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.33, at: 4, maxVoxelHeight: 5, voxelSize: 1.0), 0.66, accuracy: 0.1)
+        XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.33, at: 0, maxVoxelIndex: 5, voxelSize: 1.0), -0.33, accuracy: 0.1)
+        XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.33, at: 1, maxVoxelIndex: 5, voxelSize: 1.0), -0.07, accuracy: 0.1)
+        XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.33, at: 2, maxVoxelIndex: 5, voxelSize: 1.0), 0.17, accuracy: 0.1)
+        XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.33, at: 3, maxVoxelIndex: 5, voxelSize: 1.0), 0.33, accuracy: 0.1)
+        XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.33, at: 4, maxVoxelIndex: 5, voxelSize: 1.0), 0.66, accuracy: 0.1)
     }
 
     func testClosestDistanceReduce() throws {
