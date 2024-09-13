@@ -101,6 +101,6 @@ public enum SampleMeshData {
             [0.4, 0.4, 0.4, 0.4, 0.0],
         ]
         let heightmap = Heightmap(Array(unitFloatValues.joined()), width: 5)
-        return HeightmapConverter.heightmap(heightmap, maxVoxelHeight: 5, voxelSize: 1.0)
+        return HeightmapConverter.heightmap(heightmap, maxVoxelIndex: 5, voxelSize: 1.0)
     }
 }
