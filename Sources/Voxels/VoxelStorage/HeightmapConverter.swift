@@ -349,8 +349,6 @@ public enum HeightmapConverter {
                             //          ^
                             //      xzPosition
 
-                            // value = 0, neighborUnitHeight = 0.400000006
-
                             // the point is the center of the voxel where we want the SDF value
                             let point = sizedPositionOfCenter(xz: xzPosition, y: y, voxelSize: voxelSize)
 
