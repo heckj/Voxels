@@ -109,8 +109,8 @@ public enum EntityExample {
 
     public static var marchingCubesHeightmap: ModelEntity {
         let heightmap = Heightmap(width: 100, height: 100, seed: 437_347_632)
-        let voxels = VoxelHash<Float>.heightmap(heightmap,
-                                                maxVoxelHeight: 20)
+
+        let voxels = HeightmapConverter.heightmap(heightmap, maxVoxelIndex: 20, voxelSize: 1.0)
         let buffer = MarchingCubesRenderer().marching_cubes(data: voxels, scale: .init())
         guard let descriptor = buffer.meshDescriptor() else {
             fatalError()
@@ -122,8 +122,7 @@ public enum EntityExample {
 
     public static var surfaceNetHeightmap: ModelEntity {
         let heightmap = Heightmap(width: 100, height: 100, seed: 437_347_632)
-        let voxels = VoxelHash<Float>.heightmap(heightmap,
-                                                maxVoxelHeight: 20)
+        let voxels = HeightmapConverter.heightmap(heightmap, maxVoxelIndex: 20, voxelSize: 1.0)
         let buffer = try! SurfaceNetRenderer().render(voxelData: voxels,
                                                       scale: .init(),
                                                       within: voxels.bounds)
