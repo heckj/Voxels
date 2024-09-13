@@ -1,9 +1,9 @@
 import Heightmap
 
 public enum HeightmapConverter {
-    /// Returns the unit value of the center of the voxel at the height index you provide.
+    /// Returns the unit height value for the center of the voxel at the index you provide.
     ///
-    /// For example, for a set of voxels with a maximum height of `5`:
+    /// For example, for a set of voxels with a maximum voxel index of `4`:
     ///
     /// ```
     ///    +---
@@ -24,7 +24,56 @@ public enum HeightmapConverter {
     ///   - maxHeight: The maximum number of vertical voxels.
     @inlinable
     static func unitCentroidValue(_ heightIndex: Int, maxVoxelIndex: Int) -> Float {
-        Float(heightIndex) / Float(maxVoxelIndex - 1)
+        Float(heightIndex) / Float(maxVoxelIndex)
+    }
+
+    /// Returns a 3-dimensional position that represents the center of the voxel from the voxel index and its size.
+    ///
+    /// ```
+    ///          size: 1  size: 0.5
+    ///    +---
+    ///  4 | .  --> 4      2
+    ///    +---
+    ///  3 | .  --> 3      1.5
+    ///    +---
+    ///  2 | .  --> 2      1
+    ///    +---
+    ///  1 | .  --> 1      0.5
+    ///    +---
+    ///  0 | .  --> 0      0
+    ///    +---
+    /// ```
+    @inlinable
+    static func sizedPositionOfCenter(xz: XZIndex, y: Int, voxelSize: Float) -> SIMD3<Float> {
+        SIMD3<Float>(Float(xz.x) * voxelSize, Float(y) * voxelSize, Float(xz.z) * voxelSize)
+    }
+
+    /// Returns a 3-dimensional position that represents the coordinate location of the surface given
+    /// a unit-height, the index locations for X and Z, and the sizes of the voxel array and voxels.
+    ///
+    /// ```
+    /// unit height
+    /// of 0.33           -> 1.32     -> 0.66
+    ///
+    ///             unit    size: 1  size: 0.5
+    ///    +---
+    ///  4 | .  --> 1.00      4        2.0
+    ///    +---
+    ///  3 | .  --> 0.75      3        1.5
+    ///    +---
+    ///  2 | .  --> 0.50      2        1.0
+    ///    +---
+    ///  1 | .  --> 0.25      1        0.5
+    ///    +---
+    ///  0 | .  --> 0.00      0        0.0
+    ///    +---
+    /// ```
+    @inlinable
+    static func sizedSurfaceLocation(xz: XZIndex, unitHeight: Float, maxVoxelIndex: Int, voxelSize: Float) -> SIMD3<Float> {
+        let yCoordinate = unitHeight * Float(maxVoxelIndex) * voxelSize
+        return SIMD3<Float>(Float(xz.x) * voxelSize,
+                            yCoordinate,
+                            Float(xz.z) * voxelSize)
     }
 
     /// Returns the vertically-computed SDF value for the Y voxel index for the unit height value you provide.
@@ -36,21 +85,28 @@ public enum HeightmapConverter {
     ///
     /// The function only computes the distance to the surface vertically, and does not
     /// consider or estimate any surrounding voxels.
-    /// For example, for a set of voxels with a maximum height of `5`, and a unit-height of `0.33`:
-    /// ```       unit-value   SDF
-    ///           at center   value
-    ///    +---
-    ///  4 | .  --> 1.00 ...  0.66
-    ///    +---
-    ///  3 | .  --> 0.75 ...  0.33
-    ///    +---
-    ///  2 | .  --> 0.50 ...  0.17
-    ///    +---
-    ///  1 | .  --> 0.25 ... -0.07
-    ///    +---
-    ///  0 | .  --> 0.00 ... -0.33
-    ///    +---
+    /// For example, for a set of voxels with a maximum voxel index of `4`, a unit-height value of `0.25`,
+    /// and a voxel size of `1.0`:
+    ///
+    /// For example, for a set of voxels with a maximum voxel index of `4`,
+    /// a unit-height value of `0.25`, and a voxel size of `1.0`:
     /// ```
+    ///           unit-value   SDF     SDF
+    ///           at center   value   value
+    ///                      (0.25)  (0.33)
+    ///    +---
+    ///  4 | .  --> 1.00  ...  3.0   2.68
+    ///    +---
+    ///  3 | .  --> 0.75  ...  2.0   1.68
+    ///    +---
+    ///  2 | .  --> 0.50  ...  1.0   0.68
+    ///    +---
+    ///  1 | .  --> 0.25  ...  0.0  -0.32
+    ///    +---
+    ///  0 | .  --> 0.00  ... -1.0  -1.32
+    ///    +---
+    ///    ```
+
     @inlinable
     static func SDFValueAtHeight(_ unitValue: Float, at y: Int, maxVoxelIndex: Int, voxelSize: Float) -> Float {
         // get unit centroid value of this index
@@ -58,7 +114,51 @@ public enum HeightmapConverter {
         // compute the unit difference
         let difference = centroidFloatOfYIndex - unitValue
         // scale the difference by the size of each voxel to get the final SDF value
-        return difference * voxelSize
+        return difference * Float(maxVoxelIndex) * voxelSize
+    }
+
+    /// Returns the unit height value given the Y index value and the SDF at that index, using the
+    /// height and size of the voxels to scale the result.
+    ///
+    /// - Parameters:
+    ///   - y: The Y index location
+    ///   - sdf: The SDF value at that index
+    ///   - maxVoxelIndex: The maximum voxel index
+    ///   - voxelSize: The size of each voxel
+    ///
+    /// This effectively the inverse of ``SDFValueAtHeight``.
+    ///
+    /// For example, for a set of voxels with a maximum voxel index of `4`,
+    /// a unit-height value of `0.25`, and a voxel size of `1.0`:
+    /// ```
+    ///           unit-value   SDF     SDF
+    ///           at center   value   value
+    ///                      (0.25)  (0.33)
+    ///    +---
+    ///  4 | .  --> 1.00  ...  3.0   2.68
+    ///    +---
+    ///  3 | .  --> 0.75  ...  2.0   1.68
+    ///    +---
+    ///  2 | .  --> 0.50  ...  1.0   0.68
+    ///    +---
+    ///  1 | .  --> 0.25  ...  0.0  -0.32
+    ///    +---
+    ///  0 | .  --> 0.00  ... -1.0  -1.32
+    ///    +---
+    ///    ```
+    @inlinable
+    static func unitHeightValueAtIndex(y: Int, sdf: Float, maxVoxelIndex: Int, voxelSize: Float) -> Float {
+        let unitHeightAtCenterIndex = unitCentroidValue(y, maxVoxelIndex: maxVoxelIndex)
+        // each index point shifts unit height this amount
+        let indexIncrement = voxelSize / Float(maxVoxelIndex)
+
+        // SDF is relative to voxelSize, so expand or contract based on that
+        let SDFDistanceToUnitDistance = sdf / voxelSize
+        // since negative values indicate "below surface", we substract the negative value
+        // from the unitHeight to get the positive scaled increment in unit height to add
+        // to the base index.
+        let result = unitHeightAtCenterIndex - (SDFDistanceToUnitDistance * indexIncrement)
+        return result
     }
 
     /// Returns the Y index value that maps to the surface value location from the height map.
@@ -130,7 +230,7 @@ public enum HeightmapConverter {
     ///
     /// If a coordinate location has no voxels, the height map value is returned as 0.
     /// - Returns: A height map of the highest surface represented in the voxels SDF values.
-    public static func heightmap(from v: VoxelHash<Float>) -> Heightmap {
+    public static func heightmap(from v: VoxelHash<Float>, voxelSize: Float) -> Heightmap {
         let width = (v.bounds.max.x - v.bounds.min.x) + 1
         let heightmapSize = width * (v.bounds.max.z - v.bounds.min.z + 1)
 
@@ -152,8 +252,9 @@ public enum HeightmapConverter {
                let SDFValueAtIndex = v[VoxelIndex(xz.x, highestNegativeSDFYIndex, xz.z)]
             {
                 // compute the unit height from the index and its SDF value
-                let unitFloatAtCenterOfIndex = unitCentroidValue(highestNegativeSDFYIndex, maxVoxelIndex: v.bounds.max.y)
-                unitHeightMap.append(SDFValueAtIndex + unitFloatAtCenterOfIndex)
+                // SDF value is -0.5 and index = 0, that means the unit height is above us by some amount
+                let unitHeight = unitHeightValueAtIndex(y: highestNegativeSDFYIndex, sdf: SDFValueAtIndex, maxVoxelIndex: v.bounds.max.y, voxelSize: voxelSize)
+                unitHeightMap.append(unitHeight)
             } else {
                 unitHeightMap.append(0.0)
             }
@@ -209,6 +310,10 @@ public enum HeightmapConverter {
             // maxVoxelHeight of 6 means indices 0, 1, 2, 3, 4, and 5 are valid, but not -1 or 6
             if minYIndexOfNeighbors > 0 { minYIndexOfNeighbors -= 1 }
             if maxYIndexOfNeighbors < (maxVoxelIndex - 1) { maxYIndexOfNeighbors += 1 }
+            // go up an extra neighbor for those cases where FP rounding makes the first negative index value lower
+            // than expected. I think this workaround is really only needed when the max voxel index is a relatively low
+            // number, but the extra few values don't hurt us terribly.
+            if maxYIndexOfNeighbors < (maxVoxelIndex - 1) { maxYIndexOfNeighbors += 1 }
 
             // now we calculate the distance-to-surface values for the column extending from minYIndex to maxYIndex
             // To do so, we use the approximation of the distance to the line between the existing point (x,y,z) and the surface index point for each neighbor - taking the minimum value.
@@ -220,21 +325,48 @@ public enum HeightmapConverter {
                     // for the first index value that goes negative, set it only looking at the vertical values
                     voxels[VoxelIndex(xzPosition.x, y, xzPosition.z)] = SDFValueAtHeight(value, at: y, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
                 } else {
+                    // value is the unit-height at THIS XZ index
                     let verticalSDFDistance: Float = SDFValueAtHeight(value, at: y, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
                     // get a list of the distances to a line drawn to the surface for each of the neighbors
-                    let distances: [Float] = surroundingNeighbors.map { neighborXZIndex in
-                        // the point is the center of the voxel where we want the SDF value
-                        let point = SIMD3<Float>(Float(xzPosition.x), unitCentroidValue(y, maxVoxelIndex: maxVoxelIndex), Float(xzPosition.z))
-                        // the line start is the height value in this volume
-                        let lineStart = SIMD3<Float>(Float(xzPosition.x), value, Float(xzPosition.z))
-                        // which extends to the SDF value in the neighboring column
-                        let lineEnd = SIMD3<Float>(x: Float(xzPosition.x - neighborXZIndex.x) * voxelSize,
-                                                   y: heightmap[XZIndex(x: neighborXZIndex.x, z: neighborXZIndex.z)],
-                                                   z: Float(xzPosition.z - neighborXZIndex.z) * voxelSize)
-                        return distanceFromPointToLine(p: point, x1: lineStart, x2: lineEnd)
+                    let sizedDistances: [Float] = surroundingNeighbors.compactMap { neighborXZ in
+                        // exclude the line-estimate estimation if the height map value for this X,Z index
+                        // is LESS than the current value. The closest point in the direction where that edge drops away will be the vertical distance to the point directly beneath.
+                        // Its more relevant want there's a point significantly higher, in which case the "wall"
+                        // surface to this centroid may be closer than the vertical distance.
+                        let neighborUnitHeight = heightmap[neighborXZ]
+                        if neighborUnitHeight > value {
+                            // neighbor
+                            // XZ \/
+                            // +---+  +---+  +---+
+                            // | 2 |  | p |  |   | <- y
+                            // +---+  +---+  +---+
+                            // +---+  +---+  +---+
+                            // |   |  |   |  |   |
+                            // +---+  +---+  +---+
+                            // +---+  +---+  +---+
+                            // |   |  | 1 |  |   | <-- surface height
+                            // +---+  +---+  +---+
+                            //          ^
+                            //      xzPosition
+
+                            // value = 0, neighborUnitHeight = 0.400000006
+
+                            // the point is the center of the voxel where we want the SDF value
+                            let point = sizedPositionOfCenter(xz: xzPosition, y: y, voxelSize: voxelSize)
+
+                            // the line start is the height value (mapped to voxel size) in this column
+                            let lineStart = sizedSurfaceLocation(xz: xzPosition, unitHeight: value, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
+                            // which extends to the height value (mapped to voxel size) in the neighbor column
+                            let lineEnd = sizedSurfaceLocation(xz: neighborXZ, unitHeight: neighborUnitHeight, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
+                            let computedDistance = distanceFromPointToLine(p: point, x1: lineStart, x2: lineEnd)
+                            return computedDistance
+                        } else {
+                            return nil
+                        }
                     }
                     // now we want the distance closest to zero
-                    voxels[VoxelIndex(xzPosition.x, y, xzPosition.z)] = SDFDistanceClosestToSurface(initial: verticalSDFDistance, values: distances)
+                    let closest = SDFDistanceClosestToSurface(initial: verticalSDFDistance, values: sizedDistances)
+                    voxels[VoxelIndex(xzPosition.x, y, xzPosition.z)] = closest
                 }
             }
         }
