@@ -58,7 +58,7 @@ struct ContentView: View {
 
     private func debugEntity() -> ModelEntity {
         let voxels = EntityExample.oneByOne()
-        let buffer = VoxelMeshRenderer.fastBlockMesh(voxels, scale: .init())
+        let buffer = BlockMeshRenderer().render(voxels, scale: .init(), within: voxels.bounds.expand())
 
         let descriptor = buffer.meshDescriptor()
         let mesh = try! MeshResource.generate(from: [descriptor!])

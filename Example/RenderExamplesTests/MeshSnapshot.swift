@@ -24,7 +24,7 @@ import Voxels
     }
 
     func blockMeshEntity(_ samples: some VoxelAccessible) -> ModelEntity {
-        let buffer = BlockMeshRenderer.fastBlockMesh(samples, scale: .init())
+        let buffer = BlockMeshRenderer().render(samples, scale: .init(), within: samples.bounds.expand())
         let descriptor = buffer.meshDescriptor()
         let mesh = try! MeshResource.generate(from: [descriptor!])
         let material = SimpleMaterial(color: .green, isMetallic: false)
@@ -33,8 +33,7 @@ import Voxels
     }
 
     func marchingCubesEntity(_ samples: some VoxelAccessible) -> ModelEntity {
-        let renderer = MarchingCubesRenderer()
-        let buffer = renderer.marching_cubes(data: samples, scale: .init())
+        let buffer = MarchingCubesRenderer().render(samples, scale: .init(), within: samples.bounds.expand())
         let descriptor = buffer.meshDescriptor()
         let mesh = try! MeshResource.generate(from: [descriptor!])
         let material = SimpleMaterial(color: .green, isMetallic: false)
@@ -43,8 +42,7 @@ import Voxels
     }
 
     func surfaceNetEntity(_ samples: some VoxelAccessible) -> ModelEntity {
-        let renderer = SurfaceNetRenderer()
-        let buffer = try! renderer.render(voxelData: samples, scale: .init(), within: samples.bounds.expand())
+        let buffer = try! SurfaceNetRenderer().render(voxelData: samples, scale: .init(), within: samples.bounds.expand())
         let descriptor = buffer.meshDescriptor()
         let mesh = try! MeshResource.generate(from: [descriptor!])
         let material = SimpleMaterial(color: .green, isMetallic: false)

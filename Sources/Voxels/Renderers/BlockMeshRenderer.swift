@@ -1,10 +1,8 @@
 import IssueReporting
 
 public class BlockMeshRenderer {
-    
-    public init() {
-    }
-    
+    public init() {}
+
     /// A fast and simple meshing algorithm that produces a single quad for every visible face of a block.
     public func render(_ v: some VoxelAccessible, scale: VoxelScale<Float>, within bounds: VoxelBounds, surfaceOnly: Bool = false) -> MeshBuffer {
         var buffer = MeshBuffer()
