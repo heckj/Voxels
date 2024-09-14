@@ -60,7 +60,7 @@ benchmark.addSimple(
 }
 
 benchmark.add(
-    title: "blockmesh render",
+    title: "blockmesh render - surface",
     input: Int.self,
     maxSize: 512
 ) { input in
@@ -69,9 +69,39 @@ benchmark.add(
 
         var meshBuffer = MeshBuffer()
         timer.measure {
-            meshBuffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(voxels,
-                                                                     scale: .init(),
-                                                                     within: bounds)
+            meshBuffer = BlockMeshRenderer().render(voxels, scale: .init(), within: bounds, surfaceOnly: true)
+        }
+        blackHole(meshBuffer)
+    }
+}
+
+benchmark.add(
+    title: "blockmesh render - cube",
+    input: Int.self,
+    maxSize: 512
+) { input in
+    { timer in
+        let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(input, 50, input))
+
+        var meshBuffer = MeshBuffer()
+        timer.measure {
+            meshBuffer = BlockMeshRenderer().render(voxels, scale: .init(), within: bounds, surfaceOnly: false)
+        }
+        blackHole(meshBuffer)
+    }
+}
+
+benchmark.add(
+    title: "marchingcubes render",
+    input: Int.self,
+    maxSize: 512
+) { input in
+    { timer in
+        let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(input, 50, input))
+
+        var meshBuffer = MeshBuffer()
+        timer.measure {
+            meshBuffer = MarchingCubesRenderer().render(voxels, scale: .init(), within: bounds)
         }
         blackHole(meshBuffer)
     }

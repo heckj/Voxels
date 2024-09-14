@@ -14,7 +14,7 @@ class VoxelMeshRendererTests: XCTestCase {
             }
         }
 
-        let meshbuffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(fiveByFive, scale: VoxelScale<Float>(), within: fiveByFive.bounds.expand())
+        let meshbuffer = BlockMeshRenderer().render(fiveByFive, scale: VoxelScale<Float>(), within: fiveByFive.bounds.expand(), surfaceOnly: true)
         let numberOfTriangles = meshbuffer.indices.count / 3
         // _6_ sides, with 9 faces in each, 2 triangles per face
         XCTAssertEqual(6 * 9 * 2, numberOfTriangles)
@@ -35,7 +35,7 @@ class VoxelMeshRendererTests: XCTestCase {
 
     func testManhattanNeighborMeshSurface() throws {
         let voxels = Self.manhattanNeighbor1()
-        let meshbuffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(voxels, scale: .init(), within: voxels.bounds.expand())
+        let meshbuffer = BlockMeshRenderer().render(voxels, scale: .init(), within: voxels.bounds.expand(), surfaceOnly: true)
         let numberOfTriangles = meshbuffer.indices.count / 3
         // _6_ cubes, with 5 faces in each, 2 triangles per face
         XCTAssertEqual(6 * 5 * 2, numberOfTriangles)
@@ -44,9 +44,9 @@ class VoxelMeshRendererTests: XCTestCase {
     func testManhattanNeighborMeshSurfaceWithinBounds() throws {
         let voxels = Self.manhattanNeighbor1()
         // taking a slice of Y index layer '2', only surface blocks
-        let meshbuffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(voxels,
-                                                                     scale: .init(),
-                                                                     within: VoxelBounds(min: VoxelIndex(0, 2, 0), max: VoxelIndex(4, 2, 4)))
+        let meshbuffer = BlockMeshRenderer().render(voxels,
+                                                  scale: .init(),
+                                                  within: VoxelBounds(min: VoxelIndex(0, 2, 0), max: VoxelIndex(4, 2, 4)), surfaceOnly: true)
         let numberOfTriangles = meshbuffer.indices.count / 3
         // _4_ cubes, with 5 faces in each, 2 triangles per face
         XCTAssertEqual(4 * 5 * 2, numberOfTriangles)
@@ -55,9 +55,10 @@ class VoxelMeshRendererTests: XCTestCase {
     func testManhattanNeighborMeshSurfaceWithinBounds2() throws {
         let voxels = Self.manhattanNeighbor1()
         // taking a slice of Y index layer '3', only surface blocks
-        let meshbuffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(voxels,
-                                                                     scale: .init(),
-                                                                     within: VoxelBounds(min: VoxelIndex(0, 3, 0), max: VoxelIndex(4, 3, 4)))
+        let meshbuffer = BlockMeshRenderer().render(voxels,
+                                                  scale: .init(),
+                                                  within: VoxelBounds(min: VoxelIndex(0, 3, 0), max: VoxelIndex(4, 3, 4)),
+                                                  surfaceOnly: true)
         let numberOfTriangles = meshbuffer.indices.count / 3
         // _1_ cubes, with 5 faces in each, 2 triangles per face
         XCTAssertEqual(1 * 5 * 2, numberOfTriangles)
@@ -65,7 +66,7 @@ class VoxelMeshRendererTests: XCTestCase {
 
     func testManhattanNeighborMeshAllBlocks() throws {
         let voxels = Self.manhattanNeighbor1()
-        let meshbuffer = VoxelMeshRenderer.fastBlockMesh(voxels, scale: .init())
+        let meshbuffer = BlockMeshRenderer().render(voxels, scale: .init(), within: voxels.bounds.expand())
         let numberOfTriangles = meshbuffer.indices.count / 3
         // _7_ cubes, with 6 faces in each, 2 triangles per face
         XCTAssertEqual(7 * 6 * 2, numberOfTriangles)
@@ -74,9 +75,9 @@ class VoxelMeshRendererTests: XCTestCase {
     func testManhattanNeighborMeshWithinBounds() throws {
         let voxels = Self.manhattanNeighbor1()
         // taking a slice of Y index layer '2', only surface blocks
-        let meshbuffer = VoxelMeshRenderer.fastBlockMesh(voxels,
-                                                         scale: .init(),
-                                                         within: VoxelBounds(min: VoxelIndex(0, 2, 0), max: VoxelIndex(4, 2, 4)))
+        let meshbuffer = BlockMeshRenderer().render(voxels,
+                                                  scale: .init(),
+                                                  within: VoxelBounds(min: VoxelIndex(0, 2, 0), max: VoxelIndex(4, 2, 4)))
         let numberOfTriangles = meshbuffer.indices.count / 3
         // _5_ cubes, with 6 faces in each, 2 triangles per face
         XCTAssertEqual(5 * 6 * 2, numberOfTriangles)
@@ -85,9 +86,9 @@ class VoxelMeshRendererTests: XCTestCase {
     func testManhattanNeighborMeshWithinBounds2() throws {
         let voxels = Self.manhattanNeighbor1()
         // taking a slice of Y index layer '3', only surface blocks
-        let meshbuffer = VoxelMeshRenderer.fastBlockMesh(voxels,
-                                                         scale: .init(),
-                                                         within: VoxelBounds(min: VoxelIndex(0, 3, 0), max: VoxelIndex(4, 3, 4)))
+        let meshbuffer = BlockMeshRenderer().render(voxels,
+                                                  scale: .init(),
+                                                  within: VoxelBounds(min: VoxelIndex(0, 3, 0), max: VoxelIndex(4, 3, 4)))
         let numberOfTriangles = meshbuffer.indices.count / 3
         // _1_ cubes, with 6 faces in each, 2 triangles per face
         XCTAssertEqual(1 * 6 * 2, numberOfTriangles)
@@ -96,7 +97,7 @@ class VoxelMeshRendererTests: XCTestCase {
     func testManhattanNeighborsByLayer() throws {
         let voxels = Self.manhattanNeighbor1()
         // taking a slice of Y index layer '3', only surface blocks
-        let collectionOfBuffers = VoxelMeshRenderer.fastBlockMeshByLayers(voxels, scale: .init())
+        let collectionOfBuffers = BlockMeshRenderer.fastBlockMeshByLayers(voxels, scale: .init())
 
         XCTAssertEqual(collectionOfBuffers.count, 3)
 
@@ -118,7 +119,7 @@ class VoxelMeshRendererTests: XCTestCase {
     func testSingleVoxelBlockMesh() throws {
         var voxels = VoxelHash<Float>()
         voxels.set(VoxelIndex(2, 2, 2), newValue: -1.0)
-        let meshbuffer = VoxelMeshRenderer.fastBlockMesh(voxels, scale: .init())
+        let meshbuffer = BlockMeshRenderer().render(voxels, scale: .init(), within: voxels.bounds.expand())
 
         let numberOfTriangles = meshbuffer.indices.count / 3
         // _1_ cubes, with 6 faces in each, 2 triangles per face
@@ -128,7 +129,7 @@ class VoxelMeshRendererTests: XCTestCase {
     func testSingleVoxelBlockMeshSurfaceFaces() throws {
         var voxels = VoxelHash<Float>(defaultVoxel: Float.greatestFiniteMagnitude)
         voxels.set(VoxelIndex(2, 2, 2), newValue: -1.0)
-        let meshbuffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(voxels, scale: .init(), within: voxels.bounds.expand())
+        let meshbuffer = BlockMeshRenderer().render(voxels, scale: .init(), within: voxels.bounds.expand(), surfaceOnly: true)
 
         let numberOfTriangles = meshbuffer.indices.count / 3
         // _1_ cubes, with 6 faces in each, 2 triangles per face

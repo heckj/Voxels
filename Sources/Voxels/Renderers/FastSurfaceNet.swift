@@ -1,6 +1,6 @@
 // Derived from MIT licensed code https://github.com/bonsairobo/fast-surface-nets-rs/blob/main/src/lib.rs
 
-extension VoxelMeshRenderer {
+extension BlockMeshRenderer {
     /// The Naive Surface Nets smooth voxel meshing algorithm.
     ///
     /// Extracts an isosurface mesh from the [signed distance field](https://en.wikipedia.org/wiki/Signed_distance_function) `sdf`.
@@ -74,7 +74,7 @@ extension VoxelMeshRenderer {
                         )
                         output.surface_strides.append(UInt32(stride))
                     } else {
-                        output.stride_to_index[stride] = NULL_VERTEX
+                        output.stride_to_index[stride] = SurfaceNetsBuffer.NULL_VERTEX
                     }
                 }
             }

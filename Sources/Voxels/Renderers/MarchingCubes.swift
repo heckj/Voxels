@@ -319,13 +319,13 @@ public class MarchingCubesRenderer {
         buffer = MeshBuffer()
     }
 
-    public func marching_cubes(data: some VoxelAccessible,
-                               scale: VoxelScale<Float>,
-                               adaptive: Bool = false) -> MeshBuffer
+    public func render(_ data: some VoxelAccessible,
+                       scale: VoxelScale<Float>,
+                       within bounds: VoxelBounds,
+                       adaptive: Bool = false) -> MeshBuffer
     {
         reset()
-        let expandedBounds = data.bounds.expand(1)
-        for i in expandedBounds.indices {
+        for i in bounds.indices {
             marching_cubes_single_cell(data: data, scale: scale, index: i, adaptive: adaptive)
         }
         return buffer

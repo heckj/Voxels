@@ -5,7 +5,7 @@ final class RendererRebuildComparisonTests: XCTestCase {
     func testSurfaceNetRendererComparison() throws {
         let samples = try SampleMeshData.voxelArrayFromSphere()
 
-        let originalResultBuffer = try VoxelMeshRenderer.surfaceNetMesh(
+        let originalResultBuffer = try BlockMeshRenderer.surfaceNetMesh(
             sdf: samples,
             within: VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(32, 32, 32))
         )

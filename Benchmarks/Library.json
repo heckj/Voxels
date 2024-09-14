@@ -14,8 +14,10 @@
       "kind": "chart",
       "title": "Rendering across N voxels square",
       "tasks": [
-        "blockmesh render",
+        "blockmesh render - surface",
+        "blockmesh render - cube",
         "surfacenet render",
+        "marchingcubes render"
       ]
     },
 

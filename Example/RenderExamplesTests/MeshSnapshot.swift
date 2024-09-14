@@ -24,7 +24,7 @@ import Voxels
     }
 
     func blockMeshEntity(_ samples: some VoxelAccessible) -> ModelEntity {
-        let buffer = VoxelMeshRenderer.fastBlockMesh(samples, scale: .init())
+        let buffer = BlockMeshRenderer.fastBlockMesh(samples, scale: .init())
         let descriptor = buffer.meshDescriptor()
         let mesh = try! MeshResource.generate(from: [descriptor!])
         let material = SimpleMaterial(color: .green, isMetallic: false)
