@@ -65,7 +65,7 @@ public enum EntityExample {
 
     public static var fastSurfaceBlockMeshSphere: ModelEntity {
         let samples = sampledSDFSphere()
-        let buffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(samples, scale: .init(), within: samples.bounds.insetQuadrant())
+        let buffer = BlockMeshRenderer().render(samples, scale: .init(), within: samples.bounds.insetQuadrant())
 
         if let descriptor = buffer.meshDescriptor() {
             let mesh = try! MeshResource.generate(from: [descriptor])
@@ -111,7 +111,7 @@ public enum EntityExample {
         let heightmap = Heightmap(width: 100, height: 100, seed: 437_347_632)
 
         let voxels = HeightmapConverter.heightmap(heightmap, maxVoxelIndex: 20, voxelSize: 1.0)
-        let buffer = MarchingCubesRenderer().marching_cubes(data: voxels, scale: .init())
+        let buffer = MarchingCubesRenderer().render(voxels, scale: .init(), within: voxels.bounds.expand())
         guard let descriptor = buffer.meshDescriptor() else {
             fatalError()
         }

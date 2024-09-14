@@ -35,8 +35,7 @@ class ObservableVoxelData {
                                                        scale: .init(),
                                                        within: data.bounds.expand(2))
 
-//        let blockMeshBuffer = VoxelMeshRenderer.fastBlockMesh(data, scale: .init())
-        let blockMeshBuffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(data, scale: .init(), within: data.bounds.expand(2))
+        let blockMeshBuffer = BlockMeshRenderer().render(data, scale: .init(), within: data.bounds.expand(2))
 
         guard let descriptor = generatedMeshBuffer.meshDescriptor(), let blockDescriptor = blockMeshBuffer.meshDescriptor() else {
             fatalError("Invalid mesh - no descriptor")
@@ -93,7 +92,7 @@ class ObservableVoxelData {
         voxelEntity.model?.mesh = mesh
 
         let startTime2 = clock.now
-        let newBlockBuffer = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(wrappedVoxelData, scale: .init(), within: wrappedVoxelData.bounds.expand(2))
+        let newBlockBuffer = BlockMeshRenderer().render(wrappedVoxelData, scale: .init(), within: wrappedVoxelData.bounds.expand(2))
         let timeToRender2 = clock.now - startTime2
         print("BlockMesh Render Duration: \(timeToRender2.formatted(.units(allowed: [.milliseconds, .microseconds], width: .abbreviated))) (\(timeToRender2.description))")
 

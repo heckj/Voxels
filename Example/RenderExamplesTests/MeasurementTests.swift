@@ -39,7 +39,7 @@ final class GeneralMeasurementTests: XCTestCase {
 
         // ~ 4.37 seconds (full power, not battery)
         measure {
-            let _ = MarchingCubesRenderer().marching_cubes(data: voxels, scale: .init())
+            let _ = MarchingCubesRenderer().render(voxels, scale: .init(), within: voxels.bounds.expand())
         }
     }
 
@@ -49,7 +49,7 @@ final class GeneralMeasurementTests: XCTestCase {
 
         // ~ 0.91 seconds (full power, not battery)
         measure {
-            let _ = VoxelMeshRenderer.fastBlockMeshSurfaceFaces(voxels, scale: .init(), within: voxels.bounds)
+            let _ = BlockMeshRenderer().render(voxels, scale: .init(), within: voxels.bounds, surfaceOnly: true)
         }
     }
 
