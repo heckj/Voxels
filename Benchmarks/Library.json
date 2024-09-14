@@ -8,6 +8,8 @@
       "title": "VoxelHash<Float>",
       "tasks": [
         "VoxelHash<Float> insert",
+        "blockmesh render",
+        "surfacenet render",
       ]
     },
   ]

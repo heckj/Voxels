@@ -13,5 +13,5 @@ DerivedData/
 dd/
 
 # benchmark script outputs to ignore
-devcheck
-diff.html
+Benchmarks/devcheck
+Benchmarks/diff.html
