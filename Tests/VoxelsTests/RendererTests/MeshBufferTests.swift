@@ -7,6 +7,8 @@ class MeshBufferTests: XCTestCase {
         XCTAssertTrue(buffer.indices.isEmpty)
         XCTAssertTrue(buffer.normals.isEmpty)
         XCTAssertTrue(buffer.positions.isEmpty)
+
+        XCTAssertEqual(buffer.memSize, 0)
     }
 
     func testMeshBufferAddQuad() throws {
@@ -20,6 +22,8 @@ class MeshBufferTests: XCTestCase {
             XCTAssertTrue(i < buffer.positions.count)
             XCTAssertTrue(i < buffer.normals.count)
         }
+
+        XCTAssertEqual(buffer.memSize, 152)
     }
 
     func testMeshBufferClear() throws {
@@ -30,5 +34,7 @@ class MeshBufferTests: XCTestCase {
         XCTAssertTrue(buffer.indices.isEmpty)
         XCTAssertTrue(buffer.normals.isEmpty)
         XCTAssertTrue(buffer.positions.isEmpty)
+
+        XCTAssertEqual(buffer.memSize, 0)
     }
 }
