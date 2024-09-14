@@ -21,11 +21,13 @@ let package = Package(
         .executableTarget(
             name: "VoxelBenchmark",
             dependencies: [
+                "Voxels",
+                .product(name: "Noise", package: "swift-noise"),
                 .product(name: "Benchmark", package: "package-benchmark"),
             ],
             path: "Benchmarks/VoxelBenchmark",
             plugins: [
-                .plugin(name: "BenchmarkPlugin", package: "package-benchmark")
+                .plugin(name: "BenchmarkPlugin", package: "package-benchmark"),
             ]
         ),
         .executableTarget(
