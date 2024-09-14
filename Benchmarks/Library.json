@@ -8,9 +8,16 @@
       "title": "VoxelHash<Float>",
       "tasks": [
         "VoxelHash<Float> insert",
+      ]
+    },
+    {
+      "kind": "chart",
+      "title": "Rendering across N voxels square",
+      "tasks": [
         "blockmesh render",
         "surfacenet render",
       ]
     },
+
   ]
 }
