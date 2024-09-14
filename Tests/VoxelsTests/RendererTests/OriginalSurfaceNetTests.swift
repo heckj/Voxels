@@ -12,7 +12,7 @@ final class OriginalSurfaceNetTests: XCTestCase {
 
     func testExample() throws {
         let samples = try SampleMeshData.voxelArrayFromSphere()
-        let buffer = try VoxelMeshRenderer.surfaceNetMesh(
+        let buffer = try BlockMeshRenderer.surfaceNetMesh(
             sdf: samples,
             within: VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(32, 32, 32))
         )

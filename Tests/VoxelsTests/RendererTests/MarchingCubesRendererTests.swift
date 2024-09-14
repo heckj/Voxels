@@ -24,8 +24,7 @@ class MarchingCubesRendererTests: XCTestCase {
     func testManhattanNeighborMeshSurface() throws {
         let voxels = Self.manhattanNeighbor1()
 
-        let renderer = MarchingCubesRenderer()
-        let meshbuffer = renderer.marching_cubes(data: voxels, scale: .init())
+        let meshbuffer = MarchingCubesRenderer().render(voxels, scale: .init(), within: voxels.bounds.expand())
 
         let numberOfTriangles = meshbuffer.indices.count / 3
         XCTAssertEqual(56, numberOfTriangles)
@@ -35,8 +34,7 @@ class MarchingCubesRendererTests: XCTestCase {
         var voxels = VoxelHash<Float>()
         voxels.set(VoxelIndex(2, 2, 2), newValue: -1.0)
 
-        let renderer = MarchingCubesRenderer()
-        let meshbuffer = renderer.marching_cubes(data: voxels, scale: .init())
+        let meshbuffer = MarchingCubesRenderer().render(voxels, scale: .init(), within: voxels.bounds.expand())
 
         let numberOfTriangles = meshbuffer.indices.count / 3
         XCTAssertEqual(8, numberOfTriangles)

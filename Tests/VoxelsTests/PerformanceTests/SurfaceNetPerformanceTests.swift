@@ -11,7 +11,7 @@ final class SurfaceNetPerformanceTests: XCTestCase {
 
         // battery only: 0.182/0.183
         measure {
-            _ = try! VoxelMeshRenderer.surfaceNetMesh(sdf: samples, within: bounds)
+            _ = try! BlockMeshRenderer.surfaceNetMesh(sdf: samples, within: bounds)
         }
     }
 
