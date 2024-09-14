@@ -100,7 +100,8 @@ public class SurfaceNetRenderer {
             precondition(indicesOfQuads.count == 6)
             for indexInQuad: VoxelIndex in indicesOfQuads {
                 guard let vertexIndexPosition = voxelIndexToVertexIndexLookup[indexInQuad] else {
-                    fatalError("missing vertexIndexPosition in cache lookup for \(indexInQuad)")
+                    reportIssue("missing vertexIndexPosition in cache lookup for \(indexInQuad)")
+                    fatalError()
                 }
                 meshbuffer.indices.append(UInt32(vertexIndexPosition))
             }
@@ -109,7 +110,8 @@ public class SurfaceNetRenderer {
             precondition(indicesOfQuads.count == 6)
             for indexInQuad: VoxelIndex in indicesOfQuads {
                 guard let vertexIndexPosition = voxelIndexToVertexIndexLookup[indexInQuad] else {
-                    fatalError("missing vertexIndexPosition in cache lookup for \(indexInQuad)")
+                    reportIssue("missing vertexIndexPosition in cache lookup for \(indexInQuad)")
+                    fatalError()
                 }
                 meshbuffer.indices.append(UInt32(vertexIndexPosition))
             }
@@ -118,7 +120,8 @@ public class SurfaceNetRenderer {
             precondition(indicesOfQuads.count == 6)
             for indexInQuad: VoxelIndex in indicesOfQuads {
                 guard let vertexIndexPosition = voxelIndexToVertexIndexLookup[indexInQuad] else {
-                    fatalError("missing vertexIndexPosition in cache lookup for \(indexInQuad)")
+                    reportIssue("missing vertexIndexPosition in cache lookup for \(indexInQuad)")
+                    fatalError()
                 }
                 meshbuffer.indices.append(UInt32(vertexIndexPosition))
             }
@@ -171,7 +174,8 @@ public class SurfaceNetRenderer {
         for i in 0 ... 7 {
             let indexToCheck = cornerIndex.adding(CUBE_CORNERS[i])
             guard let voxelData = voxelData[indexToCheck] else {
-                fatalError("unable to check distance at index \(indexToCheck)")
+                reportIssue("unable to request SDF distance information at index \(indexToCheck)")
+                fatalError()
             }
             let d = voxelData.distanceAboveSurface()
             corner_dists[i] = d
@@ -292,10 +296,12 @@ public class SurfaceNetRenderer {
         forAxis: IndexAxis
     ) {
         guard let voxeldata1 = voxelData[p1] else {
-            fatalError("unable to read voxel data at \(p1)")
+            reportIssue("unable to read voxel data at \(p1)")
+            return
         }
         guard let voxeldata2 = voxelData[p2] else {
-            fatalError("unable to read voxel data at \(p2)")
+            reportIssue("unable to read voxel data at \(p2)")
+            return
         }
 
         let d1 = voxeldata1.distanceAboveSurface()
@@ -319,16 +325,20 @@ public class SurfaceNetRenderer {
         let v4 = p1.subtracting(axis_b_stride).subtracting(axis_c_stride)
 
         guard let pos1 = positionsCache[v1] else {
-            fatalError("missing position from cache at \(v1)")
+            reportIssue("missing position from cache at \(v1)")
+            fatalError()
         }
         guard let pos2 = positionsCache[v2] else {
-            fatalError("missing position from cache at \(v2)")
+            reportIssue("missing position from cache at \(v2)")
+            fatalError()
         }
         guard let pos3 = positionsCache[v3] else {
-            fatalError("missing position from cache at \(v3)")
+            reportIssue("missing position from cache at \(v3)")
+            fatalError()
         }
         guard let pos4 = positionsCache[v4] else {
-            fatalError("missing position from cache at \(v4)")
+            reportIssue("missing position from cache at \(v4)")
+            fatalError()
         }
 
         // Split the quad along the shorter axis, rather than the longer one.
