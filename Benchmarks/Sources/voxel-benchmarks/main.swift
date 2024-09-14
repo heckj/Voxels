@@ -61,7 +61,8 @@ benchmark.addSimple(
 
 benchmark.add(
     title: "blockmesh render",
-    input: Int.self
+    input: Int.self,
+    maxSize: 512
 ) { input in
     { timer in
         let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(input, 50, input))
@@ -76,9 +77,11 @@ benchmark.add(
     }
 }
 
+
 benchmark.add(
     title: "surfacenet render",
-    input: Int.self
+    input: Int.self,
+    maxSize: 512
 ) { input in
     { timer in
         let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(input, 50, input))
