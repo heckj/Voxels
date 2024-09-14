@@ -1,4 +1,5 @@
 // Derived from MIT licensed code https://github.com/bonsairobo/fast-surface-nets-rs/blob/main/src/lib.rs
+import IssueReporting
 
 public class SurfaceNetRenderer {
     // MARK: MeshBuffer cache components
@@ -84,11 +85,13 @@ public class SurfaceNetRenderer {
         for (index, voxelindex) in vertexPositions.enumerated() {
             voxelIndexToVertexIndexLookup[voxelindex] = index
             guard let position = positionsCache[voxelindex] else {
-                fatalError("missing position cache data for \(voxelindex)")
+                reportIssue("missing position cache data for \(voxelindex)")
+                fatalError()
             }
             meshbuffer.positions.append(position)
             guard let normal = normalsCache[voxelindex] else {
-                fatalError("missing normal cache data for \(voxelindex)")
+                reportIssue("missing normal cache data for \(voxelindex)")
+                fatalError()
             }
             meshbuffer.normals.append(normal)
         }
