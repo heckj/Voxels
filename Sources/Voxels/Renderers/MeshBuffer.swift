@@ -19,6 +19,12 @@ public struct MeshBuffer: Sendable {
         triangles / 2
     }
 
+    public var memSize: Int {
+        // a loose estimate of size of memory consumed by this buffer in RAM
+        indices.count * MemoryLayout<UInt32>.size +
+            (positions.count + normals.count) * MemoryLayout<SIMD3<Float>>.size
+    }
+
     public func validate() throws {
         if positions.isEmpty || normals.isEmpty {
             throw GeneratedMeshError.empty
