@@ -77,7 +77,6 @@ benchmark.add(
     }
 }
 
-
 benchmark.add(
     title: "surfacenet render",
     input: Int.self,
