@@ -28,6 +28,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/heckj/Heightmap", from: "0.6.0"),
+        .package(url: "https://github.com/pointfreeco/swift-issue-reporting", from: "1.3.0"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
         .package(url: "https://github.com/apple/swift-collections-benchmark", from: "0.0.1"),
     ],
@@ -36,6 +37,7 @@ let package = Package(
             name: "Voxels",
             dependencies: [
                 .product(name: "Heightmap", package: "Heightmap"),
+                .product(name: "IssueReporting", package: "swift-issue-reporting"),
             ],
             swiftSettings: globalSwiftSettings
         ),
