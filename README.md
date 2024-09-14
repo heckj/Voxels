@@ -21,4 +21,6 @@ Copies of some of these articles and papers are in [refs](refs/).
 ./scripts/rebuild_benchmarks.bash
 ./scripts/compare_benchmark.bash
 
+swift package benchmark --target VoxelBenchmark
+
 
