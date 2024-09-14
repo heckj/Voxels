@@ -18,4 +18,7 @@ Copies of some of these articles and papers are in [refs](refs/).
 
 ## benchmark notes
 
-swift run -c release voxel-benchmarks library run --library Benchmarks/Library.json devcheck
+./scripts/rebuild_benchmarks.bash
+./scripts/compare_benchmark.bash
+
+
