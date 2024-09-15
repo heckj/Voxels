@@ -293,18 +293,18 @@ public enum HeightmapConverter {
         // should be choosing the shortest distance to the surface points.
         if y == ySurfaceIndex {
             // MARK: distance at Y
-            
+
             // for the first index value that goes negative, set it only looking at the vertical values
             voxels[VoxelIndex(xzPosition.x, y, xzPosition.z)] = SDFValueAtHeight(unitHeightSurfaceValue, at: y, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
         } else if y < minYIndexOfNeighbors || y > maxYIndexOfNeighbors {
             // MARK: distance above or below Y range of neighbors
-            
+
             // the distance directly "down" or "up"
             let verticalSDFDistance: Float = SDFValueAtHeight(unitHeightSurfaceValue, at: y, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
             let sizedDistances: [Float] = surroundingNeighbors.compactMap { neighborXZ in
-                
+
                 let point = sizedPositionOfCenter(xz: xzPosition, y: y, voxelSize: voxelSize)
-                
+
                 let neighborUnitHeight = heightmap[neighborXZ]
                 let surfacePoint = sizedSurfaceLocation(xz: neighborXZ, unitHeight: neighborUnitHeight, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
                 let distance = (point - surfacePoint).length
@@ -317,7 +317,7 @@ public enum HeightmapConverter {
             voxels[VoxelIndex(xzPosition.x, y, xzPosition.z)] = closest
         } else {
             // MARK: distance inside Y range of neighbors
-            
+
             // value is the unit-height at THIS XZ index
             let verticalSDFDistance: Float = SDFValueAtHeight(unitHeightSurfaceValue, at: y, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
             // get a list of the distances to a line drawn to the surface for each of the neighbors
@@ -328,23 +328,24 @@ public enum HeightmapConverter {
                 // surface to this centroid may be closer than the vertical distance.
                 let neighborUnitHeight = heightmap[xzForNeighbor]
                 if neighborUnitHeight >= unitHeightSurfaceValue {
+                    // ...looking sideways at a stack of voxels...
                     // neighbor
                     // XZ \/
-                    // +---+  +---+  +---+
-                    // | 2 |  | p |  |   | <- y
-                    // +---+  +---+  +---+
-                    // +---+  +---+  +---+
-                    // |   |  |   |  |   |
-                    // +---+  +---+  +---+
-                    // +---+  +---+  +---+
-                    // |   |  | 1 |  |   | <-- surface height
-                    // +---+  +---+  +---+
-                    //          ^
-                    //      xzPosition
-                    
+                    //  +---+  +---+  +---+
+                    //  | 2 |  | p |  |   | <- y
+                    //  +---+  +---+  +---+
+                    //  +---+  +---+  +---+
+                    //  |   |  |   |  |   |
+                    //  +---+  +---+  +---+
+                    //  +---+  +---+  +---+
+                    //  |   |  | 1 |  |   | <-- surface height
+                    //  +---+  +---+  +---+
+                    //           ^
+                    //       xzPosition
+
                     // the point is the center of the voxel where we want the SDF value
                     let point = sizedPositionOfCenter(xz: xzPosition, y: y, voxelSize: voxelSize)
-                    
+
                     // the line start is the height value (mapped to voxel size) in this column
                     let lineStart = sizedSurfaceLocation(xz: xzPosition, unitHeight: unitHeightSurfaceValue, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
                     // which extends to the height value (mapped to voxel size) in the neighbor column
@@ -363,7 +364,7 @@ public enum HeightmapConverter {
             voxels[VoxelIndex(xzPosition.x, y, xzPosition.z)] = closest
         }
     }
-    
+
     /// Creates a collection of Voxels from a height map
     /// - Parameters:
     ///   - heightmap: The Heightmap that represents the relative height at each x and z voxel index.
