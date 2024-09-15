@@ -322,42 +322,34 @@ public enum HeightmapConverter {
             let verticalSDFDistance: Float = SDFValueAtHeight(unitHeightSurfaceValue, at: y, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
             // get a list of the distances to a line drawn to the surface for each of the neighbors
             let sizedDistances: [Float] = surroundingNeighbors.compactMap { xzForNeighbor in
-                // exclude the line-estimate estimation if the height map value for this X,Z index
-                // is LESS than the current value. The closest point in the direction where that edge drops away will be the vertical distance to the point directly beneath.
-                // Its more relevant want there's a point significantly higher, in which case the "wall"
-                // surface to this centroid may be closer than the vertical distance.
+                // ...looking sideways at a stack of voxels...
+                // neighbor
+                // XZ \/
+                //  +---+  +---+  +---+
+                //  | 2 |  | p |  |   | <- y
+                //  +---+  +---+  +---+
+                //  +---+  +---+  +---+
+                //  |   |  |   |  |   |
+                //  +---+  +---+  +---+
+                //  +---+  +---+  +---+
+                //  |   |  | 1 |  |   | <-- surface height
+                //  +---+  +---+  +---+
+                //           ^
+                //       xzPosition
+
+                // the point is the center of the voxel where we want the SDF value
+                let point = sizedPositionOfCenter(xz: xzPosition, y: y, voxelSize: voxelSize)
+
+                // the line start is the height value (mapped to voxel size) in this column
+                let lineStart = sizedSurfaceLocation(xz: xzPosition, unitHeight: unitHeightSurfaceValue, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
+                // which extends to the height value (mapped to voxel size) in the neighbor column
                 let neighborUnitHeight = heightmap[xzForNeighbor]
-                if neighborUnitHeight >= unitHeightSurfaceValue {
-                    // ...looking sideways at a stack of voxels...
-                    // neighbor
-                    // XZ \/
-                    //  +---+  +---+  +---+
-                    //  | 2 |  | p |  |   | <- y
-                    //  +---+  +---+  +---+
-                    //  +---+  +---+  +---+
-                    //  |   |  |   |  |   |
-                    //  +---+  +---+  +---+
-                    //  +---+  +---+  +---+
-                    //  |   |  | 1 |  |   | <-- surface height
-                    //  +---+  +---+  +---+
-                    //           ^
-                    //       xzPosition
-
-                    // the point is the center of the voxel where we want the SDF value
-                    let point = sizedPositionOfCenter(xz: xzPosition, y: y, voxelSize: voxelSize)
-
-                    // the line start is the height value (mapped to voxel size) in this column
-                    let lineStart = sizedSurfaceLocation(xz: xzPosition, unitHeight: unitHeightSurfaceValue, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
-                    // which extends to the height value (mapped to voxel size) in the neighbor column
-                    let lineEnd = sizedSurfaceLocation(xz: xzForNeighbor, unitHeight: neighborUnitHeight, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
-                    let computedDistance = distanceFromPointToLine(p: point, x1: lineStart, x2: lineEnd)
-                    if y <= ySurfaceIndex {
-                        return -computedDistance
-                    }
-                    return computedDistance
-                } else {
-                    return nil
+                let lineEnd = sizedSurfaceLocation(xz: xzForNeighbor, unitHeight: neighborUnitHeight, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
+                let computedDistance = distanceFromPointToLine(p: point, x1: lineStart, x2: lineEnd)
+                if y <= ySurfaceIndex {
+                    return -computedDistance
                 }
+                return computedDistance
             }
             // now we want the distance closest to zero
             let closest = SDFDistanceClosestToSurface(initial: verticalSDFDistance, values: sizedDistances)
