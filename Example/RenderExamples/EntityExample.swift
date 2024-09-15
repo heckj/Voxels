@@ -122,10 +122,25 @@ public enum EntityExample {
 
     public static var surfaceNetHeightmap: ModelEntity {
         let heightmap = Heightmap(width: 100, height: 100, seed: 437_347_632)
-        let voxels = HeightmapConverter.heightmap(heightmap, maxVoxelIndex: 20, voxelSize: 1.0)
+        let voxels = HeightmapConverter.heightmap(heightmap, maxVoxelIndex: 20, voxelSize: 1.0, extendToFloor: true)
         let buffer = try! SurfaceNetRenderer().render(voxelData: voxels,
                                                       scale: .init(),
                                                       within: voxels.bounds)
+        guard let descriptor = buffer.meshDescriptor() else {
+            fatalError()
+        }
+        let mesh = try! MeshResource.generate(from: [descriptor])
+        let material = SimpleMaterial(color: .brown, isMetallic: false)
+        return ModelEntity(mesh: mesh, materials: [material])
+    }
+
+    public static var surfaceBlockHeightmap: ModelEntity {
+        let heightmap = Heightmap(width: 100, height: 100, seed: 437_347_632)
+        let voxels = HeightmapConverter.heightmap(heightmap, maxVoxelIndex: 20, voxelSize: 1.0, extendToFloor: true)
+        let buffer = BlockMeshRenderer().render(voxels,
+                                                scale: .init(),
+                                                within: voxels.bounds,
+                                                surfaceOnly: true)
         guard let descriptor = buffer.meshDescriptor() else {
             fatalError()
         }
