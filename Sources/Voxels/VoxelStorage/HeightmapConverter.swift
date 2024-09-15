@@ -288,6 +288,9 @@ public enum HeightmapConverter {
             // get the X and Z coordinate index for this column of voxels from the height map
             let xzPosition = XZIndex.strideToXZ(stride, width: heightmap.width)
 
+            if xzPosition == XZIndex(x: 3, z: 3) { // 3,3
+                print(".")
+            }
             // compute a list of the valid neighbor X and Z coordinates that are within the bounds
             // of the height map
             let surroundingNeighbors: [XZIndex] = twoDIndexNeighborsFrom(position: xzPosition, widthCount: heightmap.width, depthCount: heightmap.height)
@@ -300,45 +303,85 @@ public enum HeightmapConverter {
 
             let yIndex = indexOfSurface(value, maxVoxelIndex: maxVoxelIndex)
 
-            var minYIndexOfNeighbors = 0
-            if !extendToFloor {
-                minYIndexOfNeighbors = neighborsSurfaceVoxelIndex.reduce(yIndex) { partialResult, vIndex in
-                    Swift.min(partialResult, vIndex.y)
-                }
-                if minYIndexOfNeighbors > 0 { minYIndexOfNeighbors -= 1 }
+            let minYIndexOfNeighbors: Int = neighborsSurfaceVoxelIndex.reduce(yIndex) { partialResult, vIndex in
+                Swift.min(partialResult, vIndex.y)
             }
-            var maxYIndexOfNeighbors: Int = neighborsSurfaceVoxelIndex.reduce(yIndex) { partialResult, vIndex in
+            let maxYIndexOfNeighbors: Int = neighborsSurfaceVoxelIndex.reduce(yIndex) { partialResult, vIndex in
                 Swift.max(partialResult, vIndex.y)
             }
-            // expand up and down, within the constraints of the voxel hash bounds set by maxVoxelHeight
-            // maxVoxelHeight of 6 means indices 0, 1, 2, 3, 4, and 5 are valid, but not -1 or 6
 
-            if maxYIndexOfNeighbors < (maxVoxelIndex - 1) { maxYIndexOfNeighbors += 1 }
-            // go up an extra neighbor for those cases where FP rounding makes the first negative index value lower
-            // than expected. I think this workaround is really only needed when the max voxel index is a relatively low
-            // number, but the extra few values don't hurt us terribly.
-            if maxYIndexOfNeighbors < (maxVoxelIndex - 1) { maxYIndexOfNeighbors += 1 }
+            // Compute the range of voxels to be "filled in" with data from the height map.
 
-            // now we calculate the distance-to-surface values for the column extending from minYIndex to maxYIndex
-            // To do so, we use the approximation of the distance to the line between the existing point (x,y,z) and the surface index point for each neighbor - taking the minimum value.
-            // this distance value is in "unit voxel index" though, so we multiply by the voxel cube
-            // height to get it normalized - 1/maxVoxelHeight
+            // The minimum value is either the floor (0) or one beneath the lowest Yindex from this column
+            // and its neighbors
+            var minToFillData = minYIndexOfNeighbors > 0 ? minYIndexOfNeighbors - 1 : minYIndexOfNeighbors
+            if extendToFloor {
+                minToFillData = 0
+            }
 
-            for y in minYIndexOfNeighbors ... maxYIndexOfNeighbors {
+            // The maximum value extends to up to 2 above the YIndex to ensure that we can generate correct
+            // surfaces. Because the YIndex is using a floor value, and there are crazy rounding issues with math,
+            // we extend to 2 instead of 1 additional layer.
+            var maxToFillData = maxYIndexOfNeighbors < (maxVoxelIndex - 1) ? maxYIndexOfNeighbors + 1 : maxYIndexOfNeighbors
+            if maxToFillData < (maxVoxelIndex - 1) { maxToFillData += 1 }
+
+            // now we calculate the distance-to-surface values for the column extending from minToFillData to maxToFillData
+            // There are three ranges that we can consider:
+            // - above the range of the neighbors
+            // - in the range of the neighbors
+            // - below the range of the neighbors
+            //
+            // When in the range of the neighbors, use an approximation of the distance to the line between
+            // the existing point (x,y,z) and a line between the surface point for this column and its
+            // neighbor. We take the minimum value to accommodate the shortest distance potentially being the
+            // walls that exist in variations within the ranges.
+            //
+            // We can short-cut this a bit when the index position is the same as the surface index and just use
+            // the distance value there directly.
+            //
+            // When above or below the range, that approximation breaks down (sometimes badly) and instead we
+            // should be choosing the shortest distance to the surface points.
+            for y in minToFillData ... maxToFillData {
+                if y == 0 {
+                    assert(true)
+                }
                 if y == yIndex {
+                    // MARK: distance at Y
+
                     // for the first index value that goes negative, set it only looking at the vertical values
                     voxels[VoxelIndex(xzPosition.x, y, xzPosition.z)] = SDFValueAtHeight(value, at: y, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
+                } else if y < minYIndexOfNeighbors || y > maxYIndexOfNeighbors {
+                    // MARK: distance above or below Y range of neighbors
+
+                    // the distance directly "down" or "up"
+                    let verticalSDFDistance: Float = SDFValueAtHeight(value, at: y, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
+                    let sizedDistances: [Float] = surroundingNeighbors.compactMap { neighborXZ in
+
+                        let point = sizedPositionOfCenter(xz: xzPosition, y: y, voxelSize: voxelSize)
+
+                        let neighborUnitHeight = heightmap[neighborXZ]
+                        let surfacePoint = sizedSurfaceLocation(xz: neighborXZ, unitHeight: neighborUnitHeight, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
+                        let distance = (point - surfacePoint).length
+                        if y <= yIndex {
+                            return -distance
+                        }
+                        return distance
+                    }
+                    let closest = SDFDistanceClosestToSurface(initial: verticalSDFDistance, values: sizedDistances)
+                    voxels[VoxelIndex(xzPosition.x, y, xzPosition.z)] = closest
                 } else {
+                    // MARK: distance inside Y range of neighbors
+
                     // value is the unit-height at THIS XZ index
                     let verticalSDFDistance: Float = SDFValueAtHeight(value, at: y, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
                     // get a list of the distances to a line drawn to the surface for each of the neighbors
-                    let sizedDistances: [Float] = surroundingNeighbors.compactMap { neighborXZ in
+                    let sizedDistances: [Float] = surroundingNeighbors.compactMap { xzForNeighbor in
                         // exclude the line-estimate estimation if the height map value for this X,Z index
                         // is LESS than the current value. The closest point in the direction where that edge drops away will be the vertical distance to the point directly beneath.
                         // Its more relevant want there's a point significantly higher, in which case the "wall"
                         // surface to this centroid may be closer than the vertical distance.
-                        let neighborUnitHeight = heightmap[neighborXZ]
-                        if neighborUnitHeight > value {
+                        let neighborUnitHeight = heightmap[xzForNeighbor]
+                        if neighborUnitHeight >= value {
                             // neighbor
                             // XZ \/
                             // +---+  +---+  +---+
@@ -359,11 +402,14 @@ public enum HeightmapConverter {
                             // the line start is the height value (mapped to voxel size) in this column
                             let lineStart = sizedSurfaceLocation(xz: xzPosition, unitHeight: value, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
                             // which extends to the height value (mapped to voxel size) in the neighbor column
-                            let lineEnd = sizedSurfaceLocation(xz: neighborXZ, unitHeight: neighborUnitHeight, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
+                            let lineEnd = sizedSurfaceLocation(xz: xzForNeighbor, unitHeight: neighborUnitHeight, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize)
                             let computedDistance = distanceFromPointToLine(p: point, x1: lineStart, x2: lineEnd)
+                            if y <= yIndex {
+                                return -computedDistance
+                            }
                             return computedDistance
                         } else {
-                            return verticalSDFDistance
+                            return nil
                         }
                     }
                     // now we want the distance closest to zero
