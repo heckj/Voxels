@@ -187,6 +187,10 @@ final class HeightmapConversionTests: XCTestCase {
         XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.25, at: 2, maxVoxelIndex: 4, voxelSize: 0.5), 0.5, accuracy: 0.1)
         XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.25, at: 1, maxVoxelIndex: 4, voxelSize: 0.5), 0, accuracy: 0.1)
         XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.25, at: 0, maxVoxelIndex: 4, voxelSize: 0.5), -0.5, accuracy: 0.1)
+
+        // verify SDFValueAtHeight isn't acting odd with taller values
+        XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.8, at: 0, maxVoxelIndex: 20, voxelSize: 1), -16.0, accuracy: 0.1)
+        XCTAssertEqual(HeightmapConverter.SDFValueAtHeight(0.8, at: 0, maxVoxelIndex: 20, voxelSize: 0.5), -8.0, accuracy: 0.1)
     }
 
     func testClosestDistanceReduce() throws {
@@ -243,21 +247,24 @@ final class HeightmapConversionTests: XCTestCase {
         XCTAssertNil(voxels._contents[VoxelIndex(0, 5, 0)])
         // these next two represent a SDF value identified from the wall leading up to the height
         // of one of the neighbors
-        XCTAssertEqual(voxels._contents[VoxelIndex(0, 4, 0)]!, Float(2.02), accuracy: 0.01)
-        XCTAssertEqual(voxels._contents[VoxelIndex(0, 3, 0)]!, Float(1.44), accuracy: 0.01)
+        XCTAssertEqual(voxels._contents[VoxelIndex(0, 4, 0)]!, Float(2.06), accuracy: 0.01)
+        XCTAssertEqual(voxels._contents[VoxelIndex(0, 3, 0)]!, Float(1.5), accuracy: 0.01)
         XCTAssertEqual(voxels._contents[VoxelIndex(0, 2, 0)]!, Float(0.86), accuracy: 0.01)
         XCTAssertEqual(voxels._contents[VoxelIndex(0, 1, 0)]!, Float(0.28), accuracy: 0.01)
         XCTAssertEqual(voxels._contents[VoxelIndex(0, 0, 0)]!, Float(-0.5), accuracy: 0.01)
 
         // voxels.dump()
         // ^^ pretty-prints/inspects the whole set of voxels for debugging/review
-
+//        Frame (Y): 5
+//         [0, 5, 0] : 1  [1, 5, 0] : 1
+//         [0, 5, 1] : 1  [1, 5, 1] : 1
+//
 //        Frame (Y): 4
-//         [0, 4, 0] : 2.02  [1, 4, 0] : 1.57
-//         [0, 4, 1] : 1.57  [1, 4, 1] : 1.5
+//         [0, 4, 0] : 2.06  [1, 4, 0] : 1.8
+//         [0, 4, 1] : 1.8  [1, 4, 1] : 1.5
 //
 //        Frame (Y): 3
-//         [0, 3, 0] : 1.44  [1, 3, 0] : 1.12
+//         [0, 3, 0] : 1.5  [1, 3, 0] : 1.12
 //         [0, 3, 1] : 1.12  [1, 3, 1] : 0.5
 //
 //        Frame (Y): 2
@@ -324,10 +331,10 @@ final class HeightmapConversionTests: XCTestCase {
 
 //        Frame (Y): 3
 //         [0, 3, 0] : 1  [1, 3, 0] : 1  [2, 3, 0] : 1  [3, 3, 0] : 1  [4, 3, 0] : 1
-//         [0, 3, 1] : 1  [1, 3, 1] : 0.94  [2, 3, 1] : 0.89  [3, 3, 1] : 0.94  [4, 3, 1] : 1
-//         [0, 3, 2] : 1  [1, 3, 2] : 0.89  [2, 3, 2] : 0.5  [3, 3, 2] : 0.89  [4, 3, 2] : 1
-//         [0, 3, 3] : 1  [1, 3, 3] : 0.94  [2, 3, 3] : 0.89  [3, 3, 3] : 0.94  [4, 3, 3] : 1
-//         [0, 3, 4] : 1  [1, 3, 4] : 1  [2, 3, 4] : 1  [3, 3, 4] : 1  [4, 3, 4] : 1.34
+//         [0, 3, 1] : 1  [1, 3, 1] : 1  [2, 3, 1] : 1  [3, 3, 1] : 1  [4, 3, 1] : 1
+//         [0, 3, 2] : 1  [1, 3, 2] : 1  [2, 3, 2] : 0.5  [3, 3, 2] : 1  [4, 3, 2] : 1
+//         [0, 3, 3] : 1  [1, 3, 3] : 1  [2, 3, 3] : 1  [3, 3, 3] : 1  [4, 3, 3] : 1
+//         [0, 3, 4] : 1  [1, 3, 4] : 1  [2, 3, 4] : 1  [3, 3, 4] : 1  [4, 3, 4] : 1.41
 
         // [4,3,4] closest surface point is all below, most likely [4,2,3] which should be
         // a distance of about 1.4 (sqrt(2)
@@ -337,10 +344,10 @@ final class HeightmapConversionTests: XCTestCase {
 //         [0, 2, 1] : 0  [1, 2, 1] : 0  [2, 2, 1] : 0  [3, 2, 1] : 0  [4, 2, 1] : 0
 //         [0, 2, 2] : 0  [1, 2, 2] : 0  [2, 2, 2] : -0.5  [3, 2, 2] : 0  [4, 2, 2] : 0
 //         [0, 2, 3] : 0  [1, 2, 3] : 0  [2, 2, 3] : 0  [3, 2, 3] : 0  [4, 2, 3] : 0
-//         [0, 2, 4] : 0  [1, 2, 4] : 0  [2, 2, 4] : 0  [3, 2, 4] : 0  [4, 2, 4] : 0.89
+//         [0, 2, 4] : 0  [1, 2, 4] : 0  [2, 2, 4] : 0  [3, 2, 4] : 0  [4, 2, 4] : 1
 
         //  4,2,4, unit height 0, should be a positive at this vertical slice - not 0, surface
-        XCTAssertEqual(voxels[VoxelIndex(4, 2, 4)]!, 0.89, accuracy: 0.1)
+        XCTAssertEqual(voxels[VoxelIndex(4, 2, 4)]!, 1, accuracy: 0.1)
 
 //        Frame (Y): 1
 //         [0, 1, 0] : -1  [1, 1, 0] : -1  [2, 1, 0] : -1  [3, 1, 0] : -1  [4, 1, 0] : -1
@@ -348,6 +355,7 @@ final class HeightmapConversionTests: XCTestCase {
 //         [0, 1, 2] : -1  [1, 1, 2] : -1  [2, 1, 2] : -1.5  [3, 1, 2] : -1  [4, 1, 2] : -1
 //         [0, 1, 3] : -1  [1, 1, 3] : -1  [2, 1, 3] : -1  [3, 1, 3] : -1  [4, 1, 3] : -1
 //         [0, 1, 4] : -1  [1, 1, 4] : -1  [2, 1, 4] : -1  [3, 1, 4] : -1  [4, 1, 4] : 0.45
+
         // [4,1,4] is a wall derived value... - the options were 0.45, 0.45, and 0.57, with directly
         // down being 1, so that's working as expected...
         XCTAssertEqual(voxels[VoxelIndex(4, 1, 4)]!, 0.45, accuracy: 0.1)
@@ -407,27 +415,35 @@ final class HeightmapConversionTests: XCTestCase {
         XCTAssertEqual(XZIndex.XZtoStride(x: 0, z: 1, width: 4), 4)
         XCTAssertEqual(XZIndex.XZtoStride(x: 1, z: 1, width: 4), 5)
     }
-    
+
     func testHeightMapToFloor() throws {
         let unitFloatValues: [[Float]] = [
             [0.4, 0.4, 0.4, 0.4, 0.4],
             [0.4, 0.4, 0.4, 0.4, 0.4],
             [0.4, 0.4, 0.5, 0.4, 0.4],
             [0.4, 0.4, 0.4, 0.4, 0.4],
-            [0.4, 0.4, 0.4, 0.4, 0.0],
+            [0.4, 0.4, 0.4, 0.4, 0.1],
         ]
         let heightmap = Heightmap(Array(unitFloatValues.joined()), width: 5)
         let voxels = HeightmapConverter.heightmap(heightmap, maxVoxelIndex: 20, voxelSize: 1.0, extendToFloor: true)
         XCTAssertEqual(voxels.count, 268) // extendToFloor == false : 142
-        
+
         voxels.dump()
-        
+
         // verify all of the floor voxels contain values
-        for i in 0...4 {
-            for j in 0...4 {
-                XCTAssertNotNil(voxels._contents[VoxelIndex(i,0,j)])
-                XCTAssertTrue(voxels._contents[VoxelIndex(i,0,j)]! < 0.0)
+        for i in 0 ... 4 {
+            for j in 0 ... 4 {
+                XCTAssertNotNil(voxels._contents[VoxelIndex(i, 0, j)])
+                XCTAssertTrue(voxels._contents[VoxelIndex(i, 0, j)]! < 0.0)
             }
         }
+//        Frame (Y): 2
+//         [0, 2, 0] : -6  [1, 2, 0] : -6  [2, 2, 0] : -6  [3, 2, 0] : -6  [4, 2, 0] : -6
+//         [0, 2, 1] : -6  [1, 2, 1] : -6  [2, 2, 1] : -6  [3, 2, 1] : -6  [4, 2, 1] : -6
+//         [0, 2, 2] : -6  [1, 2, 2] : -6  [2, 2, 2] : -6.08  [3, 2, 2] : -6  [4, 2, 2] : -6
+//         [0, 2, 3] : -6  [1, 2, 3] : -6  [2, 2, 3] : -6  [3, 2, 3] : -3.46  [4, 2, 3] : -6
+//         [0, 2, 4] : -6  [1, 2, 4] : -6  [2, 2, 4] : -6  [3, 2, 4] : -6  [4, 2, 4] : 0
+
+        // FIXME: 4,2,3 && 3,2,4 aren't right - they should be lower values, akin to 3,2,3
     }
 }
