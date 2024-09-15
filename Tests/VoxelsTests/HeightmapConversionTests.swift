@@ -240,8 +240,8 @@ final class HeightmapConversionTests: XCTestCase {
         XCTAssertEqual(voxels._contents[VoxelIndex(1, 4, 1)]!, Float(1.5), accuracy: 0.01)
         XCTAssertEqual(voxels._contents[VoxelIndex(1, 3, 1)]!, Float(0.5), accuracy: 0.01)
         XCTAssertEqual(voxels._contents[VoxelIndex(1, 2, 1)]!, Float(-0.5), accuracy: 0.01)
-        XCTAssertEqual(voxels._contents[VoxelIndex(1, 1, 1)]!, Float(-1.5), accuracy: 0.01)
-        XCTAssertEqual(voxels._contents[VoxelIndex(1, 0, 1)]!, Float(-2.5), accuracy: 0.01)
+        XCTAssertEqual(voxels._contents[VoxelIndex(1, 1, 1)]!, Float(-0.67), accuracy: 0.01)
+        XCTAssertEqual(voxels._contents[VoxelIndex(1, 0, 1)]!, Float(-1.12), accuracy: 0.01)
 
         // Looking at the vertical stack in the upper left (x=0,z=0) corner:
         XCTAssertNil(voxels._contents[VoxelIndex(0, 5, 0)])
@@ -253,7 +253,7 @@ final class HeightmapConversionTests: XCTestCase {
         XCTAssertEqual(voxels._contents[VoxelIndex(0, 1, 0)]!, Float(0.28), accuracy: 0.01)
         XCTAssertEqual(voxels._contents[VoxelIndex(0, 0, 0)]!, Float(-0.5), accuracy: 0.01)
 
-        // voxels.dump()
+        voxels.dump()
         // ^^ pretty-prints/inspects the whole set of voxels for debugging/review
 //        Frame (Y): 5
 //         [0, 5, 0] : 1  [1, 5, 0] : 1
@@ -273,11 +273,11 @@ final class HeightmapConversionTests: XCTestCase {
 //
 //        Frame (Y): 1
 //         [0, 1, 0] : 0.29  [1, 1, 0] : 0.22
-//         [0, 1, 1] : 0.22  [1, 1, 1] : -1.5
+//         [0, 1, 1] : 0.22  [1, 1, 1] : -0.67
 //
 //        Frame (Y): 0
 //         [0, 0, 0] : -0.5  [1, 0, 0] : -0.5
-//         [0, 0, 1] : -0.5  [1, 0, 1] : -2.5
+//         [0, 0, 1] : -0.5  [1, 0, 1] : -1.12
 
         for voxelValue in voxels {
             XCTAssertTrue(!voxelValue.isNaN)
@@ -363,9 +363,9 @@ final class HeightmapConversionTests: XCTestCase {
 //        Frame (Y): 0
 //         [0, 0, 0] : -2  [1, 0, 0] : -2  [2, 0, 0] : -2  [3, 0, 0] : -2  [4, 0, 0] : -2
 //         [0, 0, 1] : -2  [1, 0, 1] : -2  [2, 0, 1] : -2  [3, 0, 1] : -2  [4, 0, 1] : -2
-//         [0, 0, 2] : -2  [1, 0, 2] : -2  [2, 0, 2] : -2.5  [3, 0, 2] : -2  [4, 0, 2] : -2
-//         [0, 0, 3] : -2  [1, 0, 3] : -2  [2, 0, 3] : -2  [3, 0, 3] : -2  [4, 0, 3] : -2
-//         [0, 0, 4] : -2  [1, 0, 4] : -2  [2, 0, 4] : -2  [3, 0, 4] : -2  [4, 0, 4] : 0
+//         [0, 0, 2] : -2  [1, 0, 2] : -2  [2, 0, 2] : -2.24  [3, 0, 2] : -2  [4, 0, 2] : -2
+//         [0, 0, 3] : -2  [1, 0, 3] : -2  [2, 0, 3] : -2  [3, 0, 3] : -1.15  [4, 0, 3] : -0.89
+//         [0, 0, 4] : -2  [1, 0, 4] : -2  [2, 0, 4] : -2  [3, 0, 4] : -0.89  [4, 0, 4] : 0
         XCTAssertEqual(voxels[VoxelIndex(4, 0, 4)]!, 0, accuracy: 0.1)
     }
 
@@ -437,13 +437,58 @@ final class HeightmapConversionTests: XCTestCase {
                 XCTAssertTrue(voxels._contents[VoxelIndex(i, 0, j)]! < 0.0)
             }
         }
+    }
+
+    func testNeighborSDFCalculation() throws {
+        let unitFloatValues: [[Float]] = [
+            [0.4, 0.4, 0.4, 0.4, 0.4],
+            [0.4, 0.4, 0.4, 0.4, 0.4],
+            [0.4, 0.4, 0.5, 0.4, 0.4],
+            [0.4, 0.4, 0.4, 0.4, 0.4],
+            [0.4, 0.4, 0.4, 0.4, 0.1],
+        ]
+        let heightmap = Heightmap(Array(unitFloatValues.joined()), width: 5)
+        var voxels = VoxelHash<Float>()
+
+        voxels = HeightmapConverter.heightmap(heightmap, maxVoxelIndex: 20, voxelSize: 1.0, extendToFloor: true)
+        // voxels.dump()
+
+        // prep work for the internal function
+
+        // get the X and Z coordinate index for this column of voxels from the height map
+        let xzPosition = XZIndex(x: 4, z: 3)
+        let y = 2
+        let value = heightmap[xzPosition]
+        let maxVoxelIndex = 20
+        let voxelSize: Float = 1.0
+
+        // compute a list of the valid neighbor X and Z coordinates that are within the bounds
+        // of the height map
+        let surroundingNeighbors: [XZIndex] = HeightmapConverter.twoDIndexNeighborsFrom(position: xzPosition, widthCount: heightmap.width, depthCount: heightmap.height)
+
+        // get a list of the VoxelIndex positions of the surface for the neighbor voxel columns
+        let neighborsSurfaceVoxelIndex: [VoxelIndex] = surroundingNeighbors.map { xz in
+            let yIndexForNeighbor = HeightmapConverter.indexOfSurface(xz, heightmap: heightmap, maxVoxelIndex: maxVoxelIndex)
+            return VoxelIndex(xz.x, yIndexForNeighbor, xz.z)
+        }
+
+        let yIndex = HeightmapConverter.indexOfSurface(value, maxVoxelIndex: maxVoxelIndex)
+
+        let minYIndexOfNeighbors: Int = neighborsSurfaceVoxelIndex.reduce(yIndex) { partialResult, vIndex in
+            Swift.min(partialResult, vIndex.y)
+        }
+        let maxYIndexOfNeighbors: Int = neighborsSurfaceVoxelIndex.reduce(yIndex) { partialResult, vIndex in
+            Swift.max(partialResult, vIndex.y)
+        }
+
 //        Frame (Y): 2
 //         [0, 2, 0] : -6  [1, 2, 0] : -6  [2, 2, 0] : -6  [3, 2, 0] : -6  [4, 2, 0] : -6
 //         [0, 2, 1] : -6  [1, 2, 1] : -6  [2, 2, 1] : -6  [3, 2, 1] : -6  [4, 2, 1] : -6
 //         [0, 2, 2] : -6  [1, 2, 2] : -6  [2, 2, 2] : -6.08  [3, 2, 2] : -6  [4, 2, 2] : -6
-//         [0, 2, 3] : -6  [1, 2, 3] : -6  [2, 2, 3] : -6  [3, 2, 3] : -3.46  [4, 2, 3] : -6
-//         [0, 2, 4] : -6  [1, 2, 4] : -6  [2, 2, 4] : -6  [3, 2, 4] : -6  [4, 2, 4] : 0
+//         [0, 2, 3] : -6  [1, 2, 3] : -6  [2, 2, 3] : -6  [3, 2, 3] : -1.38  [4, 2, 3] : -0.99
+//         [0, 2, 4] : -6  [1, 2, 4] : -6  [2, 2, 4] : -6  [3, 2, 4] : -0.99  [4, 2, 4] : 0
 
-        // FIXME: 4,2,3 && 3,2,4 aren't right - they should be lower values, akin to 3,2,3
+        HeightmapConverter.populateVoxelWithSDF(y, xzPosition: xzPosition, ySurfaceIndex: yIndex, heightmap: heightmap, unitHeightSurfaceValue: value, maxVoxelIndex: maxVoxelIndex, voxelSize: voxelSize, minYIndexOfNeighbors: minYIndexOfNeighbors, maxYIndexOfNeighbors: maxYIndexOfNeighbors, surroundingNeighbors: surroundingNeighbors, voxels: &voxels)
+        XCTAssertEqual(voxels[VoxelIndex(xzPosition.x, y, xzPosition.z)]!, Float(-0.99), accuracy: 0.1)
     }
 }
