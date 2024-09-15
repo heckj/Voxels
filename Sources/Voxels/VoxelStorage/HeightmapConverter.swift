@@ -279,7 +279,7 @@ public enum HeightmapConverter {
     ///   - maxVoxelHeight: The maximum height of voxels.
     public static func heightmap(_ heightmap: Heightmap,
                                  maxVoxelIndex: Int,
-                                 voxelSize: Float) -> VoxelHash<Float>
+                                 voxelSize: Float, extendToFloor: Bool = false) -> VoxelHash<Float>
     {
         precondition(heightmap.width > 0)
 
@@ -300,15 +300,19 @@ public enum HeightmapConverter {
 
             let yIndex = indexOfSurface(value, maxVoxelIndex: maxVoxelIndex)
 
-            var minYIndexOfNeighbors: Int = neighborsSurfaceVoxelIndex.reduce(yIndex) { partialResult, vIndex in
-                Swift.min(partialResult, vIndex.y)
+            var minYIndexOfNeighbors = 0
+            if !extendToFloor {
+                minYIndexOfNeighbors = neighborsSurfaceVoxelIndex.reduce(yIndex) { partialResult, vIndex in
+                    Swift.min(partialResult, vIndex.y)
+                }
+                if minYIndexOfNeighbors > 0 { minYIndexOfNeighbors -= 1 }
             }
             var maxYIndexOfNeighbors: Int = neighborsSurfaceVoxelIndex.reduce(yIndex) { partialResult, vIndex in
                 Swift.max(partialResult, vIndex.y)
             }
             // expand up and down, within the constraints of the voxel hash bounds set by maxVoxelHeight
             // maxVoxelHeight of 6 means indices 0, 1, 2, 3, 4, and 5 are valid, but not -1 or 6
-            if minYIndexOfNeighbors > 0 { minYIndexOfNeighbors -= 1 }
+
             if maxYIndexOfNeighbors < (maxVoxelIndex - 1) { maxYIndexOfNeighbors += 1 }
             // go up an extra neighbor for those cases where FP rounding makes the first negative index value lower
             // than expected. I think this workaround is really only needed when the max voxel index is a relatively low
@@ -359,7 +363,7 @@ public enum HeightmapConverter {
                             let computedDistance = distanceFromPointToLine(p: point, x1: lineStart, x2: lineEnd)
                             return computedDistance
                         } else {
-                            return nil
+                            return verticalSDFDistance
                         }
                     }
                     // now we want the distance closest to zero
