@@ -249,7 +249,7 @@ final class HeightmapConversionTests: XCTestCase {
         XCTAssertEqual(voxels._contents[VoxelIndex(0, 1, 0)]!, Float(0.28), accuracy: 0.01)
         XCTAssertEqual(voxels._contents[VoxelIndex(0, 0, 0)]!, Float(-0.5), accuracy: 0.01)
 
-        voxels.dump()
+        // voxels.dump()
         // ^^ pretty-prints/inspects the whole set of voxels for debugging/review
 
 //        Frame (Y): 4
@@ -406,5 +406,28 @@ final class HeightmapConversionTests: XCTestCase {
         XCTAssertEqual(XZIndex.XZtoStride(x: 3, z: 0, width: 4), 3)
         XCTAssertEqual(XZIndex.XZtoStride(x: 0, z: 1, width: 4), 4)
         XCTAssertEqual(XZIndex.XZtoStride(x: 1, z: 1, width: 4), 5)
+    }
+    
+    func testHeightMapToFloor() throws {
+        let unitFloatValues: [[Float]] = [
+            [0.4, 0.4, 0.4, 0.4, 0.4],
+            [0.4, 0.4, 0.4, 0.4, 0.4],
+            [0.4, 0.4, 0.5, 0.4, 0.4],
+            [0.4, 0.4, 0.4, 0.4, 0.4],
+            [0.4, 0.4, 0.4, 0.4, 0.0],
+        ]
+        let heightmap = Heightmap(Array(unitFloatValues.joined()), width: 5)
+        let voxels = HeightmapConverter.heightmap(heightmap, maxVoxelIndex: 20, voxelSize: 1.0, extendToFloor: true)
+        XCTAssertEqual(voxels.count, 268) // extendToFloor == false : 142
+        
+        voxels.dump()
+        
+        // verify all of the floor voxels contain values
+        for i in 0...4 {
+            for j in 0...4 {
+                XCTAssertNotNil(voxels._contents[VoxelIndex(i,0,j)])
+                XCTAssertTrue(voxels._contents[VoxelIndex(i,0,j)]! < 0.0)
+            }
+        }
     }
 }
