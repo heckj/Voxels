@@ -42,7 +42,7 @@ public extension Vector {
     }
 
     /// Computes the dot-product of this vector and another you provide.
-    /// - Parameter other: The vector against which to compute a dot product.
+    /// - Parameter another: The vector against which to compute a dot product.
     /// - Returns: A double that indicates the value to which one vector applies to another.
     func dot(_ another: Vector) -> Float {
         #if canImport(simd)

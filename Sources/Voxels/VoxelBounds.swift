@@ -67,7 +67,7 @@ public struct VoxelBounds: Sendable {
     }
 
     /// Insets the bounds by decreasing the maximum size by the amount you provide, collapsing down to the minimum bounds.
-    /// - Parameter insetAmount: The amount to inset, default of 1.
+    /// - Parameter amount: The amount to inset, default of 1.
     /// - Returns: the inset bounds.
     @inlinable
     public func insetQuadrant(_ amount: Int = 1) -> VoxelBounds {
@@ -78,7 +78,7 @@ public struct VoxelBounds: Sendable {
     }
 
     /// Expands the bounds by increasing both the maximum and minimum away from the bounds midpoint.
-    /// - Parameter insetAmount: The amount to expand, default of 1.
+    /// - Parameter amount: The amount to expand, default of 1.
     /// - Returns: the expanded bounds.
     @inlinable
     public func expand(_ amount: Int = 1) -> VoxelBounds {
