@@ -4,8 +4,8 @@ A Swift library for storage, manipulation, export, and 3D rendering of Voxel dat
 
 ## Overview
 
-The general term of art for all this is "[isosurface](https://en.wikipedia.org/wiki/Isosurface) extraction", originating from medical image technologies.
-This library hosts data structures for storing and filtering collections of voxels, and includes multiple different means of rendering the results of a collection of voxels to a 3D mesh.
+The library supports storing and manipulating [voxels](https://en.wikipedia.org/wiki/Voxel), with convenience functions to convert the data stored within a collection of voxels into surfaces by generating 3D meshes.
+The general term of art for this process is [isosurface](https://en.wikipedia.org/wiki/Isosurface) extraction, originating from medical image technologies.
 The library includes implementations of several renderers:
 
 - simple block mesh, rendering voxels as a cube when they're determined to be opaque. 
