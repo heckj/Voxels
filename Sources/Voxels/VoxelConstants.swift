@@ -117,8 +117,7 @@ public enum CubeFace: UInt8, CaseIterable, Sendable {
 
     /// Returns a set of VoxelIndex offsets for the four corners of the face, in the winding order to create a 3D mesh quad from two triangles.
     /// - Parameters:
-    ///   - face: The direction of the voxel's face.
-    ///   - exterior: A Boolean value that indicates wether the quad is viewed from the exterior of the voxel.
+    ///   - exterior: A Boolean value that indicates whether the quad is viewed from the exterior of the voxel.
     ///
     /// The coordinate structure for the resulting offsets assumes a right-handed, Y-up coordinate system with a default view looking down the -Z direction.
     ///

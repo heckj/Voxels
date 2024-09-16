@@ -360,7 +360,9 @@ public enum HeightmapConverter {
     /// Creates a collection of Voxels from a height map
     /// - Parameters:
     ///   - heightmap: The Heightmap that represents the relative height at each x and z voxel index.
-    ///   - maxVoxelHeight: The maximum height of voxels.
+    ///   - maxVoxelIndex: The maximum height of voxels.
+    ///   - extendToFloor: A Boolean value that indicates whether the generated voxel data should extend down to index `0`.
+    ///   - voxelSize: The size of an edge of a voxel.
     public static func heightmap(_ heightmap: Heightmap,
                                  maxVoxelIndex: Int,
                                  voxelSize: Float, extendToFloor: Bool = false) -> VoxelHash<Float>
