@@ -1,8 +1,10 @@
 # Voxels
 
-A Swift library for storage, manipulation, export, and rendering of Voxel data
+A Swift library for storage, manipulation, export, and rendering of Voxel data.
 
-References:
+- [API documentation](https://swiftpackageindex.com/heckj/Voxels/documentation/voxels)
+
+## References:
 
 The general term of art for all this is "isosurface extraction"
 
@@ -13,14 +15,18 @@ Fast Surface Nets
 - [Dual Contouring Tutorial](https://www.boristhebrave.com/2018/04/15/dual-contouring-tutorial/)
   - [associated code examples (python)](https://github.com/BorisTheBrave/mc-dc/tree/master)
 
-Copies of some of these articles and papers are in [refs](refs/).
+Copies of some of these articles and papers reside in [refs](refs/).
 
+## benchmarking notes
 
-## benchmark notes
+1D Benchmarks:
 
-./scripts/rebuild_benchmarks.bash
-./scripts/compare_benchmark.bash
+    swift package benchmark --target VoxelBenchmark
 
-swift package benchmark --target VoxelBenchmark
+2D Benchmarks:
+
+    ./scripts/rebuild_benchmarks.bash
+    ./scripts/compare_benchmark.bash
+
 
 
