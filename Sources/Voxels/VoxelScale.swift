@@ -1,3 +1,6 @@
+/// A scale that provides a mapping between Voxel coordinates and 3D points.
+///
+/// Used for sampling data into a voxel data structure, or rendering voxel data into a 3D mesh.
 public struct VoxelScale<T: SIMDScalar & Sendable> {
     public let origin: SIMD3<T>
     public let cubeSize: T

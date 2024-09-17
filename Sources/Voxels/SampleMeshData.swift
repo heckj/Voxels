@@ -1,5 +1,6 @@
 import Heightmap
 
+/// Example voxel collections.
 public enum SampleMeshData {
     public static func voxelArrayFromSphere() throws -> VoxelArray<Float> {
         let sphereSDF: SDFSampleable<Float> = SDF.sphere()

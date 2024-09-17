@@ -1,3 +1,4 @@
+/// The coordinate bounds of a set of voxels.
 public struct VoxelBounds: Sendable {
     public let min: VoxelIndex
     public let max: VoxelIndex

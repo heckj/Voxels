@@ -1,5 +1,6 @@
 import Heightmap
 
+/// Utility functions for converting height maps into collections of voxels.
 public enum HeightmapConverter {
     /// Returns the unit height value for the center of the voxel at the index you provide.
     ///
