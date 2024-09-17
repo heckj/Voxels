@@ -1,3 +1,4 @@
+/// A collection of voxels backed by an array.
 public struct VoxelArray<T: VoxelRenderable>: VoxelWritable {
     var _contents: [T]
     public let edgeSize: Int

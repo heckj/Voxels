@@ -12,6 +12,7 @@
     }
 
     public extension MeshBuffer {
+        /// Returns a RealityKit mesh descriptor instance for this buffer, if the buffer data is valid.
         func meshDescriptor() -> MeshDescriptor? {
             if indices.isEmpty || positions.isEmpty || normals.isEmpty { return nil }
             var meshDescriptor = MeshDescriptor()

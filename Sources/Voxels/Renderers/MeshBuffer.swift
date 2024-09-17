@@ -1,6 +1,8 @@
 import Foundation
 
-/// The raw data collection that supports generating a MeshDescriptor
+/// A buffer of vertex indices, positions and normals that make up a generated 3D mesh.
+///
+///
 public struct MeshBuffer: Sendable {
     /// The triangle mesh positions.
     public var positions: [SIMD3<Float>]

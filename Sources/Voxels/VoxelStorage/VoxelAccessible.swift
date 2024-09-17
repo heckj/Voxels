@@ -1,3 +1,4 @@
+/// A type that holds a collection of voxels.
 public protocol VoxelAccessible<Element>: Collection where Element: VoxelRenderable {
     func value(_: VoxelIndex) throws -> Element?
     var bounds: VoxelBounds { get }
@@ -8,6 +9,7 @@ public protocol VoxelAccessible<Element>: Collection where Element: VoxelRendera
     func isSurface(_: VoxelIndex) throws -> Bool
 }
 
+/// A type that holds an updatable collection of voxels.
 public protocol VoxelWritable<Element>: VoxelAccessible {
     mutating func set(_: VoxelIndex, newValue: Element) throws
 }

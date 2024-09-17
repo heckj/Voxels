@@ -1,3 +1,4 @@
+/// The coordinates of a voxel location.
 public struct VoxelIndex: Hashable, Equatable, Sendable {
     let _storage: SIMD3<Int>
     public var x: Int {

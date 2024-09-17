@@ -1,5 +1,6 @@
 import IssueReporting
 
+/// A renderer for creating block 3D meshes of opaque voxels.
 public class BlockMeshRenderer {
     public init() {}
 
