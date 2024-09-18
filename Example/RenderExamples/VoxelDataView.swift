@@ -1,8 +1,8 @@
 import SwiftUI
 import Voxels
 
-struct VoxelDataView: View {
-    let voxelData: any VoxelAccessible
+struct VoxelDataView<VOXEL: VoxelBlockRenderable & VoxelSurfaceRenderable>: View {
+    let voxelData: any VoxelAccessible<VOXEL>
     let bounds: VoxelBounds
 
     @State private var yLevel: Int = 0
@@ -29,7 +29,7 @@ struct VoxelDataView: View {
         return row
     }
 
-    init(voxelData: any VoxelAccessible) {
+    init(voxelData: any VoxelAccessible<VOXEL>) {
         self.voxelData = voxelData
         bounds = voxelData.bounds.expand(2)
         yLevel = bounds.min.y
@@ -80,6 +80,6 @@ struct VoxelDataView: View {
 }
 
 #Preview {
-    VoxelDataView(voxelData: SampleMeshData.manhattanNeighbor1())
+    VoxelDataView<Float>(voxelData: SampleMeshData.manhattanNeighbor1())
         .frame(width: 400, height: 400)
 }

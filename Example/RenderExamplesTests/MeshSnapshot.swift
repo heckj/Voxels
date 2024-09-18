@@ -23,7 +23,8 @@ import Voxels
         arView.scene.anchors.append(originAnchor)
     }
 
-    func blockMeshEntity(_ samples: some VoxelAccessible) -> ModelEntity {
+    // swiftformat:disable opaqueGenericParameters
+    func blockMeshEntity<VOXEL: VoxelBlockRenderable>(_ samples: any VoxelAccessible<VOXEL>) -> ModelEntity {
         let buffer = BlockMeshRenderer().render(samples, scale: .init(), within: samples.bounds.expand())
         let descriptor = buffer.meshDescriptor()
         let mesh = try! MeshResource.generate(from: [descriptor!])
@@ -32,7 +33,8 @@ import Voxels
         return entity
     }
 
-    func marchingCubesEntity(_ samples: some VoxelAccessible) -> ModelEntity {
+    // swiftformat:disable opaqueGenericParameters
+    func marchingCubesEntity<VOXEL: VoxelSurfaceRenderable>(_ samples: any VoxelAccessible<VOXEL>) -> ModelEntity {
         let buffer = MarchingCubesRenderer().render(samples, scale: .init(), within: samples.bounds.expand())
         let descriptor = buffer.meshDescriptor()
         let mesh = try! MeshResource.generate(from: [descriptor!])
@@ -41,7 +43,8 @@ import Voxels
         return entity
     }
 
-    func surfaceNetEntity(_ samples: some VoxelAccessible) -> ModelEntity {
+    // swiftformat:disable opaqueGenericParameters
+    func surfaceNetEntity<VOXEL: VoxelSurfaceRenderable>(_ samples: any VoxelAccessible<VOXEL>) -> ModelEntity {
         let buffer = try! SurfaceNetRenderer().render(voxelData: samples, scale: .init(), within: samples.bounds.expand())
         let descriptor = buffer.meshDescriptor()
         let mesh = try! MeshResource.generate(from: [descriptor!])
