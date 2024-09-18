@@ -2,6 +2,7 @@
     import simd
 #endif
 
+/// A type that can be sampled at regular locations.
 public protocol VoxelSampleable {
     associatedtype VoxelDataType where VoxelDataType: SIMDScalar
     func valueAt(x: VoxelDataType, y: VoxelDataType, z: VoxelDataType) -> VoxelDataType

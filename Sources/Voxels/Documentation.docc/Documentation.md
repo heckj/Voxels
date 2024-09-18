@@ -27,16 +27,17 @@ The library also includes a converter to generate a collection of voxels from a 
 ### Renderers
 
 - ``BlockMeshRenderer``
+- ``VoxelBlockRenderable``
 - ``MarchingCubesRenderer``
 - ``SurfaceNetRenderer``
-- ``VoxelRenderable``
-- ``VoxelSampleable``
+- ``VoxelSurfaceRenderable``
 
 ### Converters
 
 - ``HeightmapConverter``
 - ``SDF``
 - ``SDFSampleable``
+- ``VoxelSampleable``
 
 ### Supporting Types
 
