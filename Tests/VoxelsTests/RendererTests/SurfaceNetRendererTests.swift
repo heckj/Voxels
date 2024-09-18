@@ -10,7 +10,7 @@ final class SurfaceNetRendererTests: XCTestCase {
             within: VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(32, 32, 32))
         )
 
-        let newThing = SurfaceNetRenderer()
+        let newThing = SurfaceNetRenderer<Float>()
         let newResultBuffer = try newThing.render(voxelData: samples, scale: .init(), within: samples.bounds.insetQuadrant())
 
         XCTAssertEqual(Set(newResultBuffer.positions), Set(originalResultBuffer.positions))
@@ -23,7 +23,7 @@ final class SurfaceNetRendererTests: XCTestCase {
     func testSurfaceNetRendererYBlock() throws {
         let samples = SampleMeshData.flatYBlock()
 
-        let newThing = SurfaceNetRenderer()
+        let newThing = SurfaceNetRenderer<Float>()
         let newResultBuffer = try newThing.render(voxelData: samples, scale: .init(), within: samples.bounds.expand(2))
 
         try newResultBuffer.validate()
@@ -34,7 +34,7 @@ final class SurfaceNetRendererTests: XCTestCase {
     func testSurfaceNetRendererSDFBrick() throws {
         let samples = SampleMeshData.SDFBrick()
 
-        let newThing = SurfaceNetRenderer()
+        let newThing = SurfaceNetRenderer<Float>()
         let newResultBuffer = try newThing.render(voxelData: samples, scale: .init(), within: samples.bounds.expand(2))
 
         try newResultBuffer.validate()

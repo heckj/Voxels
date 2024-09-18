@@ -2,7 +2,7 @@
 import IssueReporting
 
 /// A renderer for creating smooth 3D meshes of the surface of signed distance value (SDF) data.
-public class SurfaceNetRenderer {
+public class SurfaceNetRenderer<VOXEL: VoxelSurfaceRenderable> {
     // MARK: MeshBuffer cache components
 
     /// The triangle mesh positions.
@@ -57,7 +57,7 @@ public class SurfaceNetRenderer {
     ///
     /// Note that the scheme illustrated above implies that chunks must be padded with a 1-voxel border copied from neighboring
     /// voxels in order to connect seamlessly.
-    public func render(voxelData: some VoxelAccessible,
+    public func render(voxelData: any VoxelAccessible<VOXEL>,
                        scale: VoxelScale<Float>,
                        within bounds: VoxelBounds) throws -> MeshBuffer
     {
@@ -134,7 +134,7 @@ public class SurfaceNetRenderer {
     // Find all vertex positions and normals.
     // Also generate a map from grid position to vertex index to be used to look up vertices when generating quads.
     func estimateSurface(
-        voxelData: some VoxelAccessible,
+        voxelData: any VoxelAccessible<VOXEL>,
         scale: VoxelScale<Float>,
         bounds: VoxelBounds
     ) throws {
@@ -164,7 +164,7 @@ public class SurfaceNetRenderer {
     // for validating the algorithm, as the resulting extra work when found happens inline for performance.
     @discardableResult
     func estimateSurfaceForCube(
-        voxelData: some VoxelAccessible,
+        voxelData: any VoxelAccessible<VOXEL>,
         scale: VoxelScale<Float>,
         cornerIndex: VoxelIndex
     ) throws -> Bool {
@@ -208,7 +208,7 @@ public class SurfaceNetRenderer {
     // "centers" are actually the vertex positions found earlier. Also make sure the triangles are facing the right way. See the
     // comments on `maybe_make_quad` to help with understanding the indexing.
     func makeAllQuads(
-        voxelData: some VoxelAccessible,
+        voxelData: any VoxelAccessible<VOXEL>,
         bounds: VoxelBounds
     ) {
         let xyz_strides: [VoxelIndex] = [
@@ -289,7 +289,7 @@ public class SurfaceNetRenderer {
     // then we must find the other 3 quad corners by moving along the other two axes (those orthogonal to A) in the negative
     // directions; these are axis B and axis C.
     func maybeMakeQuad(
-        voxelData: some VoxelAccessible,
+        voxelData: any VoxelAccessible<VOXEL>,
         p1: VoxelIndex,
         p2: VoxelIndex,
         axis_b_stride: VoxelIndex,
