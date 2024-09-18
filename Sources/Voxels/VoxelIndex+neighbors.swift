@@ -9,7 +9,7 @@ public extension VoxelIndex {
         case surface
     }
 
-    static func neighbors(distance: Int, origin: VoxelIndex, voxels: any VoxelAccessible, strategy: NeighborStrategy = .raw) throws -> Set<VoxelIndex> {
+    static func neighbors<VOXEL: VoxelBlockRenderable>(distance: Int, origin: VoxelIndex, voxels: any VoxelAccessible<VOXEL>, strategy: NeighborStrategy = .raw) throws -> Set<VoxelIndex> {
         precondition(distance >= 0)
         var indices: Set<VoxelIndex> = [origin]
 

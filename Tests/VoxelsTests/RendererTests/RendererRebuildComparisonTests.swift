@@ -10,7 +10,7 @@ final class RendererRebuildComparisonTests: XCTestCase {
             within: VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(32, 32, 32))
         )
 
-        let newThing = SurfaceNetRenderer()
+        let newThing = SurfaceNetRenderer<Float>()
         let newResultBuffer = try newThing.render(voxelData: samples, scale: .init(), within: samples.bounds.insetQuadrant())
 
         XCTAssertEqual(Set(newResultBuffer.positions), Set(originalResultBuffer.positions))

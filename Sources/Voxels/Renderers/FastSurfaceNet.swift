@@ -114,10 +114,10 @@ extension BlockMeshRenderer {
         }
 
         // if there is an intersection, compute the centroid and gradients
-        let centroid: SIMD3<Float> = SurfaceNetRenderer.centroidOfEdgeIntersections(dists: corner_dists)
+        let centroid: SIMD3<Float> = SurfaceNetRenderer<Float>.centroidOfEdgeIntersections(dists: corner_dists)
 
         output.meshbuffer.positions.append(position + centroid)
-        output.meshbuffer.normals.append(SurfaceNetRenderer.sdfGradient(dists: corner_dists, s: centroid))
+        output.meshbuffer.normals.append(SurfaceNetRenderer<Float>.sdfGradient(dists: corner_dists, s: centroid))
 
         return true
     }
