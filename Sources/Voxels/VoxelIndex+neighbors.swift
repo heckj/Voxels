@@ -9,6 +9,7 @@ public extension VoxelIndex {
         case surface
     }
 
+    // swiftformat:disable opaqueGenericParameters
     static func neighbors<VOXEL: VoxelBlockRenderable>(distance: Int, origin: VoxelIndex, voxels: any VoxelAccessible<VOXEL>, strategy: NeighborStrategy = .raw) throws -> Set<VoxelIndex> {
         precondition(distance >= 0)
         var indices: Set<VoxelIndex> = [origin]
