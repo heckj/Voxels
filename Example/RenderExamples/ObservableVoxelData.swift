@@ -6,7 +6,7 @@ import Voxels
 @MainActor
 class ObservableVoxelData {
     public var wrappedVoxelData: VoxelHash<Float>
-    let renderer: SurfaceNetRenderer<Float>
+    let renderer: SurfaceNetRenderer
     let voxelEntity: ModelEntity
     let blockEntity: ModelEntity
 

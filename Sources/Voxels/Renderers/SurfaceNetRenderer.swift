@@ -2,7 +2,7 @@
 import IssueReporting
 
 /// A renderer for creating smooth 3D meshes of the surface of signed distance value (SDF) data.
-public class SurfaceNetRenderer<VOXEL: VoxelSurfaceRenderable> {
+public class SurfaceNetRenderer {
     // MARK: MeshBuffer cache components
 
     /// The triangle mesh positions.
@@ -57,9 +57,10 @@ public class SurfaceNetRenderer<VOXEL: VoxelSurfaceRenderable> {
     ///
     /// Note that the scheme illustrated above implies that chunks must be padded with a 1-voxel border copied from neighboring
     /// voxels in order to connect seamlessly.
-    public func render(voxelData: any VoxelAccessible<VOXEL>,
-                       scale: VoxelScale<Float>,
-                       within bounds: VoxelBounds) throws -> MeshBuffer
+    // swiftformat:disable opaqueGenericParameters
+    public func render<VOXEL: VoxelSurfaceRenderable>(voxelData: any VoxelAccessible<VOXEL>,
+                                                      scale: VoxelScale<Float>,
+                                                      within bounds: VoxelBounds) throws -> MeshBuffer
     {
         resetCache()
         // set the position and normal into the meshbuffer if the relevant voxel index is a surface voxel
@@ -133,7 +134,8 @@ public class SurfaceNetRenderer<VOXEL: VoxelSurfaceRenderable> {
 
     // Find all vertex positions and normals.
     // Also generate a map from grid position to vertex index to be used to look up vertices when generating quads.
-    func estimateSurface(
+    // swiftformat:disable opaqueGenericParameters
+    func estimateSurface<VOXEL: VoxelSurfaceRenderable>(
         voxelData: any VoxelAccessible<VOXEL>,
         scale: VoxelScale<Float>,
         bounds: VoxelBounds
@@ -162,8 +164,9 @@ public class SurfaceNetRenderer<VOXEL: VoxelSurfaceRenderable> {
     //
     // The return value indicates if a surface voxel was identified at the point provided, but is only returned
     // for validating the algorithm, as the resulting extra work when found happens inline for performance.
+    // swiftformat:disable opaqueGenericParameters
     @discardableResult
-    func estimateSurfaceForCube(
+    func estimateSurfaceForCube<VOXEL: VoxelSurfaceRenderable>(
         voxelData: any VoxelAccessible<VOXEL>,
         scale: VoxelScale<Float>,
         cornerIndex: VoxelIndex
@@ -207,7 +210,8 @@ public class SurfaceNetRenderer<VOXEL: VoxelSurfaceRenderable> {
     // For every edge that crosses the isosurface, make a quad between the "centers" of the four cubes touching that surface. The
     // "centers" are actually the vertex positions found earlier. Also make sure the triangles are facing the right way. See the
     // comments on `maybe_make_quad` to help with understanding the indexing.
-    func makeAllQuads(
+    // swiftformat:disable opaqueGenericParameters
+    func makeAllQuads<VOXEL: VoxelSurfaceRenderable>(
         voxelData: any VoxelAccessible<VOXEL>,
         bounds: VoxelBounds
     ) {
@@ -288,7 +292,8 @@ public class SurfaceNetRenderer<VOXEL: VoxelSurfaceRenderable> {
     //
     // then we must find the other 3 quad corners by moving along the other two axes (those orthogonal to A) in the negative
     // directions; these are axis B and axis C.
-    func maybeMakeQuad(
+    // swiftformat:disable opaqueGenericParameters
+    func maybeMakeQuad<VOXEL: VoxelSurfaceRenderable>(
         voxelData: any VoxelAccessible<VOXEL>,
         p1: VoxelIndex,
         p2: VoxelIndex,
