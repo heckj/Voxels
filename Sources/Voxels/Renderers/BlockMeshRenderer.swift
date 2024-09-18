@@ -5,6 +5,7 @@ public class BlockMeshRenderer {
     public init() {}
 
     /// A fast and simple meshing algorithm that produces a single quad for every visible face of a block.
+    // swiftformat:disable opaqueGenericParameters
     public func render<VOXEL: VoxelBlockRenderable>(_ v: any VoxelAccessible<VOXEL>, scale: VoxelScale<Float>, within bounds: VoxelBounds, surfaceOnly: Bool = false) -> MeshBuffer {
         var buffer = MeshBuffer()
 
@@ -36,6 +37,7 @@ public class BlockMeshRenderer {
         return buffer
     }
 
+    // swiftformat:disable opaqueGenericParameters
     public static func fastBlockMeshByLayers<VOXEL: VoxelBlockRenderable>(_ v: any VoxelAccessible<VOXEL>, scale: VoxelScale<Float>) -> [Int: MeshBuffer] {
         var collection: [Int: MeshBuffer] = [:]
 
