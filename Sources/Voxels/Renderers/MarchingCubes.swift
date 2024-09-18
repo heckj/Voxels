@@ -1,5 +1,5 @@
 /// A renderer that implements the marching cubes algorithm to create a 3D mesh from voxel data.
-public class MarchingCubesRenderer<VOXEL: VoxelSurfaceRenderable> {
+public class MarchingCubesRenderer {
     let voxel_vertex_offsets: [VoxelIndex] = [
         [0, 0, 0],
         [1, 0, 0],
@@ -320,10 +320,11 @@ public class MarchingCubesRenderer<VOXEL: VoxelSurfaceRenderable> {
         buffer = MeshBuffer()
     }
 
-    public func render(_ data: any VoxelAccessible<VOXEL>,
-                       scale: VoxelScale<Float>,
-                       within bounds: VoxelBounds,
-                       adaptive: Bool = false) -> MeshBuffer
+    // swiftformat:disable opaqueGenericParameters
+    public func render<VOXEL: VoxelSurfaceRenderable>(_ data: any VoxelAccessible<VOXEL>,
+                                                      scale: VoxelScale<Float>,
+                                                      within bounds: VoxelBounds,
+                                                      adaptive: Bool = false) -> MeshBuffer
     {
         reset()
         for i in bounds.indices {
@@ -343,11 +344,12 @@ public class MarchingCubesRenderer<VOXEL: VoxelSurfaceRenderable> {
     ///   - adaptive: If true, uses linear interpolation to determine vertex locations closer to the threshold level; otherwise, is chooses a point between the two edges of the voxel cube.
     ///   - homeworkMode: If true, enables detailed print statements showing the calculations and logic for the choice of locations for the polygon(s).
     /// - Returns: A mesh made up of the polygons for this voxel cell
-    func marching_cubes_single_cell(data: any VoxelAccessible<VOXEL>,
-                                    scale _: VoxelScale<Float>,
-                                    index: VoxelIndex,
-                                    adaptive: Bool = false,
-                                    homeworkMode: Bool = false)
+    // swiftformat:disable opaqueGenericParameters
+    func marching_cubes_single_cell<VOXEL: VoxelSurfaceRenderable>(data: any VoxelAccessible<VOXEL>,
+                                                                   scale _: VoxelScale<Float>,
+                                                                   index: VoxelIndex,
+                                                                   adaptive: Bool = false,
+                                                                   homeworkMode: Bool = false)
     {
         // iterate through the corners of the voxel, and get the data value from each of those locations.
 

@@ -47,7 +47,7 @@ public enum EntityExample {
     public static var surfaceNetSphere: ModelEntity {
         let samples = sampledSDFSphere()
         do {
-            let renderer = SurfaceNetRenderer<Float>()
+            let renderer = SurfaceNetRenderer()
             let buffer = try! renderer.render(voxelData: samples, scale: .init(), within: samples.bounds.insetQuadrant())
 
             if let descriptor = buffer.meshDescriptor() {
@@ -79,7 +79,7 @@ public enum EntityExample {
 
     public static var surfaceNetBrick: ModelEntity {
         let voxels = Voxels.SampleMeshData.SDFBrick()
-        let renderer = SurfaceNetRenderer<Float>()
+        let renderer = SurfaceNetRenderer()
         let generatedMeshBuffer = try! renderer.render(voxelData: voxels, scale: .init(), within: voxels.bounds.expand(2))
 
         guard let descriptor = generatedMeshBuffer.meshDescriptor() else {
@@ -94,7 +94,7 @@ public enum EntityExample {
 
     public static var flatYBlock: ModelEntity {
         let voxels = Voxels.SampleMeshData.flatYBlock()
-        let renderer = SurfaceNetRenderer<Float>()
+        let renderer = SurfaceNetRenderer()
         let generatedMeshBuffer = try! renderer.render(voxelData: voxels, scale: .init(), within: voxels.bounds.expand(2))
 
         guard let descriptor = generatedMeshBuffer.meshDescriptor() else {

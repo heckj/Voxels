@@ -21,7 +21,7 @@ final class SurfaceNetPerformanceTests: XCTestCase {
         let bounds = samples.bounds.insetQuadrant()
         // 0.23 -> 0.193 by not returning the data and inserting as a side effect...
         measure {
-            let thing = SurfaceNetRenderer<Float>()
+            let thing = SurfaceNetRenderer()
             _ = try! thing.render(voxelData: samples, scale: .init(), within: bounds)
         }
     }
