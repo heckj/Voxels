@@ -2,6 +2,7 @@
     import simd
 #endif
 
+/// A compact representation of a 3 dimensional vector.
 public typealias Vector = SIMD3<Float>
 
 public extension Vector {

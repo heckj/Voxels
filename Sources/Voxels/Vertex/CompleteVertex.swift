@@ -1,3 +1,4 @@
+/// A data structure that wraps up all the information needed to represent an individual vertex.
 public struct CompleteVertex: Hashable, Sendable {
     var position: SIMD3<Float>
     var normal: SIMD3<Float>

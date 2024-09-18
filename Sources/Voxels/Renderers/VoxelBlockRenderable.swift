@@ -1,3 +1,4 @@
+/// A type that can be rendered as opaque blocks.
 public protocol VoxelBlockRenderable {
     func isOpaque() -> Bool
 }
