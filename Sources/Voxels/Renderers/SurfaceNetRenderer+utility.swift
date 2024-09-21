@@ -1,4 +1,8 @@
 extension SurfaceNetRenderer {
+    /// Returns the estimated point between the 8 corners of the index positions of voxels, where a vertex
+    /// should reside that best represents the surface, inferred from the SDF values at those index positions.
+    /// - Parameter dists: <#dists description#>
+    /// - Returns: an estimated `SIMD3<Float>` in unit coordinates from the leading corner of this vertex.
     static func centroidOfEdgeIntersections(dists: [Float]) -> SIMD3<Float> {
         precondition(dists.count == 8)
         var count = 0
@@ -15,12 +19,14 @@ extension SurfaceNetRenderer {
         }
 
         return sum / Float(count)
-        // returns an estimates SIMD3<Float>[x,y,z] in unit coordinates (0...1) from the corner of this vertex
     }
 
-    /// Given the index positions of two corners, estimate where between those positions the SDF value is zero.
+    /// Given the SDF values at the index positions of two corners, estimate
+    /// where - between those positions - the SDF value is zero.
     ///
-    /// If the SDF values provided don't have different signs, there is no valid resulting value.
+    /// If the SDF values between two corners provided don't have different signs,
+    /// there is no valid resulting value.
+    ///
     /// - Parameters:
     ///   - corner1: The index value for the first corner.
     ///   - corner2: The index value for the second corner.
@@ -40,11 +46,11 @@ extension SurfaceNetRenderer {
             + interp1 * CUBE_CORNER_VECTORS[corner2]
     }
 
-    /// Calculate the normal as the gradient of the distance field. Don't bother making it a unit vector, since we'll do that on the
-    /// GPU.
+    /// Calculate the normal as the gradient of the distance field.
     ///
-    /// For each dimension, there are 4 cube edges along that axis. This will do bilinear interpolation between the differences
-    /// along those edges based on the position of the surface (s).
+    /// For each dimension, there are 4 cube edges along the corresponding axis.
+    /// This method does bilinear interpolation between the differences along those edges
+    /// based on the position of the surface (s).
     static func sdfGradient(dists: [Float32], s: SIMD3<Float>) -> SIMD3<Float> {
         let p00 = SIMD3<Float>([dists[0b001], dists[0b010], dists[0b100]])
         let n00 = SIMD3<Float>([dists[0b000], dists[0b000], dists[0b000]])
@@ -67,9 +73,10 @@ extension SurfaceNetRenderer {
         let neg = SIMD3<Float>.one - s
 
         // Do bilinear interpolation between 4 edges in each dimension.
-        return neg.yzx() * neg.zxy() * d00
+        let interpolatedResult: SIMD3<Float> = neg.yzx() * neg.zxy() * d00
             + neg.yzx() * s.zxy() * d10
             + s.yzx() * neg.zxy() * d01
             + s.yzx() * s.zxy() * d11
+        return interpolatedResult.normalized()
     }
 }

@@ -36,12 +36,15 @@ public class SurfaceNetRenderer {
     ///
     /// Extracts an isosurface mesh from the [signed distance field](https://en.wikipedia.org/wiki/Signed_distance_function) `sdf`.
     /// Each value in the field determines how close that point is to the isosurface.
-    /// Negative values are considered "interior" of the surface volume, and positive values are considered "exterior."
+    /// Negative SDF values are considered "interior" of the surface volume,
+    /// and positive values are considered "exterior."
+    ///
     /// These lattice points will be considered corners of unit cubes.
     /// For each unit cube, at most one isosurface vertex will be estimated.
+    ///
     /// In the example below, `p` is a positive corner value,
-    /// `n` is a negative corner value, `s` is an isosurface vertex,
-    /// and `|` or `-` are mesh polygons connecting the vertices.
+    /// `n` is a negative corner value, and `s` represents an isosurface vertex.
+    /// The characters `|` and `-` represent mesh polygons connecting the vertices.
     ///
     /// ```text
     /// p   p   p   p
@@ -53,10 +56,11 @@ public class SurfaceNetRenderer {
     /// p   p   p   p
     /// ```
     ///
-    /// The set of corners sampled is exactly the set of points in `[min, max]`. `sdf` must contain all of those points.
+    /// The set of corners sampled is exactly the set of points in `[min, max]`.
+    /// The collection of voxels (`voxelData`) must contain all of those points.
     ///
-    /// Note that the scheme illustrated above implies that chunks must be padded with a 1-voxel border copied from neighboring
-    /// voxels in order to connect seamlessly.
+    /// Note that the scheme illustrated above implies that chunks must be padded
+    /// with a 1-voxel border copied from neighboring voxels in order to connect seamlessly.
     // swiftformat:disable opaqueGenericParameters
     public func render<VOXEL: VoxelSurfaceRenderable>(voxelData: any VoxelAccessible<VOXEL>,
                                                       scale: VoxelScale<Float>,
