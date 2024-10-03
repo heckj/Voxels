@@ -62,13 +62,13 @@ public class SurfaceNetRenderer {
     /// Note that the scheme illustrated above implies that chunks must be padded
     /// with a 1-voxel border copied from neighboring voxels in order to connect seamlessly.
     // swiftformat:disable opaqueGenericParameters
-    public func render<VOXEL: VoxelSurfaceRenderable>(voxelData: any VoxelAccessible<VOXEL>,
+    public func render<VOXEL: VoxelSurfaceRenderable>(_ voxelData: any VoxelAccessible<VOXEL>,
                                                       scale: VoxelScale<Float>,
-                                                      within bounds: VoxelBounds) throws -> MeshBuffer
+                                                      within bounds: VoxelBounds) -> MeshBuffer
     {
         resetCache()
         // set the position and normal into the meshbuffer if the relevant voxel index is a surface voxel
-        try estimateSurface(voxelData: voxelData, scale: scale, bounds: bounds)
+        estimateSurface(voxelData: voxelData, scale: scale, bounds: bounds)
 
         makeAllQuads(voxelData: voxelData, bounds: bounds)
 
@@ -143,7 +143,7 @@ public class SurfaceNetRenderer {
         voxelData: any VoxelAccessible<VOXEL>,
         scale: VoxelScale<Float>,
         bounds: VoxelBounds
-    ) throws {
+    ) {
         // iterate throughout all the voxel indices possible within the space of the bounds provided
 
         // NOTE(heckj): the order of iteration here is extremely important to the assembly of points
@@ -154,7 +154,7 @@ public class SurfaceNetRenderer {
             for y in bounds.min.y ... bounds.max.y {
                 for x in bounds.min.x ... bounds.max.x {
                     let thisVoxel = VoxelIndex(x, y, z)
-                    _ = try estimateSurfaceForCube(voxelData: voxelData, scale: scale, cornerIndex: thisVoxel)
+                    _ = estimateSurfaceForCube(voxelData: voxelData, scale: scale, cornerIndex: thisVoxel)
                 }
             }
         }
@@ -174,7 +174,7 @@ public class SurfaceNetRenderer {
         voxelData: any VoxelAccessible<VOXEL>,
         scale: VoxelScale<Float>,
         cornerIndex: VoxelIndex
-    ) throws -> Bool {
+    ) -> Bool {
         // Get the signed distance values at each corner of this cube.
         var corner_dists: [Float] = Array(repeating: 0.0, count: 8)
         var num_negative = 0
