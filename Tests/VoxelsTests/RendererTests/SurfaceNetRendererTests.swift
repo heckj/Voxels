@@ -11,7 +11,7 @@ final class SurfaceNetRendererTests: XCTestCase {
         )
 
         let newThing = SurfaceNetRenderer()
-        let newResultBuffer = try newThing.render(voxelData: samples, scale: .init(), within: samples.bounds.insetQuadrant())
+        let newResultBuffer = newThing.render(samples, scale: .init(), within: samples.bounds.insetQuadrant())
 
         XCTAssertEqual(Set(newResultBuffer.positions), Set(originalResultBuffer.positions))
         XCTAssertEqual(newResultBuffer.indices.count, originalResultBuffer.indices.count)
@@ -24,7 +24,7 @@ final class SurfaceNetRendererTests: XCTestCase {
         let samples = SampleMeshData.flatYBlock()
 
         let newThing = SurfaceNetRenderer()
-        let newResultBuffer = try newThing.render(voxelData: samples, scale: .init(), within: samples.bounds.expand(2))
+        let newResultBuffer = newThing.render(samples, scale: .init(), within: samples.bounds.expand(2))
 
         try newResultBuffer.validate()
         XCTAssertEqual(newResultBuffer.positions.count, 282)
@@ -35,7 +35,7 @@ final class SurfaceNetRendererTests: XCTestCase {
         let samples = SampleMeshData.SDFBrick()
 
         let newThing = SurfaceNetRenderer()
-        let newResultBuffer = try newThing.render(voxelData: samples, scale: .init(), within: samples.bounds.expand(2))
+        let newResultBuffer = newThing.render(samples, scale: .init(), within: samples.bounds.expand(2))
 
         try newResultBuffer.validate()
         XCTAssertEqual(newResultBuffer.positions.count, 36)
