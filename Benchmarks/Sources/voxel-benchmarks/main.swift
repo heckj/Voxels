@@ -117,9 +117,9 @@ benchmark.add(
 
         var meshBuffer = MeshBuffer()
         timer.measure {
-            meshBuffer = try! SurfaceNetRenderer().render(voxelData: voxels,
-                                                          scale: .init(),
-                                                          within: bounds)
+            meshBuffer = SurfaceNetRenderer().render(voxels,
+                                                     scale: .init(),
+                                                     within: bounds)
         }
         blackHole(meshBuffer)
     }
