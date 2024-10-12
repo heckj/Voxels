@@ -1,5 +1,5 @@
 {
-  "originHash" : "107cbd7b33e00be9627959bc0fa432613191ca2248b6ea2a5dd843f402cfd29c",
+  "originHash" : "8f9aab5d92c933cca17b8da2cfefe7aab03d393240618efd0e199a43fcd3f920",
   "pins" : [
     {
       "identity" : "hdrhistogram-swift",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ordo-one/package-benchmark",
       "state" : {
-        "revision" : "75e8622faadd4a960ef93fee76893e41e4e8daf2",
-        "version" : "1.25.0"
+        "revision" : "f9dcf0b540c4973ab1cef7893fb46e34a4e74099",
+        "version" : "1.27.2"
       }
     },
     {
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-issue-reporting",
       "state" : {
-        "revision" : "bc2a151366f2cd0e347274544933bc2acb00c9fe",
-        "version" : "1.4.0"
+        "revision" : "770f990d3e4eececb57ac04a6076e22f8c97daeb",
+        "version" : "1.4.2"
       }
     },
     {
