@@ -11,7 +11,7 @@ class VoxelAccessibleTests: XCTestCase {
 
         var count = 0
         for i: VoxelIndex in voxels.indices {
-            if try voxels.isSurface(i) {
+            if voxels.isSurface(i) {
                 count += 1
             }
         }

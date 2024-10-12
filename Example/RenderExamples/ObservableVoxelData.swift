@@ -31,9 +31,9 @@ class ObservableVoxelData {
         enableBlockMesh = false
         renderer = SurfaceNetRenderer()
         wrappedVoxelData = data
-        let generatedMeshBuffer = try! renderer.render(data,
-                                                       scale: .init(),
-                                                       within: data.bounds.expand(2))
+        let generatedMeshBuffer = renderer.render(data,
+                                                  scale: .init(),
+                                                  within: data.bounds.expand(2))
 
         let blockMeshBuffer = BlockMeshRenderer().render(data, scale: .init(), within: data.bounds.expand(2))
 
@@ -80,9 +80,9 @@ class ObservableVoxelData {
 
     func redoRender() {
         let startTime = clock.now
-        let generatedMeshBuffer = try! renderer.render(wrappedVoxelData,
-                                                       scale: .init(),
-                                                       within: wrappedVoxelData.bounds.expand(2))
+        let generatedMeshBuffer = renderer.render(wrappedVoxelData,
+                                                  scale: .init(),
+                                                  within: wrappedVoxelData.bounds.expand(2))
         let timeToRender = clock.now - startTime
         print("SurfaceNet Render Duration: \(timeToRender.formatted(.units(allowed: [.milliseconds, .microseconds], width: .abbreviated))) (\(timeToRender.description))")
         guard let descriptor = generatedMeshBuffer.meshDescriptor() else {

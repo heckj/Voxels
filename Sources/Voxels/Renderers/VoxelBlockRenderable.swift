@@ -4,12 +4,14 @@ public protocol VoxelBlockRenderable {
 }
 
 extension Float: VoxelBlockRenderable {
+    @inlinable
     public func isOpaque() -> Bool {
         self < 0
     }
 }
 
 extension Int: VoxelBlockRenderable {
+    @inlinable
     public func isOpaque() -> Bool {
         self > 0
     }
