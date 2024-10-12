@@ -4,6 +4,7 @@ public protocol VoxelSurfaceRenderable {
 }
 
 extension Float: VoxelSurfaceRenderable {
+    @inlinable
     public func distanceAboveSurface() -> Float {
         self
     }
