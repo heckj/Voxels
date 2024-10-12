@@ -3,11 +3,12 @@ import IssueReporting
 
 /// A renderer for creating block 3D meshes of opaque voxels.
 public class BlockMeshRenderer {
+    /// Creates a block mesh renderer.
     public init() {}
 
-    /// Returns a single mesh for the voxels.
+    /// Returns a single mesh for the selected voxels from a collection.
     /// - Parameters:
-    ///   - v: The voxel collection.
+    ///   - voxels: The voxel collection.
     ///   - scale: The scale to map voxel indices to a floating point coordinate.
     ///   - bounds: The bounds within which to render.
     ///   - surfaceOnly: A Boolean value indicating whether to render only voxels at the "surface".
@@ -15,19 +16,19 @@ public class BlockMeshRenderer {
     ///
     /// The surface option returns a mesh with quads for any visible surface.
     /// The alternative creates a quad for every voxel face, regardless of potential visibility.
-    public func render<VOXEL: VoxelBlockRenderable>(_ v: any VoxelAccessible<VOXEL>, scale: VoxelScale<Float>, within bounds: VoxelBounds, surfaceOnly: Bool = false, filter: ((VOXEL) -> Bool)? = nil) -> MeshBuffer {
+    public func render<VOXEL: VoxelBlockRenderable>(_ voxels: any VoxelAccessible<VOXEL>, scale: VoxelScale<Float>, within bounds: VoxelBounds, surfaceOnly: Bool = false, filter: ((VOXEL) -> Bool)? = nil) -> MeshBuffer {
         var buffer = MeshBuffer()
 
         if surfaceOnly {
             for index in bounds.indices {
-                if let filterfunction = filter, let voxel = v[index] {
+                if let filterfunction = filter, let voxel = voxels[index] {
                     if filterfunction(voxel) == false { continue }
                 }
 
                 do {
-                    if try v.isSurface(index) {
+                    if try voxels.isSurface(index) {
                         for face in CubeFace.allCases {
-                            if try v.isSurfaceFace(index, direction: face) {
+                            if try voxels.isSurfaceFace(index, direction: face) {
                                 buffer.addQuad(index: index, scale: scale, face: face)
                             }
                         }
@@ -39,7 +40,7 @@ public class BlockMeshRenderer {
             }
         } else {
             for index in bounds.indices {
-                if let voxel = v[index] {
+                if let voxel = voxels[index] {
                     if let filterfunction = filter {
                         if filterfunction(voxel) == false { continue }
                     }
@@ -54,16 +55,20 @@ public class BlockMeshRenderer {
 
         return buffer
     }
-
-    public static func fastBlockMeshByLayers<VOXEL: VoxelBlockRenderable>(_ v: any VoxelAccessible<VOXEL>, scale: VoxelScale<Float>) -> [Int: MeshBuffer] {
+    
+    /// Returns a collection of mesh buffers, indexed by vertical layer.
+    /// - Parameters:
+    ///   - voxels: The voxel collection.
+    ///   - scale: The scale to map voxel indices to a floating point coordinate.
+    public static func fastBlockMeshByLayers<VOXEL: VoxelBlockRenderable>(_ voxels: any VoxelAccessible<VOXEL>, scale: VoxelScale<Float>) -> [Int: MeshBuffer] {
         var collection: [Int: MeshBuffer] = [:]
 
-        for yIndexValue in v.bounds.min.y ... v.bounds.max.y {
+        for yIndexValue in voxels.bounds.min.y ... voxels.bounds.max.y {
             var buffer = MeshBuffer()
-            let layerBounds = VoxelBounds(min: VoxelIndex(v.bounds.min.x, yIndexValue, v.bounds.min.z),
-                                          max: VoxelIndex(v.bounds.max.x, yIndexValue, v.bounds.max.z))
+            let layerBounds = VoxelBounds(min: VoxelIndex(voxels.bounds.min.x, yIndexValue, voxels.bounds.min.z),
+                                          max: VoxelIndex(voxels.bounds.max.x, yIndexValue, voxels.bounds.max.z))
             for index in layerBounds.indices {
-                if let voxel = v[index], voxel.isOpaque() {
+                if let voxel = voxels[index], voxel.isOpaque() {
                     for face in CubeFace.allCases {
                         buffer.addQuad(index: index, scale: scale, face: face)
                     }
