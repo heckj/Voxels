@@ -45,7 +45,7 @@ import Voxels
 
     // swiftformat:disable opaqueGenericParameters
     func surfaceNetEntity<VOXEL: VoxelSurfaceRenderable>(_ samples: any VoxelAccessible<VOXEL>) -> ModelEntity {
-        let buffer = try! SurfaceNetRenderer().render(voxelData: samples, scale: .init(), within: samples.bounds.expand())
+        let buffer = SurfaceNetRenderer().render(samples, scale: .init(), within: samples.bounds.expand())
         let descriptor = buffer.meshDescriptor()
         let mesh = try! MeshResource.generate(from: [descriptor!])
         let material = SimpleMaterial(color: .green, isMetallic: false)
