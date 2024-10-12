@@ -27,9 +27,9 @@ final class GeneralMeasurementTests: XCTestCase {
 
         // ~ 6.1 seconds (full power, not battery)
         measure {
-            let _ = try! SurfaceNetRenderer().render(voxelData: voxels,
-                                                     scale: .init(),
-                                                     within: voxels.bounds)
+            let _ = SurfaceNetRenderer().render(voxels,
+                                                scale: .init(),
+                                                within: voxels.bounds)
         }
     }
 
@@ -69,9 +69,9 @@ final class GeneralMeasurementTests: XCTestCase {
             let bounds = VoxelBounds(min: .zero, max: VoxelIndex(edge, 50, edge))
 
             let start = clock.now
-            let mesh = try! SurfaceNetRenderer().render(voxelData: voxels,
-                                                        scale: .init(),
-                                                        within: bounds)
+            let mesh = SurfaceNetRenderer().render(voxels,
+                                                   scale: .init(),
+                                                   within: bounds)
             let duration = clock.now - start
             print("SurfaceNet render of \(edge) x \(edge): \(duration) generating \(mesh.memSize) bytes")
 
