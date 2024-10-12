@@ -62,7 +62,7 @@ let benchmarks = {
     Benchmark("Render SurfaceNet") { benchmark in
         var meshBuffer = MeshBuffer()
         for _ in benchmark.scaledIterations {
-            blackHole(meshBuffer = try! SurfaceNetRenderer().render(voxelData: voxels, scale: .init(), within: bounds))
+            blackHole(meshBuffer = SurfaceNetRenderer().render(voxels, scale: .init(), within: bounds))
         }
     }
 }
