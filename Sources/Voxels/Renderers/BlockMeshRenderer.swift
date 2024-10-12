@@ -55,7 +55,7 @@ public class BlockMeshRenderer {
 
         return buffer
     }
-    
+
     /// Returns a collection of mesh buffers, indexed by vertical layer.
     /// - Parameters:
     ///   - voxels: The voxel collection.
