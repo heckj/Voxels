@@ -1,10 +1,10 @@
 public extension VoxelAccessible where Element: VoxelBlockRenderable {
-    func isSurface(_ tuple: (Int, Int, Int)) throws -> Bool {
-        try isSurface(VoxelIndex(tuple))
+    func isSurface(_ tuple: (Int, Int, Int)) -> Bool {
+        isSurface(VoxelIndex(tuple))
     }
 
-    func isSurface(_ vindex: VoxelIndex) throws -> Bool {
-        guard let voxel = try value(vindex), voxel.isOpaque() else {
+    func isSurface(_ vindex: VoxelIndex) -> Bool {
+        guard let voxel = self[vindex], voxel.isOpaque() else {
             return false
         }
 
@@ -17,20 +17,20 @@ public extension VoxelAccessible where Element: VoxelBlockRenderable {
             VoxelIndex(-1, 0, 0),
         ]
 
-        let sumOpaqueNeighbors = try distance1neighbors.reduce(into: 0) { partialResult, locationOffset in
+        let sumOpaqueNeighbors = distance1neighbors.reduce(into: 0) { partialResult, locationOffset in
             let indexInCollection = VoxelIndex(x: vindex.x + locationOffset.x, y: vindex.y + locationOffset.y, z: vindex.z + locationOffset.z)
-            if let voxel = try self.value(indexInCollection), voxel.isOpaque() {
+            if let voxel = self[indexInCollection], voxel.isOpaque() {
                 partialResult += 1
             }
         }
         return sumOpaqueNeighbors != 6
     }
 
-    func isSurfaceFace(_ vindex: VoxelIndex, direction: CubeFace) throws -> Bool {
+    func isSurfaceFace(_ vindex: VoxelIndex, direction: CubeFace) -> Bool {
         let secondIndex = vindex.adding(direction.voxelIndexOffset)
-        if let firstVoxel = try value(vindex) {
+        if let firstVoxel = self[vindex] {
             // first voxel returned a value
-            if let secondVoxel = try value(secondIndex) {
+            if let secondVoxel = self[secondIndex] {
                 return firstVoxel.isOpaque() != secondVoxel.isOpaque()
             } else {
                 // second voxel didn't return a value, treat as though its not opaque
@@ -38,7 +38,7 @@ public extension VoxelAccessible where Element: VoxelBlockRenderable {
             }
         } else {
             // first voxel didn't return a value
-            if let secondVoxel = try value(secondIndex), secondVoxel.isOpaque() {
+            if let secondVoxel = self[secondIndex], secondVoxel.isOpaque() {
                 return true
             } else {
                 return false

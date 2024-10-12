@@ -48,7 +48,7 @@ public enum EntityExample {
         let samples = sampledSDFSphere()
         do {
             let renderer = SurfaceNetRenderer()
-            let buffer = try! renderer.render(samples, scale: .init(), within: samples.bounds.insetQuadrant())
+            let buffer = renderer.render(samples, scale: .init(), within: samples.bounds.insetQuadrant())
 
             if let descriptor = buffer.meshDescriptor() {
                 let mesh = try MeshResource.generate(from: [descriptor])
@@ -80,7 +80,7 @@ public enum EntityExample {
     public static var surfaceNetBrick: ModelEntity {
         let voxels = Voxels.SampleMeshData.SDFBrick()
         let renderer = SurfaceNetRenderer()
-        let generatedMeshBuffer = try! renderer.render(voxels, scale: .init(), within: voxels.bounds.expand(2))
+        let generatedMeshBuffer = renderer.render(voxels, scale: .init(), within: voxels.bounds.expand(2))
 
         guard let descriptor = generatedMeshBuffer.meshDescriptor() else {
             fatalError("Invalid mesh - no descriptor")
@@ -95,7 +95,7 @@ public enum EntityExample {
     public static var flatYBlock: ModelEntity {
         let voxels = Voxels.SampleMeshData.flatYBlock()
         let renderer = SurfaceNetRenderer()
-        let generatedMeshBuffer = try! renderer.render(voxels, scale: .init(), within: voxels.bounds.expand(2))
+        let generatedMeshBuffer = renderer.render(voxels, scale: .init(), within: voxels.bounds.expand(2))
 
         guard let descriptor = generatedMeshBuffer.meshDescriptor() else {
             fatalError("Invalid mesh - no descriptor")
@@ -123,9 +123,9 @@ public enum EntityExample {
     public static var surfaceNetHeightmap: ModelEntity {
         let heightmap = Heightmap(width: 100, height: 100, seed: 437_347_632)
         let voxels = HeightmapConverter.heightmap(heightmap, maxVoxelIndex: 20, voxelSize: 1.0, extendToFloor: true)
-        let buffer = try! SurfaceNetRenderer().render(voxels,
-                                                      scale: .init(),
-                                                      within: voxels.bounds)
+        let buffer = SurfaceNetRenderer().render(voxels,
+                                                 scale: .init(),
+                                                 within: voxels.bounds)
         guard let descriptor = buffer.meshDescriptor() else {
             fatalError()
         }

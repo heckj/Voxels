@@ -27,7 +27,7 @@ public extension VoxelIndex {
                                 indices.insert(computedIndex)
                             }
                         case .surface:
-                            if try voxels.isSurface(computedIndex) {
+                            if voxels.isSurface(computedIndex) {
                                 indices.insert(computedIndex)
                             }
                         }

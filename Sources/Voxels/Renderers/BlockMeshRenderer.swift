@@ -1,5 +1,4 @@
 // swiftformat:disable opaqueGenericParameters
-import IssueReporting
 
 /// A renderer for creating block 3D meshes of opaque voxels.
 public class BlockMeshRenderer {
@@ -26,16 +25,13 @@ public class BlockMeshRenderer {
                 }
 
                 do {
-                    if try voxels.isSurface(index) {
+                    if voxels.isSurface(index) {
                         for face in CubeFace.allCases {
-                            if try voxels.isSurfaceFace(index, direction: face) {
+                            if voxels.isSurfaceFace(index, direction: face) {
                                 buffer.addQuad(index: index, scale: scale, face: face)
                             }
                         }
                     }
-                } catch {
-                    reportIssue(error.localizedDescription)
-                    fatalError()
                 }
             }
         } else {

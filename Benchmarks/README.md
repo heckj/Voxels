@@ -15,7 +15,7 @@ Creating a local baseline:
 
 Comparing to a the baseline 'alpha'
 
-    swift package benchmark baseline compare dev
+    swift package benchmark baseline compare 0.1.0
 
 For more details on creating and comparing baselines, read [Creating and Comparing Benchmark Baselines](https://swiftpackageindex.com/ordo-one/package-benchmark/main/documentation/benchmark/creatingandcomparingbaselines).
 
