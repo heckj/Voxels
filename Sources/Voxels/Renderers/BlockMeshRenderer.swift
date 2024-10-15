@@ -52,6 +52,16 @@ public class BlockMeshRenderer {
         return buffer
     }
 
+    public static func renderFramedVoxel(idx _: VoxelIndex, scale _: VoxelScale<Float>, inset _: Float) -> MeshBuffer {
+        var buffer = MeshBuffer()
+        return buffer
+    }
+
+    public static func renderVoxelSelector(idx _: VoxelIndex, scale _: VoxelScale<Float>, inset _: Float) -> MeshBuffer {
+        var buffer = MeshBuffer()
+        return buffer
+    }
+
     /// Returns a collection of mesh buffers, indexed by vertical layer.
     /// - Parameters:
     ///   - voxels: The voxel collection.
