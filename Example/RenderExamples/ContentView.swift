@@ -3,12 +3,6 @@ import RealityKit
 import SwiftUI
 import Voxels
 
-#if os(iOS)
-    typealias PlatformColor = UIColor
-#elseif os(macOS)
-    typealias PlatformColor = NSColor
-#endif
-
 enum RendererChoice: String, CaseIterable, Identifiable, CustomStringConvertible {
     case fastSurfaceNet
     case fastSurfaceBlockMesh
