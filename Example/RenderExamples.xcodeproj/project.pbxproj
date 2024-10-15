@@ -35,7 +35,6 @@
 		1ADE93A82C8FCA2D007413E9 /* BaselineSnapshotTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE93A72C8FCA2D007413E9 /* BaselineSnapshotTest.swift */; };
 		1ADE93AA2C8FCA6E007413E9 /* SurfaceNetRenderSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE93A92C8FCA6E007413E9 /* SurfaceNetRenderSnapshotTests.swift */; };
 		1ADE93AC2C8FCAAE007413E9 /* MarchingCubesRenderSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE93AB2C8FCAAE007413E9 /* MarchingCubesRenderSnapshotTests.swift */; };
-		1AEC43262C7E2877004809B3 /* CameraControlARViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43252C7E2877004809B3 /* CameraControlARViewTests.swift */; };
 		1AEC43272C7E2877004809B3 /* BlockMeshRenderSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43242C7E2877004809B3 /* BlockMeshRenderSnapshotTests.swift */; };
 		1AEC432C2C7E28EE004809B3 /* EntityExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC432A2C7E28EE004809B3 /* EntityExample.swift */; };
 		1AEC432D2C7E28EE004809B3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43292C7E28EE004809B3 /* ContentView.swift */; };
@@ -79,7 +78,6 @@
 		1ADE93A92C8FCA6E007413E9 /* SurfaceNetRenderSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurfaceNetRenderSnapshotTests.swift; sourceTree = "<group>"; };
 		1ADE93AB2C8FCAAE007413E9 /* MarchingCubesRenderSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarchingCubesRenderSnapshotTests.swift; sourceTree = "<group>"; };
 		1AEC43242C7E2877004809B3 /* BlockMeshRenderSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockMeshRenderSnapshotTests.swift; sourceTree = "<group>"; };
-		1AEC43252C7E2877004809B3 /* CameraControlARViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraControlARViewTests.swift; sourceTree = "<group>"; };
 		1AEC43292C7E28EE004809B3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1AEC432A2C7E28EE004809B3 /* EntityExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityExample.swift; sourceTree = "<group>"; };
 		1AEC43382C7E2A39004809B3 /* RenderExamples.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RenderExamples.xctestplan; sourceTree = "<group>"; };
@@ -197,7 +195,6 @@
 				1ADE93A72C8FCA2D007413E9 /* BaselineSnapshotTest.swift */,
 				1ADE93A52C8FC94C007413E9 /* MeshSnapshot.swift */,
 				1A9DA72F2C90C2AD007BD5DC /* MeasurementTests.swift */,
-				1AEC43252C7E2877004809B3 /* CameraControlARViewTests.swift */,
 				1A1744132C8A389000AB874F /* FormatExampleTests.swift */,
 				1A15D2302C922A2A00CDDCF4 /* NoiseHeightmapTests.swift */,
 			);
@@ -261,7 +258,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					1AF52B3A2C7E274B00B019D5 = {
 						CreatedOnToolsVersion = 15.4;
@@ -346,7 +343,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A8842322C85092600F7EADD /* QuickCheckView.swift in Sources */,
-				1AEC43262C7E2877004809B3 /* CameraControlARViewTests.swift in Sources */,
 				1A9DA7302C90C2AD007BD5DC /* MeasurementTests.swift in Sources */,
 				1AEC43272C7E2877004809B3 /* BlockMeshRenderSnapshotTests.swift in Sources */,
 				1ADE93AA2C8FCA6E007413E9 /* SurfaceNetRenderSnapshotTests.swift in Sources */,
@@ -404,6 +400,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -465,6 +462,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -493,6 +491,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"RenderExamples/Preview Content\"";
 				DEVELOPMENT_TEAM = BDV4VC27D3;
 				ENABLE_PREVIEWS = YES;
@@ -531,6 +530,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"RenderExamples/Preview Content\"";
 				DEVELOPMENT_TEAM = BDV4VC27D3;
 				ENABLE_PREVIEWS = YES;
@@ -566,6 +566,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
@@ -587,6 +588,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MACOSX_DEPLOYMENT_TARGET = 14.5;

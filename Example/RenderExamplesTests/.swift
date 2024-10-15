@@ -1,5 +1,6 @@
 import RealityKit
 @testable import RenderExamples
+import CameraControlARView
 import Spatial
 import XCTest
 
