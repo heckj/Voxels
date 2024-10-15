@@ -1,3 +1,4 @@
+import CameraControlARView
 import RealityKit
 import SwiftUI
 import Voxels
@@ -166,7 +167,7 @@ struct ContentView: View {
         .onAppear {
             do {
                 let loadedLightResource = try EnvironmentResource.load(named: "whitedome")
-                Global.arContainer.cameraARView.environment.lighting.resource = loadedLightResource
+                CameraControlARView.Global.arContainer.cameraARView.environment.lighting.resource = loadedLightResource
             } catch {
                 print("Unable to load whitedome lighting, using default: \(error)")
             }
