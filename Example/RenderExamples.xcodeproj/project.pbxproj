@@ -25,6 +25,7 @@
 		1A88422F2C85062E00F7EADD /* DebugModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88422D2C85062E00F7EADD /* DebugModels.swift */; };
 		1A8842312C85092600F7EADD /* QuickCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8842302C85092600F7EADD /* QuickCheckView.swift */; };
 		1A8842322C85092600F7EADD /* QuickCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8842302C85092600F7EADD /* QuickCheckView.swift */; };
+		1A9416E02CBF2F5A0039DBF8 /* VoxelEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9416DF2CBF2F5A0039DBF8 /* VoxelEntity.swift */; };
 		1A95073D2C8A653F00DCB6C6 /* ThreeDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A95073C2C8A653F00DCB6C6 /* ThreeDView.swift */; };
 		1A9DA7302C90C2AD007BD5DC /* MeasurementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9DA72F2C90C2AD007BD5DC /* MeasurementTests.swift */; };
 		1AA3032C2C890B4B004B0660 /* wireframeMaterial.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1AA3032B2C890B4B004B0660 /* wireframeMaterial.metal */; };
@@ -67,6 +68,7 @@
 		1A17441B2C8A52F700AB874F /* IndividualVoxelEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualVoxelEditor.swift; sourceTree = "<group>"; };
 		1A88422D2C85062E00F7EADD /* DebugModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugModels.swift; sourceTree = "<group>"; };
 		1A8842302C85092600F7EADD /* QuickCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickCheckView.swift; sourceTree = "<group>"; };
+		1A9416DF2CBF2F5A0039DBF8 /* VoxelEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoxelEntity.swift; sourceTree = "<group>"; };
 		1A95073C2C8A653F00DCB6C6 /* ThreeDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeDView.swift; sourceTree = "<group>"; };
 		1A9DA72F2C90C2AD007BD5DC /* MeasurementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementTests.swift; sourceTree = "<group>"; };
 		1AA3032B2C890B4B004B0660 /* wireframeMaterial.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = wireframeMaterial.metal; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				1A17441B2C8A52F700AB874F /* IndividualVoxelEditor.swift */,
 				1A1744152C8A3F8400AB874F /* VoxelIndexView.swift */,
 				1A1744112C8A376100AB874F /* SDFVoxelData.swift */,
+				1A9416DF2CBF2F5A0039DBF8 /* VoxelEntity.swift */,
 				1AEC432A2C7E28EE004809B3 /* EntityExample.swift */,
 				1A15D2262C92289000CDDCF4 /* NoiseHeightmap.swift */,
 				1AF52B3E2C7E274B00B019D5 /* RenderExamplesApp.swift */,

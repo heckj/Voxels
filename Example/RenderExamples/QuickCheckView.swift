@@ -2,6 +2,7 @@ import CameraControlARView
 import RealityKit
 import Spatial
 import SwiftUI
+import Voxels
 
 struct QuickCheckView: View {
     @State private var arcballState: ArcBallState
@@ -30,6 +31,8 @@ struct QuickCheckView: View {
 
                     // Debug view helpers
                     content.add(DebugModels.gizmo(edge_length: 10))
+
+                    content.add(VoxelEntity.voxelEntity(VoxelIndex(2, 2, 2), scale: .init(), color: .blue))
                     // content.add(DebugModels.gridWall(edge_length: 100))
                     // content.add(EntityExample.surfaceBlockHeightmap)
                     // content.add(EntityExample.surfaceNetHeightmap)
