@@ -154,4 +154,26 @@ class VoxelMeshRendererTests: XCTestCase {
         // _1_ cubes, with 6 faces in each, 2 triangles per face
         XCTAssertEqual(7 * 6 * 2, numberOfTriangles2)
     }
+
+    func testBlockMeshRenderFramedVoxel() throws {
+        let meshbuffer = BlockMeshRenderer.renderFramedVoxel(idx: VoxelIndex(1, 1, 1), scale: .init(), inset: 0.1)
+        let numberOfTriangles = meshbuffer.indices.count / 3
+        XCTAssertEqual(numberOfTriangles, 6 * 4 * 2)
+        for vertexPoint in meshbuffer.positions {
+            XCTAssertTrue(vertexPoint.x >= 1 && vertexPoint.x <= 2)
+            XCTAssertTrue(vertexPoint.y >= 1 && vertexPoint.y <= 2)
+            XCTAssertTrue(vertexPoint.z >= 1 && vertexPoint.z <= 2)
+        }
+    }
+
+    func testBlockMeshRenderFramedVoxelScaled() throws {
+        let meshbuffer = BlockMeshRenderer.renderFramedVoxel(idx: VoxelIndex(1, 1, 1), scale: .init(origin: SIMD3<Float>(3, 3, 3), cubeSize: 0.5), inset: 0.1)
+        let numberOfTriangles = meshbuffer.indices.count / 3
+        XCTAssertEqual(numberOfTriangles, 6 * 4 * 2)
+        for vertexPoint in meshbuffer.positions {
+            XCTAssertTrue(vertexPoint.x >= 3.5 && vertexPoint.x <= 4)
+            XCTAssertTrue(vertexPoint.y >= 3.5 && vertexPoint.y <= 4)
+            XCTAssertTrue(vertexPoint.z >= 3.5 && vertexPoint.z <= 4)
+        }
+    }
 }
