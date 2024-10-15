@@ -18,6 +18,8 @@
 		1A1744182C8A491200AB874F /* VoxelEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1744172C8A491200AB874F /* VoxelEditorView.swift */; };
 		1A17441A2C8A4B6D00AB874F /* ObservableVoxelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1744192C8A4B6D00AB874F /* ObservableVoxelData.swift */; };
 		1A17441C2C8A52F700AB874F /* IndividualVoxelEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A17441B2C8A52F700AB874F /* IndividualVoxelEditor.swift */; };
+		1A82A8952CBED9BF00F56C56 /* CameraControlARView in Frameworks */ = {isa = PBXBuildFile; productRef = 1A82A8942CBED9BF00F56C56 /* CameraControlARView */; };
+		1A82A8982CBED9EC00F56C56 /* CameraControlARView in Frameworks */ = {isa = PBXBuildFile; productRef = 1A82A8972CBED9EC00F56C56 /* CameraControlARView */; };
 		1A88422B2C8505F300F7EADD /* RealityGeometries in Frameworks */ = {isa = PBXBuildFile; productRef = 1A88422A2C8505F300F7EADD /* RealityGeometries */; };
 		1A88422E2C85062E00F7EADD /* DebugModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88422D2C85062E00F7EADD /* DebugModels.swift */; };
 		1A88422F2C85062E00F7EADD /* DebugModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88422D2C85062E00F7EADD /* DebugModels.swift */; };
@@ -33,26 +35,6 @@
 		1ADE93A82C8FCA2D007413E9 /* BaselineSnapshotTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE93A72C8FCA2D007413E9 /* BaselineSnapshotTest.swift */; };
 		1ADE93AA2C8FCA6E007413E9 /* SurfaceNetRenderSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE93A92C8FCA6E007413E9 /* SurfaceNetRenderSnapshotTests.swift */; };
 		1ADE93AC2C8FCAAE007413E9 /* MarchingCubesRenderSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE93AB2C8FCAAE007413E9 /* MarchingCubesRenderSnapshotTests.swift */; };
-		1AEC43102C7E285E004809B3 /* Transforms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430E2C7E285E004809B3 /* Transforms.swift */; };
-		1AEC43112C7E285E004809B3 /* RealityKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430C2C7E285E004809B3 /* RealityKitView.swift */; };
-		1AEC43122C7E285E004809B3 /* ArcBallState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43052C7E285E004809B3 /* ArcBallState.swift */; };
-		1AEC43132C7E285E004809B3 /* ExternalRealityKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430A2C7E285E004809B3 /* ExternalRealityKitView.swift */; };
-		1AEC43142C7E285E004809B3 /* MotionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430B2C7E285E004809B3 /* MotionMode.swift */; };
-		1AEC43152C7E285E004809B3 /* BirdsEyeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43072C7E285E004809B3 /* BirdsEyeState.swift */; };
-		1AEC43162C7E285E004809B3 /* ARViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43062C7E285E004809B3 /* ARViewContainer.swift */; };
-		1AEC43172C7E285E004809B3 /* CameraControlledARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43082C7E285E004809B3 /* CameraControlledARView.swift */; };
-		1AEC43182C7E285E004809B3 /* Comparable+clamped.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43092C7E285E004809B3 /* Comparable+clamped.swift */; };
-		1AEC43192C7E285E004809B3 /* TopDownVectorImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430D2C7E285E004809B3 /* TopDownVectorImage.swift */; };
-		1AEC431A2C7E285E004809B3 /* Transforms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430E2C7E285E004809B3 /* Transforms.swift */; };
-		1AEC431B2C7E285E004809B3 /* RealityKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430C2C7E285E004809B3 /* RealityKitView.swift */; };
-		1AEC431C2C7E285E004809B3 /* ArcBallState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43052C7E285E004809B3 /* ArcBallState.swift */; };
-		1AEC431D2C7E285E004809B3 /* ExternalRealityKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430A2C7E285E004809B3 /* ExternalRealityKitView.swift */; };
-		1AEC431E2C7E285E004809B3 /* MotionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430B2C7E285E004809B3 /* MotionMode.swift */; };
-		1AEC431F2C7E285E004809B3 /* BirdsEyeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43072C7E285E004809B3 /* BirdsEyeState.swift */; };
-		1AEC43202C7E285E004809B3 /* ARViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43062C7E285E004809B3 /* ARViewContainer.swift */; };
-		1AEC43212C7E285E004809B3 /* CameraControlledARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43082C7E285E004809B3 /* CameraControlledARView.swift */; };
-		1AEC43222C7E285E004809B3 /* Comparable+clamped.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43092C7E285E004809B3 /* Comparable+clamped.swift */; };
-		1AEC43232C7E285E004809B3 /* TopDownVectorImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC430D2C7E285E004809B3 /* TopDownVectorImage.swift */; };
 		1AEC43262C7E2877004809B3 /* CameraControlARViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43252C7E2877004809B3 /* CameraControlARViewTests.swift */; };
 		1AEC43272C7E2877004809B3 /* BlockMeshRenderSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC43242C7E2877004809B3 /* BlockMeshRenderSnapshotTests.swift */; };
 		1AEC432C2C7E28EE004809B3 /* EntityExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEC432A2C7E28EE004809B3 /* EntityExample.swift */; };
@@ -96,16 +78,6 @@
 		1ADE93A72C8FCA2D007413E9 /* BaselineSnapshotTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselineSnapshotTest.swift; sourceTree = "<group>"; };
 		1ADE93A92C8FCA6E007413E9 /* SurfaceNetRenderSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurfaceNetRenderSnapshotTests.swift; sourceTree = "<group>"; };
 		1ADE93AB2C8FCAAE007413E9 /* MarchingCubesRenderSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarchingCubesRenderSnapshotTests.swift; sourceTree = "<group>"; };
-		1AEC43052C7E285E004809B3 /* ArcBallState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcBallState.swift; sourceTree = "<group>"; };
-		1AEC43062C7E285E004809B3 /* ARViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewContainer.swift; sourceTree = "<group>"; };
-		1AEC43072C7E285E004809B3 /* BirdsEyeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdsEyeState.swift; sourceTree = "<group>"; };
-		1AEC43082C7E285E004809B3 /* CameraControlledARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraControlledARView.swift; sourceTree = "<group>"; };
-		1AEC43092C7E285E004809B3 /* Comparable+clamped.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+clamped.swift"; sourceTree = "<group>"; };
-		1AEC430A2C7E285E004809B3 /* ExternalRealityKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalRealityKitView.swift; sourceTree = "<group>"; };
-		1AEC430B2C7E285E004809B3 /* MotionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionMode.swift; sourceTree = "<group>"; };
-		1AEC430C2C7E285E004809B3 /* RealityKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealityKitView.swift; sourceTree = "<group>"; };
-		1AEC430D2C7E285E004809B3 /* TopDownVectorImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopDownVectorImage.swift; sourceTree = "<group>"; };
-		1AEC430E2C7E285E004809B3 /* Transforms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transforms.swift; sourceTree = "<group>"; };
 		1AEC43242C7E2877004809B3 /* BlockMeshRenderSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockMeshRenderSnapshotTests.swift; sourceTree = "<group>"; };
 		1AEC43252C7E2877004809B3 /* CameraControlARViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraControlARViewTests.swift; sourceTree = "<group>"; };
 		1AEC43292C7E28EE004809B3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -126,6 +98,8 @@
 			files = (
 				1AB60B402C90B50D00CF0C6E /* Heightmap in Frameworks */,
 				1AEC43322C7E2968004809B3 /* Voxels in Frameworks */,
+				1A82A8952CBED9BF00F56C56 /* CameraControlARView in Frameworks */,
+				1A82A8982CBED9EC00F56C56 /* CameraControlARView in Frameworks */,
 				1A88422B2C8505F300F7EADD /* RealityGeometries in Frameworks */,
 				1A15D22A2C9228CA00CDDCF4 /* Noise in Frameworks */,
 			);
@@ -160,30 +134,12 @@
 			path = DebugMeshResources;
 			sourceTree = "<group>";
 		};
-		1AEC430F2C7E285E004809B3 /* CameraControlARView */ = {
-			isa = PBXGroup;
-			children = (
-				1AEC43052C7E285E004809B3 /* ArcBallState.swift */,
-				1AEC43062C7E285E004809B3 /* ARViewContainer.swift */,
-				1AEC43072C7E285E004809B3 /* BirdsEyeState.swift */,
-				1AEC43082C7E285E004809B3 /* CameraControlledARView.swift */,
-				1AEC43092C7E285E004809B3 /* Comparable+clamped.swift */,
-				1AEC430A2C7E285E004809B3 /* ExternalRealityKitView.swift */,
-				1AEC430B2C7E285E004809B3 /* MotionMode.swift */,
-				1AEC430C2C7E285E004809B3 /* RealityKitView.swift */,
-				1AEC430D2C7E285E004809B3 /* TopDownVectorImage.swift */,
-				1AEC430E2C7E285E004809B3 /* Transforms.swift */,
-			);
-			path = CameraControlARView;
-			sourceTree = "<group>";
-		};
 		1AF52B322C7E274B00B019D5 = {
 			isa = PBXGroup;
 			children = (
 				1A88422C2C85060000F7EADD /* DebugMeshResources */,
 				1AEC43382C7E2A39004809B3 /* RenderExamples.xctestplan */,
 				1AA4B6DA2C7E9AB300C9796B /* RenderExamplesCI.xctestplan */,
-				1AEC430F2C7E285E004809B3 /* CameraControlARView */,
 				1AF52B3D2C7E274B00B019D5 /* RenderExamples */,
 				1AF52B522C7E27A900B019D5 /* RenderExamplesTests */,
 				1AF52B3C2C7E274B00B019D5 /* Products */,
@@ -268,6 +224,8 @@
 				1A88422A2C8505F300F7EADD /* RealityGeometries */,
 				1AB60B3F2C90B50D00CF0C6E /* Heightmap */,
 				1A15D2292C9228CA00CDDCF4 /* Noise */,
+				1A82A8942CBED9BF00F56C56 /* CameraControlARView */,
+				1A82A8972CBED9EC00F56C56 /* CameraControlARView */,
 			);
 			productName = RenderExamples;
 			productReference = 1AF52B3B2C7E274B00B019D5 /* RenderExamples.app */;
@@ -329,6 +287,7 @@
 				1A8842292C8505F300F7EADD /* XCRemoteSwiftPackageReference "RealityGeometries" */,
 				1AB60B3E2C90B50D00CF0C6E /* XCRemoteSwiftPackageReference "Heightmap" */,
 				1A15D2282C9228CA00CDDCF4 /* XCRemoteSwiftPackageReference "swift-noise" */,
+				1A82A8962CBED9EC00F56C56 /* XCRemoteSwiftPackageReference "CameraControlARView" */,
 			);
 			productRefGroup = 1AF52B3C2C7E274B00B019D5 /* Products */;
 			projectDirPath = "";
@@ -371,23 +330,13 @@
 				1AA3032C2C890B4B004B0660 /* wireframeMaterial.metal in Sources */,
 				1A8842312C85092600F7EADD /* QuickCheckView.swift in Sources */,
 				1AEC432D2C7E28EE004809B3 /* ContentView.swift in Sources */,
-				1AEC431A2C7E285E004809B3 /* Transforms.swift in Sources */,
 				1A1744122C8A376100AB874F /* SDFVoxelData.swift in Sources */,
-				1AEC431B2C7E285E004809B3 /* RealityKitView.swift in Sources */,
-				1AEC431C2C7E285E004809B3 /* ArcBallState.swift in Sources */,
-				1AEC431D2C7E285E004809B3 /* ExternalRealityKitView.swift in Sources */,
-				1AEC431E2C7E285E004809B3 /* MotionMode.swift in Sources */,
-				1AEC431F2C7E285E004809B3 /* BirdsEyeState.swift in Sources */,
 				1AD4AF6B2C88F00900FF4C1C /* VoxelDataView.swift in Sources */,
-				1AEC43202C7E285E004809B3 /* ARViewContainer.swift in Sources */,
 				1A15D2272C92289000CDDCF4 /* NoiseHeightmap.swift in Sources */,
 				1A88422E2C85062E00F7EADD /* DebugModels.swift in Sources */,
-				1AEC43212C7E285E004809B3 /* CameraControlledARView.swift in Sources */,
 				1A95073D2C8A653F00DCB6C6 /* ThreeDView.swift in Sources */,
 				1A1744182C8A491200AB874F /* VoxelEditorView.swift in Sources */,
 				1AD4AF692C88EC8300FF4C1C /* VoxelExplorerView.swift in Sources */,
-				1AEC43222C7E285E004809B3 /* Comparable+clamped.swift in Sources */,
-				1AEC43232C7E285E004809B3 /* TopDownVectorImage.swift in Sources */,
 				1AF52B3F2C7E274B00B019D5 /* RenderExamplesApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -396,27 +345,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1AEC43102C7E285E004809B3 /* Transforms.swift in Sources */,
 				1A8842322C85092600F7EADD /* QuickCheckView.swift in Sources */,
-				1AEC43112C7E285E004809B3 /* RealityKitView.swift in Sources */,
-				1AEC43122C7E285E004809B3 /* ArcBallState.swift in Sources */,
 				1AEC43262C7E2877004809B3 /* CameraControlARViewTests.swift in Sources */,
 				1A9DA7302C90C2AD007BD5DC /* MeasurementTests.swift in Sources */,
 				1AEC43272C7E2877004809B3 /* BlockMeshRenderSnapshotTests.swift in Sources */,
-				1AEC43132C7E285E004809B3 /* ExternalRealityKitView.swift in Sources */,
 				1ADE93AA2C8FCA6E007413E9 /* SurfaceNetRenderSnapshotTests.swift in Sources */,
-				1AEC43142C7E285E004809B3 /* MotionMode.swift in Sources */,
-				1AEC43152C7E285E004809B3 /* BirdsEyeState.swift in Sources */,
 				1A1744142C8A389000AB874F /* FormatExampleTests.swift in Sources */,
 				1ADE93A62C8FC94C007413E9 /* MeshSnapshot.swift in Sources */,
 				1ADE93A82C8FCA2D007413E9 /* BaselineSnapshotTest.swift in Sources */,
-				1AEC43162C7E285E004809B3 /* ARViewContainer.swift in Sources */,
-				1AEC43172C7E285E004809B3 /* CameraControlledARView.swift in Sources */,
 				1A15D2312C922A2A00CDDCF4 /* NoiseHeightmapTests.swift in Sources */,
 				1A88422F2C85062E00F7EADD /* DebugModels.swift in Sources */,
-				1AEC43182C7E285E004809B3 /* Comparable+clamped.swift in Sources */,
 				1ADE93AC2C8FCAAE007413E9 /* MarchingCubesRenderSnapshotTests.swift in Sources */,
-				1AEC43192C7E285E004809B3 /* TopDownVectorImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -554,6 +493,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"RenderExamples/Preview Content\"";
+				DEVELOPMENT_TEAM = BDV4VC27D3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -590,6 +530,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"RenderExamples/Preview Content\"";
+				DEVELOPMENT_TEAM = BDV4VC27D3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -707,6 +648,14 @@
 				minimumVersion = 1.1.0;
 			};
 		};
+		1A82A8962CBED9EC00F56C56 /* XCRemoteSwiftPackageReference "CameraControlARView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/heckj/CameraControlARView";
+			requirement = {
+				branch = controls_update;
+				kind = branch;
+			};
+		};
 		1A8842292C8505F300F7EADD /* XCRemoteSwiftPackageReference "RealityGeometries" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/maxxfrazer/RealityGeometries";
@@ -748,6 +697,15 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1AB60B3E2C90B50D00CF0C6E /* XCRemoteSwiftPackageReference "Heightmap" */;
 			productName = Heightmap;
+		};
+		1A82A8942CBED9BF00F56C56 /* CameraControlARView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CameraControlARView;
+		};
+		1A82A8972CBED9EC00F56C56 /* CameraControlARView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A82A8962CBED9EC00F56C56 /* XCRemoteSwiftPackageReference "CameraControlARView" */;
+			productName = CameraControlARView;
 		};
 		1A88422A2C8505F300F7EADD /* RealityGeometries */ = {
 			isa = XCSwiftPackageProductDependency;
