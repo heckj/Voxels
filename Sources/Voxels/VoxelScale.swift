@@ -2,7 +2,8 @@
 ///
 /// Used for sampling data into a voxel data structure, or rendering voxel data into a 3D mesh.
 public struct VoxelScale<T: SIMDScalar & Sendable> {
-    public let origin: SIMD3<T>
+    // TODO(heckj): When FixedSized arrays become a "thing" - switch to that!!
+    public let origin: (T, T, T)
     public let cubeSize: T
 
     /// Creates a new scale from an integer-based voxel domain to an external range.
@@ -13,7 +14,7 @@ public struct VoxelScale<T: SIMDScalar & Sendable> {
     ///   - origin: The origin location of the initial, corner voxel.
     ///   - cubeSize: The width of a voxel cube.
     public init(origin: SIMD3<T>, cubeSize: T) {
-        self.origin = origin
+        self.origin = (origin.x, origin.y, origin.z)
         self.cubeSize = cubeSize
     }
 
@@ -28,46 +29,49 @@ public struct VoxelScale<T: SIMDScalar & Sendable> {
     /// - Parameter index: The voxel's index.
     /// - Returns: The inner corner (closest to the origin) of the voxel.
     public func cornerPosition(_ index: VoxelIndex) -> SIMD3<T> where T: BinaryFloatingPoint {
-        origin + SIMD3<T>(x: T(index.x), y: T(index.y), z: T(index.z)) * cubeSize
+        let simdOrigin = SIMD3<T>(x: origin.0, y: origin.1, z: origin.2)
+        return simdOrigin + SIMD3<T>(x: T(index.x), y: T(index.y), z: T(index.z)) * cubeSize
     }
 
     /// Returns the inner corner position in the range output from the voxel index you provide.
     /// - Parameter index: The voxel's index.
     /// - Returns: The inner corner (closest to the origin) of the voxel.
     public func cornerPosition(_ index: VoxelIndex) -> SIMD3<T> where T: FixedWidthInteger {
-        SIMD3<T>(x: origin.x + (T(index.x) * cubeSize),
-                 y: origin.y + (T(index.y) * cubeSize),
-                 z: origin.z + (T(index.z) * cubeSize))
+        SIMD3<T>(x: (origin.0 + T(index.x)) * cubeSize,
+                 y: (origin.1 + T(index.y)) * cubeSize,
+                 z: (origin.2 + T(index.z)) * cubeSize)
     }
 
     /// Returns the voxelIndex for the position you provide.
     /// - Parameter position: The position of the point.
     /// - Returns: The index of the voxel that contains that point.
     public func index(for position: SIMD3<T>) -> VoxelIndex where T: BinaryFloatingPoint {
-        let x = (Double(position.x) - Double(origin.x)) / Double(cubeSize)
-        let y = (Double(position.y) - Double(origin.y)) / Double(cubeSize)
-        let z = (Double(position.z) - Double(origin.z)) / Double(cubeSize)
+        let x = (Double(position.x) - Double(origin.0)) / Double(cubeSize)
+        let y = (Double(position.y) - Double(origin.1)) / Double(cubeSize)
+        let z = (Double(position.z) - Double(origin.2)) / Double(cubeSize)
         return VoxelIndex(x: Int(x.rounded(.towardZero)),
                           y: Int(y.rounded(.towardZero)),
                           z: Int(z.rounded(.towardZero)))
     }
 }
 
+extension VoxelScale: Sendable {}
+
 public extension VoxelScale where T == Float {
     init() {
-        origin = SIMD3<Float>(0, 0, 0)
+        origin = (0, 0, 0)
         cubeSize = 1.0
     }
 
     init(origin: SIMD3<Float>? = nil, cubeSize: Float? = nil) {
-        self.origin = origin ?? SIMD3<Float>(0, 0, 0)
+        self.origin = (origin?.x ?? 0, origin?.y ?? 0, origin?.z ?? 0)
         self.cubeSize = cubeSize ?? 1.0
     }
 }
 
 public extension VoxelScale where T == Int {
     init() {
-        origin = SIMD3<Int>(0, 0, 0)
+        origin = (0, 0, 0)
         cubeSize = 1
     }
 }

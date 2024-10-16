@@ -1,7 +1,7 @@
 /// A collection of voxels backed by a hash table.
 ///
 /// Useful for sparse voxel collections.
-public struct VoxelHash<T>: VoxelWritable {
+public struct VoxelHash<T: Sendable>: VoxelWritable, Sendable {
     var _contents: [VoxelIndex: T]
     public var bounds: VoxelBounds
     let defaultVoxel: T?

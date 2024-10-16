@@ -1,5 +1,5 @@
 /// A collection of voxels backed by an array.
-public struct VoxelArray<T>: VoxelWritable {
+public struct VoxelArray<T: Sendable>: VoxelWritable, Sendable {
     var _contents: [T]
     public let edgeSize: Int
     public var bounds: VoxelBounds
