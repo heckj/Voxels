@@ -54,7 +54,9 @@ class VoxelScaleTests: XCTestCase {
     func testMappingFloatIntoVoxelIndex() throws {
         let scale = VoxelScale<Float>()
         XCTAssertEqual(scale.cubeSize, 1)
-        XCTAssertEqual(scale.origin, SIMD3<Float>(0, 0, 0))
+        XCTAssertEqual(scale.origin.0, 0)
+        XCTAssertEqual(scale.origin.1, 0)
+        XCTAssertEqual(scale.origin.2, 0)
 
         let sphereSDF = SDF.sphere(radius: 5)
 
