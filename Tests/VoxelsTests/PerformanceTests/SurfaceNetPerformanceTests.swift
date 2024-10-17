@@ -2,19 +2,6 @@ import Voxels
 import XCTest
 
 final class SurfaceNetPerformanceTests: XCTestCase {
-    func testPerformanceInitialSurfaceNetPort() throws {
-        let samples = try SampleMeshData.voxelArrayFromSphere()
-
-        let bounds = samples.bounds.insetQuadrant()
-        // 0.189 sec - original // initial 0.220
-        // changing corners: 0.183, 0.184 // initial 0.216
-
-        // battery only: 0.182/0.183
-        measure {
-            _ = try! BlockMeshRenderer.surfaceNetMesh(sdf: samples, within: bounds)
-        }
-    }
-
     func testPerformanceRemadeSurfaceNetPort() throws {
         let samples = try SampleMeshData.voxelArrayFromSphere()
 

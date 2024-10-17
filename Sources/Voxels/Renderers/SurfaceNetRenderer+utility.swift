@@ -1,7 +1,7 @@
 extension SurfaceNetRenderer {
     /// Returns the estimated point between the 8 corners of the index positions of voxels, where a vertex
     /// should reside that best represents the surface, inferred from the SDF values at those index positions.
-    /// - Parameter dists: <#dists description#>
+    /// - Parameter dists: The SDF float values at each of the corners.
     /// - Returns: an estimated `SIMD3<Float>` in unit coordinates from the leading corner of this vertex.
     static func centroidOfEdgeIntersections(dists: [Float]) -> SIMD3<Float> {
         precondition(dists.count == 8)

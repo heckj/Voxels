@@ -1,16 +1,6 @@
 #if canImport(RealityKit)
     import RealityKit
 
-    public extension SurfaceNetsBuffer {
-        func meshDescriptor() -> MeshDescriptor {
-            var meshDescriptor = MeshDescriptor()
-            meshDescriptor.primitives = .triangles(meshbuffer.indices)
-            meshDescriptor.positions = MeshBuffers.Positions(meshbuffer.positions)
-            meshDescriptor.normals = MeshBuffers.Normals(meshbuffer.normals)
-            return meshDescriptor
-        }
-    }
-
     public extension MeshBuffer {
         /// Returns a RealityKit mesh descriptor instance for this buffer, if the buffer data is valid.
         func meshDescriptor() -> MeshDescriptor? {

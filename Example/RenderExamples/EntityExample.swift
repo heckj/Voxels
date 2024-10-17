@@ -17,7 +17,7 @@ public enum EntityExample {
                 let voxelIndex = try samples.bounds.delinearize(i)
                 let position: SIMD3<Float> = into_domain(array_dim: 32, voxelIndex)
                 let valueAtPosition = sphereSDF.valueAt(position)
-                try samples.set(voxelIndex, newValue: valueAtPosition)
+                samples.set(voxelIndex, newValue: valueAtPosition)
             }
         } catch {
             fatalError("Issue while sampling SDF into a voxel array: \(error)")
