@@ -50,10 +50,8 @@ The library also includes a converter to generate a collection of voxels from a 
 - ``VoxelScale``
 - ``MeshBuffer``
 - ``Vector``
-- ``CompleteVertex``
 - ``CUBE_CORNERS``
 - ``CubeFace``
-- ``SurfaceNetsBuffer``
 
 ### Errors
 
