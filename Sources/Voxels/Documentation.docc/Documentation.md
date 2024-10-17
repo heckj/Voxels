@@ -23,6 +23,9 @@ The library also includes a converter to generate a collection of voxels from a 
 - ``VoxelAccessible``
 - ``VoxelWritable``
 
+### Voxel Updates
+
+- ``VoxelUpdate``
 
 ### Renderers
 
