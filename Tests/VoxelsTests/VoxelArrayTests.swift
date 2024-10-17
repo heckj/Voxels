@@ -36,4 +36,14 @@ class VoxelArrayTests: XCTestCase {
 
         XCTAssertThrowsError(try voxels.value(VoxelIndex(x: 2, y: 2, z: 3)))
     }
+
+    func testApplyingVoxelUpdate() throws {
+        let index = VoxelIndex(0, 1, 1)
+        var voxels = VoxelArray<Int>(edge: 3, value: 1)
+
+        let update = VoxelUpdate(index: index, value: 5)
+        try voxels.updating(with: [update])
+
+        XCTAssertEqual(voxels[index], 5)
+    }
 }

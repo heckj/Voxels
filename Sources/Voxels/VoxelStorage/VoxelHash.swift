@@ -1,7 +1,7 @@
 /// A collection of voxels backed by a hash table.
 ///
 /// Useful for sparse voxel collections.
-public struct VoxelHash<T: Sendable>: VoxelWritable, Sendable {
+public struct VoxelHash<T: Sendable>: VoxelWritable {
     var _contents: [VoxelIndex: T]
     public var bounds: VoxelBounds
     let defaultVoxel: T?
@@ -93,50 +93,4 @@ public struct VoxelHash<T: Sendable>: VoxelWritable, Sendable {
     }
 }
 
-extension VoxelHash: Sequence {
-    public typealias Iterator = VoxelHashIndexIterator
-    public func makeIterator() -> VoxelHashIndexIterator {
-        VoxelHashIndexIterator(self)
-    }
-
-    public struct VoxelHashIndexIterator: IteratorProtocol {
-        var indexPosition: Dictionary<VoxelIndex, T>.Index
-        let originalVoxelHash: VoxelHash<T>
-
-        init(_ originalVoxelHash: VoxelHash<T>) {
-            self.originalVoxelHash = originalVoxelHash
-            indexPosition = self.originalVoxelHash._contents.startIndex
-        }
-
-        public mutating func next() -> T? {
-            if indexPosition < originalVoxelHash._contents.endIndex {
-                let foo: (key: VoxelIndex, value: T) = originalVoxelHash._contents[indexPosition]
-                indexPosition = originalVoxelHash._contents.index(after: indexPosition)
-                return foo.value
-            } else {
-                return nil
-            }
-        }
-    }
-}
-
-extension VoxelHash: Collection {
-    public typealias Index = Dictionary<VoxelIndex, T>.Index
-
-    public var startIndex: Dictionary<VoxelIndex, T>.Index {
-        _contents.startIndex
-    }
-
-    public var endIndex: Dictionary<VoxelIndex, T>.Index {
-        _contents.endIndex
-    }
-
-    public func index(after: Dictionary<VoxelIndex, T>.Index) -> Dictionary<VoxelIndex, T>.Index {
-        _contents.index(after: after)
-    }
-
-    public subscript(position: Dictionary<VoxelIndex, T>.Index) -> T {
-        let foo: (key: VoxelIndex, value: T) = _contents[position]
-        return foo.value
-    }
-}
+extension VoxelHash: Sendable {}

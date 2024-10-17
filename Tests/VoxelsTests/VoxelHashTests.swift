@@ -95,4 +95,25 @@ class VoxelHashTests: XCTestCase {
         let ones = voxels.filter { $0 == 1 }
         XCTAssertEqual(ones.count, 1)
     }
+
+    func testVoxelUpdateFromHash() throws {
+        var voxels = VoxelHash<Int>()
+        voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
+        voxels.set(VoxelIndex(1, 1, 1), newValue: 2)
+
+        let updates = voxels.updates()
+        XCTAssertEqual(updates.count, 2)
+        XCTAssertEqual(updates[1].index, VoxelIndex(1, 1, 1))
+        XCTAssertEqual(updates[1].value, 2)
+    }
+
+    func testApplyingVoxelUpdate() throws {
+        let update = VoxelUpdate(index: VoxelIndex(0, 1, 1), value: 5)
+        var voxels = VoxelHash<Int>()
+        voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
+        voxels.set(VoxelIndex(1, 1, 1), newValue: 2)
+
+        voxels.updating(with: [update])
+        XCTAssertEqual(voxels.count, 3)
+    }
 }
