@@ -9,6 +9,12 @@ class VoxelBoundsTests: XCTestCase {
         XCTAssertEqual(bounds.max, VoxelIndex(2, 2, 2))
     }
 
+    func testConvenienceInitializer() throws {
+        let bounds = VoxelBounds(min: (0, 0, 0), max: (2, 2, 2))
+        XCTAssertEqual(bounds, VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(2, 2, 2)))
+        XCTAssertEqual(bounds, VoxelBounds(min: [0, 0, 0], max: [2, 2, 2]))
+    }
+
     func testNonChangingAdd() throws {
         let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(2, 2, 2))
         let newBounds = bounds.adding(VoxelIndex(1, 1, 1))

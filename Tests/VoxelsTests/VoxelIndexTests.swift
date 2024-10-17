@@ -14,6 +14,14 @@ class VoxelIndexTests: XCTestCase {
         XCTAssertNotNil(VoxelIndex(ijk))
     }
 
+//    func testFailingInitializer() throws {
+//        // precondition failures
+//        XCTAssertThrowsError(VoxelIndex([]))
+//        XCTAssertThrowsError(VoxelIndex([0]))
+//        XCTAssertThrowsError(VoxelIndex([0,1]))
+//        XCTAssertThrowsError(VoxelIndex([0,1,2,3]))
+//    }
+
     func testIndexComparable() throws {
         XCTAssertTrue(VoxelIndex(0, 0, 0) < VoxelIndex(2, 2, 2))
         XCTAssertFalse(VoxelIndex(0, 0, 0) > VoxelIndex(2, 2, 2))
