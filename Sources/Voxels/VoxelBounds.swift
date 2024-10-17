@@ -17,6 +17,16 @@ public struct VoxelBounds: Sendable {
         self.max = max
     }
 
+    public init(min: (Int, Int, Int), max: (Int, Int, Int)) {
+        self.min = VoxelIndex(min)
+        self.max = VoxelIndex(max)
+    }
+
+    public init(min: [Int], max: [Int]) {
+        self.min = VoxelIndex(min)
+        self.max = VoxelIndex(max)
+    }
+
     public init(_ seqOfIndex: [VoxelIndex]) {
         if seqOfIndex.isEmpty {
             self.init(VoxelIndex())

@@ -30,7 +30,7 @@ public struct VoxelIndex: Hashable, Equatable, Sendable {
     }
 
     public init(_ arr: [Int]) {
-        precondition(arr.count == 3)
+        precondition(arr.count == 3, "The count of integers for initializing VoxelIndex must be 3")
         _storage = SIMD3<Int>(arr)
     }
 
