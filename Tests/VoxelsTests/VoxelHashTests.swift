@@ -116,4 +116,19 @@ class VoxelHashTests: XCTestCase {
         voxels.updating(with: [update])
         XCTAssertEqual(voxels.count, 3)
     }
+
+    func testApplyingUpdateFromHash() throws {
+        let index = VoxelIndex(0, 1, 1)
+        var voxels = VoxelHash<Int>()
+        voxels.set(VoxelIndex(0, 0, 0), newValue: 1)
+        voxels.set(VoxelIndex(1, 1, 1), newValue: 2)
+
+        var updateSet = VoxelHash<Int>()
+        updateSet[index] = 5
+
+        voxels.updating(with: updateSet)
+
+        XCTAssertEqual(voxels[index], 5)
+        XCTAssertEqual(voxels.count, 3)
+    }
 }

@@ -1,8 +1,8 @@
 public extension VoxelArray {
-    mutating func updating(with voxels: VoxelHash<T>) {
+    mutating func updating(with voxels: VoxelHash<T>) throws {
         for idx in voxels._contents.keys {
             if let voxelValue = voxels[idx] {
-                self[idx] = voxelValue
+                try set(idx, newValue: voxelValue)
             }
         }
     }
