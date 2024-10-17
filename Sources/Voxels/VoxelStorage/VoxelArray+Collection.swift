@@ -1,5 +1,4 @@
 extension VoxelArray: Collection {
-    // public typealias Index = VoxelIndex
     public typealias Index = Int
 
     public func index(after i: Int) -> Int {
