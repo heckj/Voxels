@@ -1,3 +1,5 @@
+import IssueReporting
+
 /// A collection of voxels backed by an array.
 public struct VoxelArray<T: Sendable>: VoxelWritable {
     var _contents: [T]
@@ -15,13 +17,13 @@ public struct VoxelArray<T: Sendable>: VoxelWritable {
         bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(edge - 1, edge - 1, edge - 1))
     }
 
-    public func value(_ vi: VoxelIndex) throws -> T? {
-        let stride = try bounds.linearize(vi)
+    public func value(_ vi: VoxelIndex) -> T? {
+        let stride = bounds._unchecked_linearize(vi)
         return _contents[stride]
     }
 
-    public mutating func set(_ vi: VoxelIndex, newValue: T) throws {
-        let stride = try bounds.linearize(vi)
+    public mutating func set(_ vi: VoxelIndex, newValue: T) {
+        let stride = bounds._unchecked_linearize(vi)
         _contents[stride] = newValue
     }
 

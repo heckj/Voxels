@@ -1,3 +1,5 @@
+import IssueReporting
+
 /// The coordinate bounds of a set of voxels.
 public struct VoxelBounds: Sendable {
     public let min: VoxelIndex
@@ -150,6 +152,9 @@ extension VoxelBounds: StrideIndexable {
 
     @inline(__always)
     public func _unchecked_delinearize(_ strideIndex: Int) -> VoxelIndex {
+        if strideIndex < 0 || strideIndex >= size {
+            reportIssue("stride index out of bounds: \(strideIndex)")
+        }
         let xDistance = self.max.x - self.min.x // 1
         let yDistance = self.max.y - self.min.y // 2
         let zDistance = self.max.z - self.min.z // 3

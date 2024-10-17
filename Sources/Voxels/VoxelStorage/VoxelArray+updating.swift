@@ -1,15 +1,15 @@
 public extension VoxelArray {
-    mutating func updating(with voxels: VoxelHash<T>) throws {
+    mutating func updating(with voxels: VoxelHash<T>) {
         for idx in voxels._contents.keys {
             if let voxelValue = voxels[idx] {
-                try set(idx, newValue: voxelValue)
+                set(idx, newValue: voxelValue)
             }
         }
     }
 
-    mutating func updating(with voxelUpdates: [VoxelUpdate<T>]) throws {
+    mutating func updating(with voxelUpdates: [VoxelUpdate<T>]) {
         for update in voxelUpdates {
-            try set(update.index, newValue: update.value)
+            set(update.index, newValue: update.value)
         }
     }
 }
