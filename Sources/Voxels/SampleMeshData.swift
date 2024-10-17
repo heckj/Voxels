@@ -15,7 +15,7 @@ public enum SampleMeshData {
             let voxelIndex = try samples.bounds.delinearize(i)
             let position: SIMD3<Float> = into_domain(array_dim: 32, voxelIndex)
             let value = sphereSDF.valueAt(position)
-            try samples.set(voxelIndex, newValue: value)
+            samples.set(voxelIndex, newValue: value)
         }
         return samples
     }
