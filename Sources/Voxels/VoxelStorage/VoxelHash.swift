@@ -16,6 +16,12 @@ public struct VoxelHash<T: Sendable>: VoxelWritable {
         defaultVoxel = nil
     }
 
+    public init(bounds: VoxelBounds) {
+        _contents = [:]
+        self.bounds = bounds
+        defaultVoxel = nil
+    }
+
     public init(defaultVoxel: T) {
         _contents = [:]
         bounds = .empty
@@ -46,8 +52,8 @@ public struct VoxelHash<T: Sendable>: VoxelWritable {
     }
 
     private mutating func updateBoundsAdding(_ vi: VoxelIndex) {
-        if _contents.count == 1 {
-            bounds = VoxelBounds(vi)
+        if bounds == .empty, _contents.count == 1 {
+            bounds = .init(vi)
         } else {
             bounds = bounds.adding(vi)
         }
