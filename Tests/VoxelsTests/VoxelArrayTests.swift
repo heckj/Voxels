@@ -95,4 +95,9 @@ class VoxelArrayTests: XCTestCase {
 
         XCTAssertEqual(voxels[index], 5)
     }
+
+    func testVoxelArrayCollection() throws {
+        let test = VoxelArray(bounds: VoxelBounds(min: (0, 0, 0), max: (9, 9, 9)), initialValue: 0)
+        XCTAssertEqual(test.count, 10 * 10 * 10)
+    }
 }
