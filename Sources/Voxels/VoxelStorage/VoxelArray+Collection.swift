@@ -10,7 +10,7 @@ extension VoxelArray: Collection {
     }
 
     public var endIndex: Int {
-        _contents.count - 1
+        _contents.count
     }
 
     public subscript(linearindex: Int) -> T {
