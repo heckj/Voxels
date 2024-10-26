@@ -1,4 +1,4 @@
-import Heightmap
+public import Heightmap
 
 /// Utility functions for converting height maps into collections of voxels.
 public enum HeightmapConverter {
@@ -45,7 +45,7 @@ public enum HeightmapConverter {
     ///    +---
     /// ```
     @inlinable
-    static func sizedPositionOfCenter(xz: XZIndex, y: Int, voxelSize: Float) -> SIMD3<Float> {
+    public static func sizedPositionOfCenter(xz: XZIndex, y: Int, voxelSize: Float) -> SIMD3<Float> {
         SIMD3<Float>(Float(xz.x) * voxelSize, Float(y) * voxelSize, Float(xz.z) * voxelSize)
     }
 

@@ -1,17 +1,11 @@
 // swift-tools-version: 5.10
-// Swift 5.9 to support Xcode 15.2 on GitHub Actions
-// Swift 5.10 requires Xcode 15.4 in GitHub Actions
 
 import PackageDescription
 
 var globalSwiftSettings: [PackageDescription.SwiftSetting] = [
-    .enableExperimentalFeature("StrictConcurrency"),
-    // Swift 6 enablement
-    // .enableUpcomingFeature("StrictConcurrency")
-    // .swiftLanguageVersion(.v5)
     .enableUpcomingFeature("ExistentialAny"),
     // .enableExperimentalFeature("AccessLevelOnImport"),
-    // .enableUpcomingFeature("InternalImportsByDefault"),
+    .enableUpcomingFeature("InternalImportsByDefault"),
 ]
 
 let package = Package(
@@ -47,5 +41,6 @@ let package = Package(
                 .product(name: "Heightmap", package: "Heightmap"),
             ]
         ),
-    ]
+    ],
+    swiftLanguageVersions: [.version("6"), .v5]
 )
