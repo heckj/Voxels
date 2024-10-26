@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 
 /// A buffer of vertex indices, positions and normals that make up a generated 3D mesh.
 ///

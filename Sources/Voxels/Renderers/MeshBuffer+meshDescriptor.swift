@@ -1,5 +1,5 @@
 #if canImport(RealityKit)
-    import RealityKit
+    public import RealityKit
 
     public extension MeshBuffer {
         /// Returns a RealityKit mesh descriptor instance for this buffer, if the buffer data is valid.
