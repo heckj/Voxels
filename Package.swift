@@ -4,7 +4,7 @@ import PackageDescription
 
 var globalSwiftSettings: [PackageDescription.SwiftSetting] = [
     .enableUpcomingFeature("ExistentialAny"),
-    // .enableExperimentalFeature("AccessLevelOnImport"),
+    .enableExperimentalFeature("AccessLevelOnImport"),
     .enableUpcomingFeature("InternalImportsByDefault"),
 ]
 
