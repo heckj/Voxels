@@ -6,8 +6,6 @@ public protocol VoxelAccessible<Element>: Collection {
     func value(_: VoxelIndex) throws -> Element?
     /// The bounds of the voxel collection.
     var bounds: VoxelBounds { get }
-    /// The collection of available voxel indices.
-    var indices: [VoxelIndex] { get }
     /// Accesses the voxel at the index you provide.
     subscript(_: VoxelIndex) -> Element? { get }
 }

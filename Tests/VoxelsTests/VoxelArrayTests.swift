@@ -37,7 +37,7 @@ class VoxelArrayTests: XCTestCase {
         XCTAssertEqual(v.value(VoxelIndex(x: 2, y: 2, z: 2)), 1)
 
         XCTAssertEqual(v.bounds.size, 10 * 5 * 10)
-        XCTAssertEqual(v.indices, v.bounds.indices)
+        XCTAssertEqual(v.indices.count, v.bounds.indices.count)
     }
 
     func testUpdatingVoxelArray() throws {

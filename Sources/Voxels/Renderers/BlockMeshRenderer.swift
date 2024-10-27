@@ -19,7 +19,7 @@ public class BlockMeshRenderer {
         var buffer = MeshBuffer()
 
         if surfaceOnly {
-            for index in bounds.indices {
+            for index in bounds {
                 if let filterfunction = filter, let voxel = voxels[index] {
                     if filterfunction(voxel) == false { continue }
                 }
@@ -35,7 +35,7 @@ public class BlockMeshRenderer {
                 }
             }
         } else {
-            for index in bounds.indices {
+            for index in bounds {
                 if let voxel = voxels[index] {
                     if let filterfunction = filter {
                         if filterfunction(voxel) == false { continue }
@@ -142,7 +142,7 @@ public class BlockMeshRenderer {
             var buffer = MeshBuffer()
             let layerBounds = VoxelBounds(min: VoxelIndex(voxels.bounds.min.x, yIndexValue, voxels.bounds.min.z),
                                           max: VoxelIndex(voxels.bounds.max.x, yIndexValue, voxels.bounds.max.z))
-            for index in layerBounds.indices {
+            for index in layerBounds {
                 if let voxel = voxels[index], voxel.isOpaque() {
                     for face in CubeFace.allCases {
                         buffer.addQuad(index: index, scale: scale, face: face)

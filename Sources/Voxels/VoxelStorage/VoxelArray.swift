@@ -5,10 +5,6 @@ public struct VoxelArray<T: Sendable>: VoxelWritable {
     var _contents: [T]
     public let bounds: VoxelBounds
 
-    public var indices: [VoxelIndex] {
-        bounds.indices
-    }
-
     public init(edge: Int, value: T) {
         precondition(edge > 0)
         _contents = Array(repeating: value, count: edge * edge * edge)

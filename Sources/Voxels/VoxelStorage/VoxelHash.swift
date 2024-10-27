@@ -6,10 +6,6 @@ public struct VoxelHash<T: Sendable>: VoxelWritable {
     public var bounds: VoxelBounds
     let defaultVoxel: T?
 
-    public var indices: [VoxelIndex] {
-        bounds.indices
-    }
-
     public init() {
         _contents = [:]
         bounds = .empty
