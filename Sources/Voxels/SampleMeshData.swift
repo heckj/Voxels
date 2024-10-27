@@ -1,4 +1,4 @@
-import Heightmap
+internal import Heightmap
 
 /// Example voxel collections.
 public enum SampleMeshData {

@@ -1,5 +1,5 @@
 #if canImport(simd)
-    import simd
+    internal import simd
 #endif
 
 /// A compact representation of a 3 dimensional vector.
