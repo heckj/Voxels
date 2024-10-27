@@ -1,5 +1,5 @@
 #if canImport(simd)
-    import simd
+    internal import simd
 #endif
 
 /// A type that can be sampled at regular locations.

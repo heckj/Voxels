@@ -1,4 +1,4 @@
-import Foundation
+internal import Foundation
 
 extension VoxelHash where T == Float {
     func dump() {

@@ -1,4 +1,4 @@
-import IssueReporting
+internal import IssueReporting
 
 /// The coordinate bounds of a set of voxels.
 public struct VoxelBounds: Sendable {

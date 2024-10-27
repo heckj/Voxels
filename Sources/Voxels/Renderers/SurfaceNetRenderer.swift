@@ -1,5 +1,5 @@
 // Derived from MIT licensed code https://github.com/bonsairobo/fast-surface-nets-rs/blob/main/src/lib.rs
-import IssueReporting
+internal import IssueReporting
 
 /// A renderer for creating smooth 3D meshes of the surface of signed distance value (SDF) data.
 public class SurfaceNetRenderer {

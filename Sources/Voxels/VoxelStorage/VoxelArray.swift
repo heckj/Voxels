@@ -1,4 +1,4 @@
-import IssueReporting
+internal import IssueReporting
 
 /// A collection of voxels backed by an array.
 public struct VoxelArray<T: Sendable>: VoxelWritable {
