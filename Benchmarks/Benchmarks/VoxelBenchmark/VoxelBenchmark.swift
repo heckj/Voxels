@@ -65,4 +65,15 @@ let benchmarks = {
             blackHole(meshBuffer = SurfaceNetRenderer().render(voxels, scale: .init(), within: bounds))
         }
     }
+
+    Benchmark("VoxelArray iteration") { benchmark in
+        var va = VoxelArray(bounds: VoxelBounds(min: (0, 0, 0), max: (999, 499, 999)), initialValue: 0)
+        let seed = VoxelHash<Int>()
+        for idx in VoxelBounds(min: (0, 0, 0), max: (999, 49, 999)) {
+            seed[idx] = 1
+        }
+        for _ in benchmark.scaledIterations {
+            va.updating(with: seed)
+        }
+    }
 }
