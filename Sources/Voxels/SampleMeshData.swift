@@ -37,7 +37,7 @@ public enum SampleMeshData {
         var flatVoxelBlock = VoxelHash<Float>(defaultVoxel: Float(10.0))
         // create cube in the middle
         let bounds = VoxelBounds(min: VoxelIndex(0, 2, 0), max: VoxelIndex(9, 3, 9))
-        for i in bounds.indices {
+        for i in bounds {
             flatVoxelBlock.set(i, newValue: -1.0)
         }
         return flatVoxelBlock

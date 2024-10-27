@@ -142,14 +142,14 @@ class VoxelBoundsTests: XCTestCase {
     func testVoxelBoundsSingleIndex() {
         let bounds = VoxelBounds(VoxelIndex(2, 2, 2))
         XCTAssertEqual(bounds.indices.count, 1)
-        XCTAssertEqual(bounds.indices[0], VoxelIndex(2, 2, 2))
+        XCTAssertEqual(bounds[0], VoxelIndex(2, 2, 2))
     }
 
     func testVoxelBoundsTwoIndices() {
         let bounds = VoxelBounds(min: VoxelIndex(2, 2, 2), max: VoxelIndex(3, 2, 2))
         XCTAssertEqual(bounds.size, 2)
         XCTAssertEqual(bounds.indices.count, 2)
-        for idx in bounds.indices {
+        for idx in bounds {
             XCTAssertTrue(bounds.contains(idx))
         }
     }
@@ -157,9 +157,8 @@ class VoxelBoundsTests: XCTestCase {
     func testVoxelBoundsIndicesWithinBounds() {
         let bounds = VoxelBounds(min: VoxelIndex(0, 0, 0), max: VoxelIndex(4, 1, 8))
 
-        let indices = bounds.indices
-        XCTAssertEqual(indices.count, 2 * 5 * 9)
-        for idx in indices {
+        XCTAssertEqual(bounds.indices.count, 2 * 5 * 9)
+        for idx in bounds {
             XCTAssertTrue(bounds.contains(idx))
         }
     }

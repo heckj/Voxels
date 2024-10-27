@@ -6,11 +6,10 @@ class VoxelAccessibleTests: XCTestCase {
         let voxels = SampleMeshData.manhattanNeighbor1()
 
         XCTAssertEqual(voxels.count, 7)
-        let indices = Array(voxels.indices)
-        XCTAssertEqual(indices.count, 27)
+        XCTAssertEqual(voxels.bounds.count, 27)
 
         var count = 0
-        for i: VoxelIndex in voxels.indices {
+        for i: VoxelIndex in voxels.bounds {
             if voxels.isSurface(i) {
                 count += 1
             }

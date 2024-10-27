@@ -327,7 +327,7 @@ public class MarchingCubesRenderer {
                                                       adaptive: Bool = false) -> MeshBuffer
     {
         reset()
-        for i in bounds.indices {
+        for i in bounds {
             marching_cubes_single_cell(data: data, scale: scale, index: i, adaptive: adaptive)
         }
         return buffer
