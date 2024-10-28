@@ -18,6 +18,9 @@ public extension Heightmap {
     }
 }
 
+// Benchmark documentation:
+// https://swiftpackageindex.com/ordo-one/package-benchmark/documentation/benchmark/writingbenchmarks
+
 let heightmap = Heightmap(width: 1025, height: 1025, seed: 437_347_632)
 let voxels = HeightmapConverter.heightmap(heightmap, maxVoxelIndex: 50, voxelSize: 1.0)
 
@@ -63,6 +66,35 @@ let benchmarks = {
         var meshBuffer = MeshBuffer()
         for _ in benchmark.scaledIterations {
             blackHole(meshBuffer = SurfaceNetRenderer().render(voxels, scale: .init(), within: bounds))
+        }
+    }
+
+    // swift package benchmark --target "VoxelBenchmark:VoxelArray updating"
+    Benchmark("VoxelArray updating", configuration: .init(maxDuration: .seconds(9))) { benchmark in
+        var va = VoxelArray(bounds: VoxelBounds(min: (0, 0, 0), max: (999, 499, 999)), initialValue: 0)
+        var seed = VoxelHash<Int>()
+        for idx in VoxelBounds(min: (0, 0, 0), max: (999, 4, 999)) {
+            seed[idx] = 1
+        }
+        // 5,000,000 updates : ~1.67 seconds
+        for _ in benchmark.scaledIterations {
+            benchmark.startMeasurement()
+            va.updating(with: seed)
+            benchmark.stopMeasurement()
+        }
+    }
+
+    // swift package benchmark --target "VoxelBenchmark:VoxelArray incr-updating"
+    Benchmark("VoxelArray incr-updating", configuration: .init(maxDuration: .seconds(9))) { benchmark in
+        var va = VoxelArray(bounds: VoxelBounds(min: (0, 0, 0), max: (999, 499, 999)), initialValue: 0)
+        var seed = VoxelHash<Int>()
+        // 5,000,000 updates : ~1.75 seconds
+        for _ in benchmark.scaledIterations {
+            benchmark.startMeasurement()
+            for idx in VoxelBounds(min: (0, 0, 0), max: (999, 4, 999)) {
+                seed[idx] = 1
+            }
+            benchmark.stopMeasurement()
         }
     }
 }
