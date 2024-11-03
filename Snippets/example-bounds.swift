@@ -37,7 +37,7 @@ for voxelIndex in bounds {
 //    [2, 2, 2]
 
 print("slice indices")
-let slice = bounds.y(0...0)
+let slice = bounds.y(0 ... 0)
 for voxelIndex in slice {
     print(voxelIndex)
 }
