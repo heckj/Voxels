@@ -29,4 +29,6 @@ Copies of some of these articles and papers reside in [refs](refs/).
     ./scripts/compare_benchmark.bash
 - [benchmark results](https://github.com/heckj/Voxels/blob/main/Benchmarks/Results.md)
 
+## Checking documentation
 
+    swift package generate-documentation --analyze --warnings-as-errors
