@@ -31,4 +31,11 @@ Copies of some of these articles and papers reside in [refs](refs/).
 
 ## Checking documentation
 
+build and check for errors or warnings:
+
     swift package generate-documentation --analyze --warnings-as-errors
+
+preview the documentation
+
+    swift package --disable-sandbox preview-documentation --target Voxels
+
