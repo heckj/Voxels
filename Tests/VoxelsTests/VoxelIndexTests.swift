@@ -3,6 +3,8 @@ import XCTest
 
 class VoxelIndexTests: XCTestCase {
     func testIndexInit() throws {
+        XCTAssertEqual(VoxelIndex(0, 0, 0), VoxelIndex())
+
         XCTAssertNotNil(VoxelIndex(0, 0, 0))
         XCTAssertNotNil(VoxelIndex(x: 0, y: 0, z: 0))
 
@@ -12,6 +14,11 @@ class VoxelIndexTests: XCTestCase {
         XCTAssertNotNil(VoxelIndex(xyz))
         let ijk = (2, 2, 2)
         XCTAssertNotNil(VoxelIndex(ijk))
+    }
+
+    func testConvenienceAdd() throws {
+        let shiftedIndex = VoxelIndex().adding(1, 1, 1)
+        XCTAssertEqual(shiftedIndex, VoxelIndex.one)
     }
 
     func testIndexComparable() throws {
