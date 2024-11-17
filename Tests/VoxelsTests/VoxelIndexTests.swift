@@ -14,14 +14,6 @@ class VoxelIndexTests: XCTestCase {
         XCTAssertNotNil(VoxelIndex(ijk))
     }
 
-//    func testFailingInitializer() throws {
-//        // precondition failures
-//        XCTAssertThrowsError(VoxelIndex([]))
-//        XCTAssertThrowsError(VoxelIndex([0]))
-//        XCTAssertThrowsError(VoxelIndex([0,1]))
-//        XCTAssertThrowsError(VoxelIndex([0,1,2,3]))
-//    }
-
     func testIndexComparable() throws {
         XCTAssertTrue(VoxelIndex(0, 0, 0) < VoxelIndex(2, 2, 2))
         XCTAssertFalse(VoxelIndex(0, 0, 0) > VoxelIndex(2, 2, 2))
@@ -73,6 +65,26 @@ class VoxelIndexTests: XCTestCase {
 
         let neighbors = try VoxelIndex.neighbors(distance: 0, origin: VoxelIndex(2, 2, 2), voxels: fiveByFive, strategy: .raw)
         XCTAssertEqual(neighbors.count, 1)
+    }
+
+    func testNeighbors1() throws {
+        let index = VoxelIndex((12, 5, 1))
+        let neighbors = index.manhattan_1_neighbors()
+        XCTAssertEqual(neighbors.count, 6)
+        for n in neighbors {
+            XCTAssertEqual(VoxelIndex.manhattan_distance(from: index, to: n), 1)
+        }
+    }
+
+    func testNeighbors2() throws {
+        let index = VoxelIndex((2, 2, 2))
+        let neighbors = index.manhattan_2_neighbors()
+        XCTAssertEqual(neighbors.count, 24)
+        for n in neighbors {
+            let distance = VoxelIndex.manhattan_distance(from: index, to: n)
+            // print("distance from \(index) to \(n) is \(distance)")
+            XCTAssertTrue(distance <= 2)
+        }
     }
 
     func testBuiltins() throws {
