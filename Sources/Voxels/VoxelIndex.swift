@@ -73,6 +73,19 @@ public struct VoxelIndex: Hashable, Equatable, Sendable {
         VoxelIndex(x: _storage.x + x, y: _storage.y + y, z: _storage.z + z)
     }
 
+    /// Returns a new voxel index offset from the current by the axis-aligned index values you provide.
+    /// - Parameters:
+    ///   - x: The distance in the X direction.
+    ///   - y: The distance in the Y direction.
+    ///   - z: The distance in the Z direction.
+    ///
+    /// A convenience function for shifting a `VoxelIndex` so that you don't have to create a new relative
+    /// `VoxelIndex` to use with ``adding(_:)``.
+    @inline(__always)
+    public func adding(x: Int = 0, y: Int = 0, z: Int = 0) -> VoxelIndex {
+        VoxelIndex(x: _storage.x + x, y: _storage.y + y, z: _storage.z + z)
+    }
+
     /// Returns a new voxel index that is the component difference of the current index and the index you provide.
     /// - Parameter i: The index to add.
     @inline(__always)

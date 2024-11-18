@@ -19,6 +19,9 @@ class VoxelIndexTests: XCTestCase {
     func testConvenienceAdd() throws {
         let shiftedIndex = VoxelIndex().adding(1, 1, 1)
         XCTAssertEqual(shiftedIndex, VoxelIndex.one)
+
+        let nextIndexUp = shiftedIndex.adding(y: 1)
+        XCTAssertEqual(nextIndexUp, VoxelIndex(1, 2, 1))
     }
 
     func testIndexComparable() throws {
