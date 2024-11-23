@@ -141,4 +141,19 @@ class VoxelHashTests: XCTestCase {
         voxels.set(VoxelIndex(1, 5, 1), newValue: 1)
         XCTAssertEqual(voxels.bounds, VoxelBounds(min: (0, 0, 0), max: (9, 5, 9)))
     }
+
+    func testVoxelHashEquatable() throws {
+        let bounds = VoxelBounds(min: (0, 0, 0), max: (2, 2, 2))
+        var originalVoxels = VoxelHash<Int>(bounds: bounds)
+
+        originalVoxels[VoxelIndex(1, 1, 1)] = 5
+        originalVoxels[VoxelIndex(0, 0, 0)] = 1
+        var voxelsCopy = originalVoxels
+
+        XCTAssertEqual(voxelsCopy, originalVoxels)
+        voxelsCopy[VoxelIndex(0, 0, 0)] = 2
+        XCTAssertNotEqual(voxelsCopy, originalVoxels)
+        voxelsCopy[VoxelIndex(0, 0, 0)] = 1
+        XCTAssertEqual(voxelsCopy, originalVoxels)
+    }
 }

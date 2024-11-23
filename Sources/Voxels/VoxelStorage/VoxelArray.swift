@@ -50,3 +50,6 @@ public struct VoxelArray<T: Sendable>: VoxelWritable {
 }
 
 extension VoxelArray: Sendable {}
+
+extension VoxelArray: Equatable where T: Equatable {}
+extension VoxelArray: Hashable where T: Hashable {}
