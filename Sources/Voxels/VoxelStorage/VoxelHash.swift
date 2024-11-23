@@ -96,3 +96,6 @@ public struct VoxelHash<T: Sendable>: VoxelWritable {
 }
 
 extension VoxelHash: Sendable {}
+
+extension VoxelHash: Equatable where T: Equatable {}
+extension VoxelHash: Hashable where T: Hashable {}

@@ -84,6 +84,18 @@ class VoxelArrayTests: XCTestCase {
         XCTAssertEqual(voxels[index], 5)
     }
 
+    func testVoxelArrayEquatable() throws {
+        let bounds = VoxelBounds(min: (0, 0, 0), max: (2, 2, 2))
+        let originalVoxels = VoxelArray<Int>(bounds: bounds, initialValue: 1)
+        var voxelsCopy = originalVoxels
+
+        XCTAssertEqual(voxelsCopy, originalVoxels)
+        voxelsCopy[3] = 2
+        XCTAssertNotEqual(voxelsCopy, originalVoxels)
+        voxelsCopy[3] = 1
+        XCTAssertEqual(voxelsCopy, originalVoxels)
+    }
+
     func testApplyingVoxelUpdateFromHash() throws {
         let index = VoxelIndex(0, 1, 1)
         var voxels = VoxelArray<Int>(edge: 3, value: 1)

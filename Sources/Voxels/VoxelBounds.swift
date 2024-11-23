@@ -108,6 +108,7 @@ public struct VoxelBounds: Sendable {
 }
 
 extension VoxelBounds: Equatable {}
+extension VoxelBounds: Hashable {}
 
 extension VoxelBounds: StrideIndexable {
     @inline(__always)
