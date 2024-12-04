@@ -1,5 +1,7 @@
 Voxels is released under an MIT License, see LICENSE for details.
 
+The implementation of SurfaceNetRenderer is ported and updated (derived, not used directly) from a Rust implementation of [fast-surface-nets-rs](https://github.com/bonsairobo/fast-surface-nets-rs/tree/main), referenced under license (MIT, (c) 2021) from [its source](https://github.com/bonsairobo/fast-surface-nets-rs/blob/main/src/lib.rs). A huge thank you to [Duncan](https://github.com/bonsairobo) for making his implementation available.
+
 Copyright 2024, Joseph Heck.
 
 
