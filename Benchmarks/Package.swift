@@ -5,8 +5,8 @@ import PackageDescription
 let package = Package(
     name: "VoxelBenchmarks",
     platforms: [
-        .iOS(.v17),
-        .macOS(.v14),
+        .iOS(.v16),
+        .macOS(.v13),
     ],
     products: [
         .executable(name: "voxel-benchmarks", targets: ["voxel-benchmarks"]),

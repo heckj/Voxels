@@ -1,13 +1,13 @@
 {
-  "originHash" : "8f9aab5d92c933cca17b8da2cfefe7aab03d393240618efd0e199a43fcd3f920",
+  "originHash" : "d2a43ad8512b4a8f47fb67c82344d333a01c75a1358751841fdd37abe4c01640",
   "pins" : [
     {
       "identity" : "hdrhistogram-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/HdrHistogram/hdrhistogram-swift",
       "state" : {
-        "revision" : "a69fa24d7b70421870cafa86340ece900489e17e",
-        "version" : "0.1.2"
+        "revision" : "93a1618c8aa20f6a521a9da656a3e0591889e9dc",
+        "version" : "0.1.3"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/heckj/Heightmap",
       "state" : {
-        "revision" : "b3e32343bcb9d78f31f3fa45084dda4be6062aa1",
-        "version" : "0.6.2"
+        "revision" : "93436af1ed955f1599f1dc67752cda8d0ef2c385",
+        "version" : "0.6.3"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ordo-one/package-benchmark",
       "state" : {
-        "revision" : "d4909695344b6e1ef88f0a711df6ab8708dd135d",
-        "version" : "1.27.3"
+        "revision" : "ec06262cf296aaa4bd40ed654ccdf9a87fe1879f",
+        "version" : "1.29.2"
       }
     },
     {
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/tayloraswift/swift-hash",
       "state" : {
-        "revision" : "4d70a941b7039358f2ec8565f6c3b53c05f6c6ef",
-        "version" : "0.6.3"
+        "revision" : "ea0b9fc3152ed5941dd82e4a01e65f99fe1a75d2",
+        "version" : "0.7.1"
       }
     },
     {
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-issue-reporting",
       "state" : {
-        "revision" : "770f990d3e4eececb57ac04a6076e22f8c97daeb",
-        "version" : "1.4.2"
+        "revision" : "39de59b2d47f7ef3ca88a039dff3084688fe27f4",
+        "version" : "1.5.2"
       }
     },
     {
@@ -105,8 +105,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/tayloraswift/swift-png",
       "state" : {
-        "revision" : "aff420495467463b43d42c58b4dbb29ab74f4ccb",
-        "version" : "4.4.5"
+        "revision" : "d444d98aa32f022bf4a8e74b5a697c7ee856a6ad",
+        "version" : "4.4.9"
       }
     },
     {
@@ -114,8 +114,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-system",
       "state" : {
-        "revision" : "c8a44d836fe7913603e246acab7c528c2e780168",
-        "version" : "1.4.0"
+        "revision" : "a34201439c74b53f0fd71ef11741af7e7caf01e1",
+        "version" : "1.4.2"
       }
     },
     {

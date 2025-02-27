@@ -36,6 +36,7 @@ public extension VoxelIndex {
         return neighbors
     }
 
+    @inlinable
     static func manhattan_distance(from: VoxelIndex, to: VoxelIndex) -> Int {
         abs(from.x - to.x) + abs(from.y - to.y) + abs(from.z - to.z)
     }
