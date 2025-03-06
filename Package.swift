@@ -24,7 +24,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/heckj/Heightmap", from: "0.6.0"),
-        .package(url: "https://github.com/pointfreeco/swift-issue-reporting", from: "1.2.0"),
+        .package(url: "https://github.com/pointfreeco/xctest-dynamic-overlay", from: "1.5.0"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
     ],
     targets: [
@@ -32,7 +32,7 @@ let package = Package(
             name: "Voxels",
             dependencies: [
                 .product(name: "Heightmap", package: "Heightmap"),
-                .product(name: "IssueReporting", package: "swift-issue-reporting"),
+                .product(name: "IssueReporting", package: "xctest-dynamic-overlay"),
             ],
             swiftSettings: globalSwiftSettings
         ),
